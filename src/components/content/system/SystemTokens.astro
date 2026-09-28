@@ -1,0 +1,81 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import SystemTable from "@/components/content/system/SystemTable.astro";
+import {
+  contrast,
+  describe,
+  level,
+  rgb,
+  themeNames,
+  themes,
+} from "@/utils/tokens.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Table shown. `themes` lists each theme's colors, `contrast` checks them against WCAG. */
+  variant?: "themes" | "contrast";
+};
+
+const { render = true, variant = "themes", ...rest } = Astro.props;
+
+const titles = themeNames.map((name) => name[0].toUpperCase() + name.slice(1));
+
+const themeTokens = [
+  ["background", "Section background"],
+  ["background-2", "Surface: cards, panels"],
+  ["background-3", "Surface on a surface, tags"],
+  ["text", "Text"],
+  ["text-2", "Muted text"],
+  ["border", "Hairlines"],
+  ["heading-accent", "Accent words, icons, link hover"],
+  ["highlight", "Second accent, figures"],
+  ["button-background", "Primary button"],
+  ["button-text", "Primary button label"],
+  ["button-background-hover", "Primary button hover"],
+  ["button-2-border", "Secondary button border"],
+  ["selection-background", "Text selection"],
+];
+
+const themeRows = themeTokens.map(([token, use]) => [
+  `<code>--${token}</code><br>${use}`,
+  ...themeNames.map((name) => {
+    const value = themes[name].get(token);
+    return value ? describe(value, themes[name]) : "";
+  }),
+]);
+
+const pairs = [
+  ["Text", "text", "background"],
+  ["Muted text", "text-2", "background"],
+  ["Heading accent", "heading-accent", "background"],
+  ["Highlight", "highlight", "background"],
+  ["Button label", "button-text", "button-background"],
+];
+
+const contrastRows = pairs.map(([label, front, back]) => [
+  `${label}<br><code>--${front}</code> on <code>--${back}</code>`,
+  ...themeNames.map((name) => {
+    const scope = themes[name];
+    const backValue = scope.get(back);
+    const frontValue = scope.get(front);
+    const backColor = backValue ? rgb(backValue, scope) : undefined;
+    const frontColor =
+      frontValue && backColor ? rgb(frontValue, scope, backColor) : undefined;
+    if (!backColor || !frontColor) return "";
+    const ratio = contrast(frontColor, backColor);
+    return `${ratio.toFixed(1)}:1<br>${level(ratio)}`;
+  }),
+]);
+---
+
+{
+  render && (
+    <SystemTable
+      label={variant === "themes" ? "Theme tokens" : "Contrast by theme"}
+      head={[variant === "themes" ? "Token" : "Pair", ...titles]}
+      rows={variant === "themes" ? themeRows : contrastRows}
+      {...rest}
+    />
+  )
+}

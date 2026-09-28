@@ -1,0 +1,1497 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import RichText from "@/components/typography/RichText.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Facts from "@/components/item/Facts.astro";
+import List from "@/components/item/List.astro";
+import LogoList from "@/components/item/LogoList.astro";
+import Quote from "@/components/item/Quote.astro";
+import Stat from "@/components/item/Stat.astro";
+import Accordion from "@/components/interactive/Accordion.astro";
+import AccordionItem from "@/components/interactive/AccordionItem.astro";
+import Tabs from "@/components/interactive/Tabs.astro";
+import TabLink from "@/components/interactive/TabLink.astro";
+import Slider from "@/components/interactive/Slider.astro";
+import Marquee from "@/components/interactive/Marquee.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Icon from "@/components/media/Icon.astro";
+import Img from "@/components/media/Img.astro";
+import GoMark from "@/components/media/GoMark.astro";
+import CasePanel from "@/components/content/CasePanel.astro";
+import SystemLayout from "@/components/content/system/SystemLayout.astro";
+import SystemChapter from "@/components/content/system/SystemChapter.astro";
+import SystemBlock from "@/components/content/system/SystemBlock.astro";
+import SystemSwatch from "@/components/content/system/SystemSwatch.astro";
+import SystemTable from "@/components/content/system/SystemTable.astro";
+import SystemTheme from "@/components/content/system/SystemTheme.astro";
+import SystemTokens from "@/components/content/system/SystemTokens.astro";
+import SystemType from "@/components/content/system/SystemType.astro";
+import SystemScale from "@/components/content/system/SystemScale.astro";
+import SystemSample from "@/components/content/system/SystemSample.astro";
+import SystemRules from "@/components/content/system/SystemRules.astro";
+import SystemProps from "@/components/content/system/SystemProps.astro";
+import { range, resolve } from "@/utils/tokens.ts";
+import records from "@/assets/icons/records.svg";
+import shield from "@/assets/icons/shield.svg";
+import lock from "@/assets/icons/lock.svg";
+import microsoft from "@/assets/images/about/logo-microsoft.png";
+import firmscribe from "@/assets/images/about/logo-firmscribe.png";
+import celltrust from "@/assets/images/about/logo-celltrust.png";
+import kroll from "@/assets/images/about/logo-kroll.png";
+import morningstar from "@/assets/images/about/logo-morningstar.png";
+import aws from "@/assets/images/about/logo-aws.png";
+import daveFeldman from "@/assets/images/about/dave-feldman.jpg";
+import edSchembor from "@/assets/images/about/ed-schembor.jpg";
+import daveFrisone from "@/assets/images/about/dave-frisone.jpg";
+import financialAdvisors from "@/assets/images/solutions/financial-advisors.jpg";
+import privateFunds from "@/assets/images/solutions/private-funds.jpg";
+import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
+---
+
+<Layout
+  title="Web system"
+  description="The Greenboard web system: color, themes, type, spacing and every component, read from the site's own code."
+>
+  {/* Header */}
+  <HeroPage eyebrow="Reference" heading="Greenboard web system" maxWidth={14}>
+    <Paragraph variant="large">
+      Color, type, spacing, themes and components for greenboard.com. Every
+      example on this page is the live component reading the live tokens, so the
+      page changes when the site does.
+    </Paragraph>
+    <Facts>
+      <div>
+        <dt>Framework</dt>
+        <dd>Lumos for Astro</dd>
+      </div>
+      <div>
+        <dt>Typeface</dt>
+        <dd>Outfit, four weights</dd>
+      </div>
+      <div>
+        <dt>Themes</dt>
+        <dd>Light, Soft, Dark, Deep, Brand</dd>
+      </div>
+      <div>
+        <dt>Prepared by</dt>
+        <dd>Official Partner</dd>
+      </div>
+    </Facts>
+  </HeroPage>
+
+  {/* Chapters */}
+  <Section theme="light">
+    <SystemLayout
+      chapters={[
+        { id: "overview", label: "How it works" },
+        { id: "color", label: "Color" },
+        { id: "themes", label: "Themes" },
+        { id: "type", label: "Typography" },
+        { id: "spacing", label: "Spacing" },
+        { id: "layout", label: "Layout" },
+        { id: "shape", label: "Shape and depth" },
+        { id: "motion", label: "Motion" },
+        { id: "buttons", label: "Buttons and links" },
+        { id: "forms", label: "Forms" },
+        { id: "labels", label: "Labels and lists" },
+        { id: "cards", label: "Cards" },
+        { id: "data", label: "Data" },
+        { id: "interactive", label: "Interactive" },
+        { id: "headers", label: "Section heads" },
+        { id: "build", label: "Astro build" },
+      ]}
+    >
+      <SystemChapter
+        id="overview"
+        number="00"
+        heading="How the system works"
+        text="Every color, size and space comes from a named token, and components take their colors from the theme around them. Change a token and every component that reads it follows."
+      >
+        <SystemBlock
+          heading="Five layers"
+          text="Each layer only uses the ones below it."
+        >
+          <SystemTable
+            label="Layers"
+            head={["Layer", "What it holds", "Where it lives"]}
+            rows={[
+              [
+                "1. Tokens",
+                "Swatches, type sizes, spacing, radius, motion. Raw values, named once.",
+                "<code>src/styles/base.css</code>",
+              ],
+              [
+                "2. Themes",
+                "Light, Soft, Dark, Deep and Brand remap the color tokens for everything inside them.",
+                "<code>theme-*</code> classes in <code>base.css</code>",
+              ],
+              [
+                "3. Patterns and utilities",
+                "Text styles, heading accent and margin trim, plus single-purpose classes for one-off changes.",
+                "<code>patterns.css</code>, <code>utilities.css</code>",
+              ],
+              [
+                "4. Components",
+                "Buttons, cards, forms, accordion, tabs. They only read theme tokens.",
+                "<code>src/components</code>",
+              ],
+              [
+                "5. Pages",
+                "Sections assembled from components, with the banner, nav and footer shared by every page.",
+                "<code>src/pages</code>",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock heading="Principles">
+          <Grid medium={2} large={3} class="gap-row-7">
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Midnight and Ivory lead"
+              text="Most of any page is Ivory with Midnight text, or the reverse. Accents are small and deliberate, as the brand book asks."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Emerald means action"
+              text="Primary buttons are Emerald on every theme except Brand, where they turn Midnight. Lemon Lime is kept for figures and text selection."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Light type is for large sizes"
+              text="Outfit Light carries Display, H1 and H2. Reading text stays Regular, and labels and buttons use Medium."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Flat by default"
+              text="Surfaces are separated by tone and one hairline. Only floating elements like menus get a shadow."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Components never pick a color"
+              text="A component reads its theme. Put it in a Dark section and it adapts without a variant."
+            />
+          </Grid>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="color"
+        number="01"
+        heading="Color"
+        text="The brand book palette. Midnight Green and Ivory carry the pages, the accents mark moments, and two tonal ranges add depth without new hues."
+      >
+        <SystemBlock
+          heading="Core"
+          text="Midnight Green and Ivory are the brand. They should be recognizable at a glance."
+        >
+          <Grid xsmall={2} large={3}>
+            <SystemSwatch
+              name="Midnight Green"
+              token="midnight-800"
+              note="Text on light surfaces, dark sections, primary button hover."
+            />
+            <SystemSwatch
+              name="Ivory"
+              token="ivory-50"
+              note="Page background, text on dark surfaces."
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Accents"
+          text="Used sparingly, each with one job."
+        >
+          <Grid xsmall={2} large={4}>
+            <SystemSwatch
+              name="Dark Teal"
+              token="teal"
+              note="Accent on light surfaces: heading accent, icons, links on hover."
+            />
+            <SystemSwatch
+              name="Emerald"
+              token="emerald"
+              note="The action color. Primary buttons, accent on dark surfaces."
+            />
+            <SystemSwatch
+              name="Beige"
+              token="ivory-200"
+              note="Soft sections that break up a long page."
+            />
+            <SystemSwatch
+              name="Lemon Lime"
+              token="lime"
+              note="Figures on dark surfaces and text selection. Never text on light."
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Tonal ranges"
+          text="From the brand book. Used for surfaces and product visuals instead of new colors."
+        >
+          <Grid xsmall={3} medium={6}>
+            <SystemSwatch variant="compact" token="midnight-900" />
+            <SystemSwatch variant="compact" token="midnight-800" />
+            <SystemSwatch variant="compact" token="midnight-700" />
+            <SystemSwatch variant="compact" token="midnight-600" />
+            <SystemSwatch variant="compact" token="midnight-500" />
+            <SystemSwatch variant="compact" token="midnight-400" />
+          </Grid>
+          <Grid xsmall={3} medium={6}>
+            <SystemSwatch variant="compact" token="ivory-50" />
+            <SystemSwatch variant="compact" token="ivory-100" />
+            <SystemSwatch variant="compact" token="ivory-200" />
+            <SystemSwatch variant="compact" token="ivory-300" />
+            <SystemSwatch variant="compact" token="ivory-400" />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Logo"
+          text="The green of the G in the logo. It stays in the logo and is never used for interface color."
+        >
+          <Grid xsmall={2} large={4}>
+            <SystemSwatch name="Logo green" token="logo" />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Contrast"
+          text="Worked out from the theme tokens against WCAG 2.2 each time the site builds. Body text needs 4.5:1, large text and interface parts need 3:1."
+        >
+          <SystemTokens variant="contrast" />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="themes"
+        number="02"
+        heading="Themes"
+        text="A theme is a set of color tokens applied with one class. Every component reads the theme it sits in, so a button, card or link looks right on any surface without a variant of its own."
+      >
+        <SystemBlock
+          heading="Five themes"
+          text="Set with the <code>theme</code> prop on a Section, or a <code>theme-*</code> class on any element. Themes nest: a Light card inside a Soft section switches back to Light values."
+        >
+          <SystemTheme
+            theme="light"
+            name="Light"
+            surface="Ivory"
+            text="Default page surface. Most content sections."
+          />
+          <SystemTheme
+            theme="soft"
+            name="Soft"
+            surface="Beige"
+            text="Alternating sections, and card groups that need a surface behind them."
+          />
+          <SystemTheme
+            theme="dark"
+            name="Dark"
+            surface="Midnight Green"
+            text="Product sections and the closing call to action."
+          />
+          <SystemTheme
+            theme="deep"
+            name="Deep"
+            surface="Midnight 900"
+            text="One step darker than Dark, for a section that sits next to a Dark one."
+          />
+          <SystemTheme
+            theme="brand"
+            name="Brand"
+            surface="Emerald"
+            text="Small elements only, like the Go tag. Never a full section."
+            heading="Brand is for small moments."
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Theme tokens"
+          text="The color tokens every component reads, per theme, as set in <code>base.css</code>."
+        >
+          <SystemTokens variant="themes" />
+        </SystemBlock>
+        <SystemBlock
+          heading="Heading accent"
+          text="Wrap the words to stress in <code>strong</code> inside a heading with <code>heading-accent</code>. The color changes, the weight does not. A rare second stress goes in <code>em</code> and takes the highlight, as in the About hero."
+          variant="panel"
+        >
+          <Paragraph variant="h2" maxWidth={24} class="heading-accent">
+            Built for <strong>AI-native</strong> compliance teams.
+          </Paragraph>
+        </SystemBlock>
+        <SystemBlock variant="panel" theme="dark">
+          <Paragraph variant="h2" maxWidth={24} class="heading-accent">
+            AI to increase <strong>human agency</strong> in support of a <em
+              >culture of compliance</em
+            >
+          </Paragraph>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="type"
+        number="03"
+        heading="Typography"
+        text="One family, Outfit. Sizes are fluid between a 320px and a 1440px wide screen, so headings scale smoothly instead of jumping at breakpoints."
+      >
+        <SystemBlock
+          heading="Outfit"
+          text="Self-hosted as a variable font. Light for large headings, Regular for reading, Medium for labels and buttons."
+        >
+          <Grid small={2} large={4}>
+            <SystemSample
+              variant="type-light"
+              label="Light 300"
+              note="Display, H1, H2"
+            />
+            <SystemSample
+              variant="type-regular"
+              label="Regular 400"
+              note="H3 to H5, reading text"
+            />
+            <SystemSample
+              variant="type-medium"
+              label="Medium 500"
+              note="H6, labels, buttons"
+            />
+            <SystemSample
+              variant="type-bold"
+              label="Semibold 600"
+              note="Footer group titles"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Type scale"
+          text="Ten text styles, read from <code>base.css</code>. Set the style with <code>variant</code> and keep the tag semantic: an <code>h2</code> can use the H4 style."
+        >
+          <div>
+            <SystemType variant="display" note="One per page, the hero."
+              >Compliance is mandatory,</SystemType
+            >
+            <SystemType variant="h1" note="Page titles on inner pages."
+              >Suffering is not.</SystemType
+            >
+            <SystemType variant="h2" note="Section headings."
+              >Our principles</SystemType
+            >
+            <SystemType variant="h3" note="Module titles, large quotes."
+              >Archiving & Supervision</SystemType
+            >
+            <SystemType variant="h4" note="Card titles."
+              >A full program without a full team.</SystemType
+            >
+            <SystemType variant="h5" note="Small card titles, list headings."
+              >Financial Advisors</SystemType
+            >
+            <SystemType variant="h6" note="Group titles."
+              >Right-sized for your firm</SystemType
+            >
+            <SystemType variant="large" note="Intro paragraphs under a heading."
+              >Configured during implementation to match your team’s roles,
+              groups, and the exact standards of your program.</SystemType
+            >
+            <SystemType variant="main" note="Body copy and buttons."
+              >Supervision runs on a risk graph you configure, combining AI
+              rules and lexicons, so what gets escalated reflects your program,
+              not a vendor’s default keyword list.</SystemType
+            >
+            <SystemType variant="small" note="Card text, captions, form help."
+              >Unified recordkeeping designed for CCO peace of mind, so an exam
+              request becomes a query instead of a fire drill.</SystemType
+            >
+          </div>
+        </SystemBlock>
+        <SystemBlock
+          heading="Measure"
+          text="Set <code>maxWidth</code> on a Heading or Paragraph for its line length in characters. Body copy reads best at 45 to 70 characters, headings between 12 and 24."
+          variant="panel"
+        >
+          <ContentWrapper>
+            <Heading tag="h4" variant="h3" maxWidth={16}
+              >Right-sized for your firm</Heading
+            >
+            <Paragraph maxWidth={48} class="color-faded">
+              The same records backbone whether you’re one person or a
+              multi-entity organization, configured to the program you actually
+              run.
+            </Paragraph>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Rich text"
+          text="Long copy and CMS content go in <code>RichText</code>, which spaces headings, paragraphs and lists on its own. Links inside text are underlined and take the accent on hover."
+          variant="panel"
+        >
+          <RichText>
+            <h4>Every channel, one record.</h4>
+            <p>
+              Email, chat, text, voice, and social, captured where your people
+              actually talk, then written once to a WORM, 17a-4 compliant
+              record.
+            </p>
+            <ul>
+              <li>Gmail, Outlook, Slack, Teams and WhatsApp</li>
+              <li>Risk graph built from your own AI rules and lexicons</li>
+              <li>A reviewable trail behind every decision</li>
+            </ul>
+            <p>Read more in the <a href="#type">Trust Center</a>.</p>
+          </RichText>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="spacing"
+        number="04"
+        heading="Spacing"
+        text="Eight steps for components and four for sections, all fluid. Every gap, padding and margin comes from this list."
+      >
+        <SystemBlock
+          heading="Space scale"
+          text="Tokens <code>--space-1</code> to <code>--space-8</code>. Bars show the value at the current screen width."
+        >
+          <SystemScale
+            rows={[
+              { token: "space-1", note: "Icon to text" },
+              { token: "space-2", note: "Tight groups, button gaps" },
+              { token: "space-3", note: "Label to title, list items" },
+              { token: "space-4", note: "Paragraph rhythm" },
+              { token: "space-5", note: "Heading to text, compact padding" },
+              { token: "space-6", note: "Card padding, block gaps" },
+              { token: "space-7", note: "Space above headings, panel padding" },
+              { token: "space-8", note: "Section head to content" },
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Section spacing"
+          text="Top and bottom padding of a Section, set with <code>paddingTop</code> and <code>paddingBottom</code>. Medium is the default."
+        >
+          <SystemScale
+            rows={[
+              { token: "section-space-small", note: "Logo rows, dense bands" },
+              { token: "section-space-medium", note: "Default section" },
+              { token: "section-space-large", note: "Closing call to action" },
+              {
+                token: "section-space-nav-overlap",
+                note: "First section, when it runs under the nav",
+              },
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock heading="Rhythm">
+          <SystemRules
+            use={[
+              "Keep related items tight (space 2 to 3) and separate groups generously (space 6 to 8).",
+              "Leave more space above a heading than below it. Text styles set this through their margin tokens.",
+              "Use gap on flex and grid parents. Use margins only between text elements.",
+            ]}
+            avoid={[
+              "Mixing space steps inside one component to fix alignment by eye.",
+              "Section padding smaller than the gap between its own children.",
+              "Lengths in <code>px</code>. Sizes are in <code>rem</code>, text widths in <code>ch</code>.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="layout"
+        number="05"
+        heading="Layout"
+        text="Content sits in a Section, the Section centers it in a container, and components change layout at three breakpoints."
+      >
+        <SystemBlock
+          heading="Containers"
+          text="Containers center themselves and never touch the screen edge."
+        >
+          <SystemTable
+            label="Containers"
+            head={["Token", "Value", "Use"]}
+            rows={[
+              [
+                "<code>--max-width-main</code>",
+                "1440px",
+                "Default for every section.",
+              ],
+              [
+                "<code>--max-width-small</code>",
+                "70rem, 1120px",
+                "Narrow content such as legal pages and articles.",
+              ],
+              [
+                "<code>--site-margin</code>",
+                range("site-margin"),
+                "Space between the content and the screen edge.",
+              ],
+              [
+                "<code>--site-gutter</code>",
+                range("site-gutter"),
+                "Gap between grid columns.",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Grid"
+          text="<code>Grid</code> sets its columns per breakpoint with the <code>xsmall</code>, <code>small</code>, <code>medium</code> and <code>large</code> props. <code>ruled</code> draws hairlines between the cells."
+        >
+          <SystemTable
+            label="Breakpoints"
+            head={["Prop", "Screen width", "Typical screen"]}
+            rows={[
+              ["<code>xsmall</code>", "Under 30rem, 480px", "Phones"],
+              ["<code>small</code>", "30rem, 480px and up", "Large phones"],
+              ["<code>medium</code>", "48rem, 768px and up", "Tablets"],
+              [
+                "<code>large</code>",
+                "64rem, 1024px and up",
+                "Laptops and desktops",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Content wrapper"
+          text="<code>ContentWrapper</code> lays out the content inside a section. Its variants cover most section layouts."
+        >
+          <SystemTable
+            label="Content wrapper variants"
+            head={["Variant", "Layout"]}
+            rows={[
+              [
+                "<code>stack</code>",
+                "One column. Add <code>centered</code> to center it.",
+              ],
+              [
+                "<code>auto-width</code>",
+                "Two groups on one row, each as wide as its content, wrapping when space runs out. Used for most section heads.",
+              ],
+              ["<code>columns</code>", "Two equal columns from 64rem."],
+              [
+                "<code>breakout</code>",
+                "Text in the container, visual running to the screen edge.",
+              ],
+              [
+                "<code>contain</code>",
+                "Text and visual together on a surface panel.",
+              ],
+              [
+                "<code>sticky-content</code>",
+                "The text stays in view while the visual column scrolls.",
+              ],
+              [
+                "<code>sticky-visual</code>",
+                "The visual stays in view while the text scrolls.",
+              ],
+              ["<code>card</code>", "Centered content over a faded visual."],
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="shape"
+        number="06"
+        heading="Shape and depth"
+        text="Three radii, one hairline and a single shadow. Depth comes from tone: a surface is one step lighter or darker than the section behind it."
+      >
+        <SystemBlock heading="Radius">
+          <Grid small={3}>
+            <SystemSample
+              variant="corner-small"
+              label="Small, 6px"
+              note="Tags, form fields, icon tiles."
+            />
+            <SystemSample
+              variant="corner-main"
+              label="Main, 12px"
+              note="Cards, media, panels."
+            />
+            <SystemSample
+              variant="corner-round"
+              label="Round"
+              note="Buttons, tabs, the email field."
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock heading="Lines">
+          <SystemTable
+            label="Lines"
+            head={["Line", "Token", "Use"]}
+            rows={[
+              [
+                "Hairline",
+                "<code>--border</code>, text color at 16%",
+                "Dividers, ruled grids, accordion rows.",
+              ],
+              [
+                "Control",
+                "<code>--button-2-border</code>, text color at 40%",
+                "Secondary buttons, link underlines.",
+              ],
+              [
+                "Focus",
+                "<code>--focus-width</code> 2px, 3px offset",
+                "Buttons, links and tabs, for keyboard users only.",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Elevation"
+          text="Surfaces stay flat. The one shadow is for things that float above the page."
+        >
+          <Grid small={2}>
+            <SystemSample
+              variant="surface"
+              label="Surface"
+              note="Background 2, no border, no shadow."
+            />
+            <SystemSample
+              variant="floating"
+              label="Floating"
+              note="Ivory with --shadow-float. Menus and anything else that opens over the page."
+            />
+          </Grid>
+          <SystemRules
+            use={["Choose one: a fill, a hairline or a shadow."]}
+            avoid={[
+              "A border and a shadow on the same card.",
+              "Cards inside cards.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="motion"
+        number="07"
+        heading="Motion"
+        text="Motion confirms an action or explains a change. One authored moment per page, and quick, quiet feedback everywhere else."
+      >
+        <SystemBlock heading="Tokens">
+          <SystemTable
+            label="Motion tokens"
+            head={["Token", "Value", "Use"]}
+            rows={[
+              [
+                "<code>--hover-duration</code>",
+                resolve("hover-duration") ?? "",
+                "Hover and state changes on buttons, links and cards.",
+              ],
+              [
+                "<code>--hover-ease</code>",
+                resolve("hover-ease") ?? "",
+                "Everything that responds to the pointer.",
+              ],
+              [
+                "<code>--open-duration</code>",
+                resolve("open-duration") ?? "",
+                "Accordion items, menus and anything else that opens.",
+              ],
+              [
+                "<code>--open-ease</code>",
+                resolve("open-ease") ?? "",
+                "Same curve as hover.",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock heading="Rules">
+          <SystemRules
+            use={[
+              "One authored moment per page, usually the hero.",
+              "Respect reduced motion. When a visitor asks for less motion, transitions drop to near zero.",
+            ]}
+            avoid={[
+              "The same fade-up on every section.",
+              "Bounce or elastic easing.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="buttons"
+        number="08"
+        heading="Buttons and links"
+        text="Two button styles, a text link and round icon buttons. Emerald is the action color, and hover inverts to the theme's text color."
+      >
+        <SystemBlock heading="On light" variant="panel">
+          <ButtonWrapper marginTop="0">
+            <Button>Book a demo</Button>
+            <Button emphasis="secondary">Talk to us</Button>
+            <Button variant="link">See GreenboardGo</Button>
+            <Button variant="link" icon="diagonal">Read the story</Button>
+          </ButtonWrapper>
+          <ButtonWrapper marginTop="0">
+            <Button variant="arrow" direction="back" emphasis="secondary" />
+            <Button variant="arrow" direction="forward" emphasis="secondary" />
+            <Button variant="play" />
+            <Button variant="close" emphasis="secondary" />
+          </ButtonWrapper>
+        </SystemBlock>
+        <SystemBlock heading="On dark" variant="panel" theme="dark">
+          <ButtonWrapper marginTop="0">
+            <Button>Book a demo</Button>
+            <Button emphasis="secondary">Talk to us</Button>
+            <Button variant="link">See GreenboardGo</Button>
+            <Button variant="link" icon="diagonal">Read the story</Button>
+          </ButtonWrapper>
+          <ButtonWrapper marginTop="0">
+            <Button variant="arrow" direction="back" emphasis="secondary" />
+            <Button variant="arrow" direction="forward" emphasis="secondary" />
+            <Button variant="play" />
+            <Button variant="close" emphasis="secondary" />
+          </ButtonWrapper>
+        </SystemBlock>
+        <SystemBlock heading="Props">
+          <SystemTable
+            label="Button props"
+            head={["Prop", "Values", "Use"]}
+            rows={[
+              [
+                "<code>variant</code>",
+                "main, link, arrow, play, close",
+                "Main is the default. Link is the text link. The other three are round icon buttons.",
+              ],
+              [
+                "<code>emphasis</code>",
+                "primary, secondary",
+                "Primary is filled, secondary is outlined.",
+              ],
+              [
+                "<code>icon</code>",
+                "arrow, diagonal, none",
+                "The arrow moves forward on the page, the diagonal arrow opens another page.",
+              ],
+              [
+                "<code>element</code>",
+                "button, link",
+                "Set <code>link</code> with an <code>href</code> to go somewhere.",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock heading="Usage">
+          <SystemRules
+            use={[
+              "One primary button per view. Pair it with a secondary button or a text link.",
+              "Name the action: Book a demo, Talk to us, Read the story.",
+            ]}
+            avoid={[
+              "Two primary buttons side by side.",
+              "Gradients or shadows on buttons.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="forms"
+        number="09"
+        heading="Forms"
+        text="The email field is the main conversion point of the site, so it has its own inline layout. Other fields share the same border and focus rules."
+      >
+        <SystemBlock
+          heading="Email capture"
+          text="The <code>inline</code> Form, in the hero and the closing call to action. Submit it empty or with an invalid address to see the error."
+          variant="panel"
+        >
+          <Form name="system-capture-light" variant="inline">
+            <Input
+              variant="email"
+              label="Work email"
+              placeholder="Enter your work email address"
+              labelHidden
+              required
+            />
+            <Button type="submit">Book a demo</Button>
+          </Form>
+        </SystemBlock>
+        <SystemBlock variant="panel" theme="dark">
+          <Form name="system-capture-dark" variant="inline">
+            <Input
+              variant="email"
+              label="Work email"
+              placeholder="Enter your work email address"
+              labelHidden
+              required
+            />
+            <Button type="submit">Book a demo</Button>
+          </Form>
+        </SystemBlock>
+        <SystemBlock
+          heading="Fields"
+          text="Label above, the field below. Fields are at least 16px so phones do not zoom in."
+          variant="panel"
+        >
+          <Form name="system-fields">
+            <Input variant="email" label="Work email" required />
+            <Input label="Firm name" />
+            <Button type="submit">Book a demo</Button>
+          </Form>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="labels"
+        number="10"
+        heading="Labels and lists"
+        text="Small parts that carry meaning: categories, trust statements and feature lists."
+      >
+        <SystemBlock
+          heading="Eyebrow and tag"
+          text="<code>Eyebrow</code> is a short label above a heading. Use it only when it adds something the heading does not say. The <code>tag</code> variant fills it; inside a card it takes the section color."
+          variant="panel"
+        >
+          <ContentWrapper>
+            <Eyebrow>Case studies</Eyebrow>
+            <Heading tag="h4" variant="h3" maxWidth={24}
+              >Real results from teams running on Greenboard</Heading
+            >
+          </ContentWrapper>
+          <ButtonWrapper marginTop="0">
+            <Eyebrow variant="tag">Solutions</Eyebrow>
+            <Eyebrow variant="tag">Small firms</Eyebrow>
+          </ButtonWrapper>
+        </SystemBlock>
+        <SystemBlock variant="panel" theme="dark">
+          <ButtonWrapper marginTop="0">
+            <Eyebrow variant="tag">Solutions</Eyebrow>
+            <Eyebrow variant="tag">About Greenboard</Eyebrow>
+          </ButtonWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Go mark"
+          text="<code>GoMark</code> sets the GreenboardGo wordmark inside a sentence. With <code>href</code> it becomes a tag with an arrow."
+          variant="panel"
+        >
+          <ContentWrapper>
+            <Paragraph variant="large">
+              <GoMark href="#labels" /> makes compliance better for the people we
+              serve.
+            </Paragraph>
+            <Paragraph>
+              <GoMark /> catches the obvious problems before anything reaches your
+              queue.
+            </Paragraph>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Lists"
+          text="<code>List</code> styles a plain list of <code>li</code> items. A <code>strong</code> opening an item is its title."
+        >
+          <Grid medium={2} class="gap-row-7">
+            <ContentWrapper>
+              <Heading tag="h4" variant="h6">check</Heading>
+              <List>
+                <li>Fast, guided setup</li>
+                <li>Templates for every policy</li>
+                <li>Exam-ready from day one</li>
+              </List>
+            </ContentWrapper>
+            <ContentWrapper>
+              <Heading tag="h4" variant="h6">steps</Heading>
+              <List variant="steps">
+                <li>
+                  <strong>A review process you configure</strong> Set your own stages,
+                  reviewer questions, and approval logic.
+                </li>
+                <li>
+                  <strong>Exam production in a click</strong> Every version, comment,
+                  flag, and approval stays attached to the piece.
+                </li>
+              </List>
+            </ContentWrapper>
+            <ContentWrapper>
+              <Heading tag="h4" variant="h6">rows</Heading>
+              <List variant="rows">
+                <li>Communications archiving and supervision</li>
+                <li>Employee compliance</li>
+                <li>Marketing review</li>
+              </List>
+            </ContentWrapper>
+            <ContentWrapper>
+              <Heading tag="h4" variant="h6">inline</Heading>
+              <List variant="inline">
+                <li>Gmail</li>
+                <li>Outlook</li>
+                <li>Slack</li>
+                <li>Teams</li>
+                <li>Zoom</li>
+                <li>WhatsApp</li>
+              </List>
+            </ContentWrapper>
+          </Grid>
+          <ContentWrapper>
+            <Heading tag="h4" variant="h6">icons</Heading>
+            <List variant="icons">
+              <li>
+                <Icon src={records} />Leading auditability and recordkeeping
+              </li>
+              <li>
+                <Icon src={shield} />Built-in regulatory guidance: WORM and
+                17a-4 compliant
+              </li>
+              <li>
+                <Icon src={lock} />Enterprise-grade security and privacy: SOC 2
+                Type 2
+              </li>
+            </List>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Logo list"
+          text="Partner and investor logos, held to one height and muted to one tone."
+        >
+          <LogoList label="Example logos">
+            <Img src={microsoft} alt="Microsoft" />
+            <Img src={firmscribe} alt="FirmScribe" />
+            <Img src={celltrust} alt="CellTrust" />
+            <Img src={kroll} alt="Kroll" />
+            <Img src={morningstar} alt="Morningstar" />
+            <Img src={aws} alt="AWS" />
+          </LogoList>
+        </SystemBlock>
+        <SystemBlock
+          heading="Facts"
+          text="Short labelled values in a row, as in the About hero."
+        >
+          <Facts>
+            <div>
+              <dt>Headquartered in</dt>
+              <dd>New York, NY</dd>
+            </div>
+            <div>
+              <dt>Founded in</dt>
+              <dd>2023</dd>
+            </div>
+          </Facts>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="cards"
+        number="11"
+        heading="Cards"
+        text="Cards are for items that stand on their own: a plan, a segment, a person. One <code>Card</code> component covers every layout through <code>variant</code>, so a set of cards always shares its spacing and type."
+      >
+        <SystemBlock
+          heading="Feature"
+          text='<code>variant="feature"</code>. Principles and capabilities, straight on the section with a hairline above.'
+        >
+          <Grid medium={2} large={3}>
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="One system of action"
+              lead="Independence from fragmented tools."
+              text="Archiving, firm compliance, employee compliance, and marketing review belong in one system, where the work and the record of the work live together."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Automation everywhere"
+              lead="That’s Go."
+              text="AI-native automation built into every workflow rather than a chatbot layered on old tools. It drafts, triages, and routes so your people decide."
+            />
+            <Card
+              variant="feature"
+              headingTag="h4"
+              heading="Exam-ready by default"
+              lead="WORM-based and 17a-4 compliant."
+              text="Unified recordkeeping designed for CCO peace of mind, so an exam request becomes a query instead of a fire drill."
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Default"
+          text="Plans and products, on a surface one step off the section. <code>eyebrow</code> sets a tag, <code>meta</code> a note beside it, and the slot takes a list."
+          variant="panel"
+          theme="soft"
+        >
+          <Grid medium={2}>
+            <Card
+              eyebrow="Small firms"
+              meta="1–25 people"
+              headingTag="h4"
+              heading="A full program without a full team."
+              text="One person often carries the whole program. Greenboard gives them the archive, the calendar, the attestations, and the exam file in one place, with Go handling the busywork."
+              buttonLabel="Talk to us"
+              buttonHref="#cards"
+            >
+              <List>
+                <li>Fast, guided setup</li>
+                <li>Templates for every policy</li>
+              </List>
+            </Card>
+            <Card
+              eyebrow="Growing businesses"
+              meta="25–250 people"
+              headingTag="h4"
+              heading="Scale the program, not the headcount."
+              text="As headcount and channels multiply, supervision has to keep pace. Configure your own risk graph, route work to the right reviewers, and keep everything on one record."
+              buttonLabel="Talk to us"
+              buttonHref="#cards"
+            >
+              <List>
+                <li>Roles, groups, and delegation</li>
+                <li>Custom Go Agents</li>
+              </List>
+            </Card>
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Link grid"
+          text="Default cards with only <code>buttonHref</code> in a <code>ruled</code> Grid. The whole card is the link and lifts to the surface color on hover."
+        >
+          <Grid ruled medium={2} large={3}>
+            <Card
+              headingTag="h4"
+              heading="Financial Advisors"
+              text="RIAs running lean programs that still need to pass a full SEC exam."
+              buttonHref="#cards"
+            />
+            <Card
+              headingTag="h4"
+              heading="Private Funds"
+              text="Fund managers juggling investor commitments, side letters, and personal trading."
+              buttonHref="#cards"
+            />
+            <Card
+              headingTag="h4"
+              heading="Hedge Funds"
+              text="High-velocity trading desks that need supervision without slowing the floor."
+              buttonHref="#cards"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Split"
+          text='<code>variant="split"</code>. Text and a photo side by side, the photo on top on small screens. Used for the solutions list.'
+        >
+          <Card
+            variant="split"
+            headingTag="h4"
+            heading="Financial Advisors"
+            text="A single, AI-powered operating system automates archiving, marketing, trading, and employee compliance so RIAs can stay focused on clients."
+            image={financialAdvisors}
+            imageAlt="Two advisors reviewing a report together at a laptop"
+            buttonLabel="Learn more"
+            buttonHref="#cards"
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Cover and stacked"
+          text="<code>cover</code> sets the text over the photo. <code>stacked</code> puts the photo above the text, straight on the section."
+        >
+          <Grid medium={2}>
+            <Card
+              variant="cover"
+              theme="dark"
+              headingTag="h4"
+              heading="Private Funds"
+              text="Fund managers juggling investor commitments, side letters, and personal trading."
+              image={privateFunds}
+              buttonLabel="Learn more"
+              buttonHref="#cards"
+            />
+            <Card
+              variant="stacked"
+              headingTag="h4"
+              heading="Hedge Funds"
+              text="High-velocity trading desks that need supervision without slowing the floor."
+              image={hedgeFunds}
+              buttonLabel="Learn more"
+              buttonHref="#cards"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Person"
+          text='<code>variant="person"</code>. Portrait, name and role, for leadership and team pages.'
+        >
+          <Grid xsmall={2} medium={3} large={5}>
+            <Card
+              variant="person"
+              headingTag="h4"
+              heading="Dave Feldman"
+              text="Co-founder and CEO"
+              image={daveFeldman}
+              imageAlt="Dave Feldman"
+            />
+            <Card
+              variant="person"
+              headingTag="h4"
+              heading="Ed Schembor"
+              text="Co-founder & CTO"
+              image={edSchembor}
+              imageAlt="Ed Schembor"
+            />
+            <Card
+              variant="person"
+              headingTag="h4"
+              heading="Dave Frisone"
+              text="Head of Revenue"
+              image={daveFrisone}
+              imageAlt="Dave Frisone"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Row"
+          text='<code>variant="row"</code>. One line and a link, the whole row clickable. For job openings and resource lists.'
+        >
+          <Grid class="gap-2">
+            <Card
+              variant="row"
+              headingTag="h4"
+              heading="AI Automation Engineer"
+              buttonLabel="Read more"
+              buttonHref="#cards"
+            />
+            <Card
+              variant="row"
+              headingTag="h4"
+              heading="Senior DevSecOps Engineer"
+              buttonLabel="Read more"
+              buttonHref="#cards"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock heading="Usage">
+          <SystemRules
+            use={[
+              "Cards in a group share one variant, so height, padding and element order match.",
+            ]}
+            avoid={[
+              "Cards inside cards.",
+              "A card for every block of text on a page.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="data"
+        number="12"
+        heading="Data"
+        text="Figures use the H1 style with tabular numerals. On dark themes the highlight variant sets them in Lemon Lime, the only place lime appears as text."
+      >
+        <SystemBlock heading="On light">
+          <Grid medium={3}>
+            <Stat
+              number="703+"
+              label="Regulated financial firms served last quarter, and counting"
+            />
+            <Stat
+              number="32 367+"
+              label="People served last quarter, and counting"
+            />
+            <Stat number="99%" label="Industry-leading retention" />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="On dark, highlighted"
+          variant="panel"
+          theme="dark"
+        >
+          <Grid medium={3}>
+            <Stat
+              variant="highlight"
+              number="24"
+              unit="hrs"
+              label="Estimated weekly time saved on marketing review"
+            />
+            <Stat variant="highlight" number="70+" label="Greenboard users" />
+            <Stat
+              variant="highlight"
+              number="20%"
+              label="Month over month headcount growth enabled"
+            />
+          </Grid>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="interactive"
+        number="13"
+        heading="Interactive"
+        text="Accordion, tabs, slider and marquee, as they run on the homepage. All of them work with a keyboard."
+      >
+        <SystemBlock
+          heading="Accordion"
+          text="Product modules. On the homepage, <code>openTheme</code> opens each item into a full-width band of that theme."
+          variant="panel"
+          theme="dark"
+        >
+          <Accordion single={false}>
+            <AccordionItem
+              heading="Archiving & Supervision"
+              label="eComms"
+              headingTag="h4"
+              open
+            >
+              <Paragraph slot="intro" variant="large" maxWidth={58}>
+                Capture every channel your firm uses, then supervise it with a
+                risk graph you configure yourself.
+              </Paragraph>
+              <List variant="inline">
+                <li>Gmail</li>
+                <li>Outlook</li>
+                <li>Slack</li>
+                <li>Teams</li>
+              </List>
+            </AccordionItem>
+            <AccordionItem
+              heading="Employee Compliance"
+              label="People"
+              headingTag="h4"
+            >
+              <Paragraph slot="intro" variant="large" maxWidth={58}>
+                Personal trading, gifts and entertainment, outside business
+                activities, and attestations in one place — with reminders your
+                team will actually act on.
+              </Paragraph>
+            </AccordionItem>
+          </Accordion>
+        </SystemBlock>
+        <SystemBlock
+          heading="Tabs"
+          text='<code>variant="pills"</code>, with a <code>CasePanel</code> in each tab. Arrow keys move between tabs.'
+          variant="panel"
+          theme="deep"
+        >
+          <Tabs variant="pills" id="system-case">
+            <TabLink slot="links">Root Financial</TabLink>
+            <TabLink slot="links">JMG Financial Group</TabLink>
+            <CasePanel
+              href="#interactive"
+              linkLabel="Read the Root Financial story"
+            >
+              <Quote
+                name="Alex Stickelman"
+                position="CCO & COO, Root Financial"
+              >
+                Whatever we came up with for marketing reviews, it had to move
+                as fast as the content creators moved.
+              </Quote>
+              <Stat
+                slot="results"
+                variant="highlight"
+                number="24"
+                unit="hrs"
+                label="Estimated weekly time saved on marketing review"
+              />
+              <Stat
+                slot="results"
+                variant="highlight"
+                number="70+"
+                label="Greenboard users"
+              />
+            </CasePanel>
+            <CasePanel
+              href="#interactive"
+              linkLabel="Read the JMG Financial Group story"
+            >
+              <Quote
+                name="Adam Boyer"
+                position="COO & CCO, JMG Financial Group"
+              >
+                I can’t say they like compliance, but I can tell you that
+                advisors love Greenboard.
+              </Quote>
+              <Stat
+                slot="results"
+                variant="highlight"
+                number="100+"
+                label="Greenboard users"
+              />
+              <Stat
+                slot="results"
+                variant="highlight"
+                number="3"
+                label="Legacy systems consolidated"
+              />
+            </CasePanel>
+          </Tabs>
+        </SystemBlock>
+        <SystemBlock
+          heading="Slider"
+          text="Quotes in an endless loop, with arrows, dots, arrow keys and swipe. <code>loop</code> turns the endless loop on."
+          variant="panel"
+          theme="soft"
+        >
+          <Slider label="Example quotes" variant="contained" xsmall={1} loop>
+            <Quote
+              variant="large"
+              name="Brook Powers"
+              position="CEO, Fiduciary Financial"
+              initials="BP"
+            >
+              Greenboard helps us detect risk and automate more of our
+              compliance program than was previously possible — and it’s easy to
+              use.
+            </Quote>
+            <Quote
+              variant="large"
+              name="Alex Stickelman"
+              position="CCO & COO, Root Financial"
+              initials="AS"
+            >
+              Whatever we came up with for marketing reviews, it had to move as
+              fast as the content creators moved.
+            </Quote>
+          </Slider>
+        </SystemBlock>
+        <SystemBlock
+          heading="Marquee"
+          text="A row that scrolls on its own and pauses on hover. <code>caption</code> sets the line before it."
+        >
+          <Marquee label="Example customers" caption="Trusted by firms like">
+            <span>Root Financial</span>
+            <span>JMG Financial Group</span>
+            <span>FSG / ICA</span>
+            <span>Fiduciary Financial</span>
+          </Marquee>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="headers"
+        number="14"
+        heading="Section heads"
+        text="A section opens with a ContentWrapper holding an Eyebrow, Heading, Paragraph and buttons. Widths are set in characters, so they hold their shape at every screen size."
+      >
+        <SystemBlock
+          heading="Stacked"
+          text="The default <code>stack</code> variant. Heading, intro and an optional action."
+          variant="panel"
+        >
+          <ContentWrapper>
+            <Eyebrow>What we believe</Eyebrow>
+            <Heading tag="h4" variant="h2" maxWidth={20}>Our principles</Heading
+            >
+            <Paragraph maxWidth={48} class="color-faded">
+              Six commitments that shape the product and the way we work with
+              the firms we serve.
+            </Paragraph>
+            <ButtonWrapper>
+              <Button variant="link">See GreenboardGo</Button>
+            </ButtonWrapper>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Auto width"
+          text='<code>variant="auto-width"</code>. Heading on the left, the second column on the right, as on most homepage sections.'
+          variant="panel"
+        >
+          <ContentWrapper variant="auto-width">
+            <Heading tag="h4" variant="h2" maxWidth={16}
+              >Right-sized for your firm</Heading
+            >
+            <Paragraph slot="column2" maxWidth={44} class="color-faded">
+              The same records backbone whether you’re one person or a
+              multi-entity organization, configured to the program you actually
+              run.
+            </Paragraph>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Centered"
+          text="<code>centered</code> on the stack variant. For closing calls to action and statements."
+          variant="panel"
+          theme="dark"
+        >
+          <ContentWrapper centered>
+            <Heading tag="h4" variant="h2" maxWidth={18} class="heading-accent">
+              Built for <strong>AI-native</strong> compliance teams.
+            </Heading>
+            <ButtonWrapper>
+              <Button>Book a demo</Button>
+            </ButtonWrapper>
+          </ContentWrapper>
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="build"
+        number="15"
+        heading="Astro build"
+        text="Where things live in the repository, and every component with its variants and props, read from the source each time the site builds."
+      >
+        <SystemBlock heading="Files">
+          <SystemTable
+            label="Files"
+            head={["Path", "What it holds"]}
+            rows={[
+              [
+                "<code>src/styles/base.css</code>",
+                "Tokens, themes, text styles and element defaults.",
+              ],
+              [
+                "<code>src/styles/patterns.css</code>",
+                "Shared patterns such as the heading accent, eyebrow spacing and margin trim.",
+              ],
+              [
+                "<code>src/styles/utilities.css</code>",
+                "Single-purpose classes for one-off changes.",
+              ],
+              [
+                "<code>src/components</code>",
+                "One file per component, holding its markup, styles and script.",
+              ],
+              [
+                "<code>src/pages</code>",
+                "One file per page, assembled from components.",
+              ],
+              [
+                "<code>src/assets</code>",
+                "Images and icons, optimized when the site builds.",
+              ],
+              [
+                "<code>LUMOS.md</code>",
+                "The rules for adding pages, components and styles.",
+              ],
+            ]}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Components"
+          text="Listed from the component files. Hover a prop for its description."
+        >
+          <SystemProps />
+        </SystemBlock>
+        <SystemBlock heading="Adding to the system">
+          <SystemRules
+            use={[
+              "Build pages from existing components before writing new markup.",
+              "Add a variant to a component before creating a new one.",
+              "Put a new value in <code>base.css</code> as a token, then read the token.",
+            ]}
+            avoid={[
+              "Styles on a page. They belong in the component that needs them.",
+              "The same class or prop repeated on every instance. Change the default instead.",
+              "Lengths in <code>px</code>.",
+            ]}
+          />
+        </SystemBlock>
+      </SystemChapter>
+    </SystemLayout>
+  </Section>
+</Layout>

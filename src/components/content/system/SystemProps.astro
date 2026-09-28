@@ -1,0 +1,133 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Heading from "@/components/typography/Heading.astro";
+import SystemTable from "@/components/content/system/SystemTable.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+};
+
+const { render = true, class: className, ...rest } = Astro.props;
+
+const files = import.meta.glob<string>(
+  ["/src/components/**/*.astro", "!/src/components/content/system/**"],
+  { query: "?raw", import: "default", eager: true },
+);
+
+const literals = (type: string) =>
+  [...type.matchAll(/"([^"]*)"/g)].map((match) => match[1]);
+const isLiteralUnion = (type: string) =>
+  /^("[^"]*"\s*\|?\s*)+$/.test(type.replace(/^\|\s*/, ""));
+const escape = (text: string) =>
+  text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+type Prop = { name: string; doc: string; type: string; values: string[] };
+
+function readProps(source: string) {
+  const frontmatter = source.split(/^---$/m)[1] ?? "";
+  const aliases = new Map(
+    [...frontmatter.matchAll(/type (\w+)\s*=\s*([^;{]+);/g)]
+      .map((match) => [match[1], match[2].replace(/\s+/g, " ").trim()] as const)
+      .filter(([, value]) => isLiteralUnion(value)),
+  );
+  const props = new Map<string, Prop>();
+  for (const match of frontmatter.matchAll(
+    /\/\*\*([\s\S]*?)\*\/\s*([A-Za-z]\w*)\??\s*:\s*([^;]+);/g,
+  )) {
+    const [, rawDoc, name, rawType] = match;
+    let type = rawType.replace(/\s+/g, " ").trim();
+    type = aliases.get(type) ?? type;
+    if (type === "never" || name === "render") continue;
+    const doc = rawDoc
+      .split("\n")
+      .map((line) => line.replace(/^\s*\*\s?/, "").trim())
+      .filter((line) => line && !line.startsWith("@"))
+      .join(" ");
+    const known = props.get(name);
+    const values = isLiteralUnion(type) ? literals(type) : [];
+    if (known) {
+      known.values = [...new Set([...known.values, ...values])];
+    } else {
+      props.set(name, { name, doc, type, values });
+    }
+  }
+  const variant = props.get("variant");
+  if (variant) {
+    for (const match of frontmatter.matchAll(
+      /^\s*variant\??\s*:\s*([^;]+);/gm,
+    )) {
+      variant.values = [
+        ...new Set([
+          ...variant.values,
+          ...literals(aliases.get(match[1].trim()) ?? match[1]),
+        ]),
+      ];
+    }
+  }
+  return [...props.values()];
+}
+
+const groups = new Map<string, string[][]>();
+for (const [path, source] of Object.entries(files).sort(([a], [b]) =>
+  a.localeCompare(b),
+)) {
+  const parts = path.split("/");
+  const component = parts.pop()!.replace(".astro", "");
+  const folder = parts.length > 3 ? parts.slice(3).join("/") : "root";
+  const props = readProps(source);
+  const variant = props.find((prop) => prop.name === "variant");
+  const others = props.filter((prop) => prop.name !== "variant");
+  const row = [
+    `${component}<br><code>${folder === "root" ? "" : `${folder}/`}${component}.astro</code>`,
+    variant?.values.length ? variant.values.join(", ") : "",
+    others
+      .map((prop) => `<code title="${escape(prop.doc)}">${prop.name}</code>`)
+      .join(" "),
+  ];
+  groups.set(folder, [...(groups.get(folder) ?? []), row]);
+}
+---
+
+{
+  render && groups.size > 0 && (
+    <div class:list={["system-props_wrap", className]} {...rest}>
+      {[...groups].map(([folder, rows]) => (
+        <div class="system-props_group">
+          <Heading tag="h4" variant="h6">
+            {folder === "root" ? "components" : folder}
+          </Heading>
+          <SystemTable
+            label={`Components in ${folder}`}
+            head={["Component", "Variants", "Props"]}
+            rows={rows}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-props_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      width: 100%;
+    }
+
+    .system-props_group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      & > * {
+        margin: 0;
+      }
+    }
+  }
+</style>

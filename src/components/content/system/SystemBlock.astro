@@ -1,0 +1,93 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Block title. */
+  heading?: string;
+  /** Short note under the title. Supports inline markup. */
+  text?: string;
+  /** Block layout. `panel` frames the examples in a bordered box. */
+  variant?: "default" | "panel";
+  /** Color theme of element and its children. */
+  theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand";
+};
+
+const {
+  render = true,
+  heading,
+  text,
+  variant = "default",
+  theme = "inherit",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const content = await slotContent(Astro.slots);
+---
+
+{
+  render && content && (
+    <div
+      class:list={[
+        "system-block_wrap",
+        variant !== "default" && variant,
+        className,
+      ]}
+      {...rest}
+    >
+      {heading && (
+        <div class="system-block_head margin-trim">
+          <Heading tag="h3" variant="h5">
+            <Fragment set:html={heading} />
+          </Heading>
+          <Paragraph variant="small" maxWidth={72} class="color-faded">
+            <Fragment set:html={text} />
+          </Paragraph>
+        </div>
+      )}
+      <div
+        class:list={[
+          "system-block_body",
+          "margin-trim",
+          theme !== "inherit" && `theme-${theme}`,
+        ]}
+      >
+        <Fragment set:html={content} />
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-block_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      width: 100%;
+
+      &.panel > .system-block_body {
+        padding: var(--space-6);
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-main);
+      }
+    }
+
+    .system-block_head > .heading + .text {
+      margin-top: var(--space-2);
+    }
+
+    .system-block_body {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-6);
+      min-width: 0;
+    }
+  }
+</style>

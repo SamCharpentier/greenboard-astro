@@ -1,0 +1,129 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import { range, resolve } from "@/utils/tokens.ts";
+import { slotContent } from "@/utils/slots.ts";
+
+type TextStyle =
+  | "display"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "large"
+  | "main"
+  | "small";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Where the style is used. */
+  note?: string;
+  /** Text style shown. */
+  variant?: TextStyle;
+};
+
+const {
+  render = true,
+  note,
+  variant = "main",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const sample = await slotContent(Astro.slots);
+
+const prefix = ["large", "main", "small"].includes(variant)
+  ? `text-${variant}`
+  : variant;
+const name =
+  variant.length === 2
+    ? variant.toUpperCase()
+    : variant[0].toUpperCase() + variant.slice(1);
+const weights: Record<string, string> = {
+  "300": "Light 300",
+  "400": "Regular 400",
+  "500": "Medium 500",
+  "600": "Semibold 600",
+};
+const weight = resolve(`${prefix}-font-weight`) ?? "";
+const specs = [
+  ["Size", range(prefix)],
+  ["Line", resolve(`${prefix}-line-height`)],
+  ["Weight", weights[weight] ?? weight],
+  ["Tracking", resolve(`${prefix}-letter-spacing`)],
+];
+---
+
+{
+  render && sample && (
+    <div class:list={["system-type_wrap", className]} {...rest}>
+      <div class="system-type_about">
+        <p class="text-style-h6">{name}</p>
+        <p class="text-style-small">
+          <code>text-style-{variant}</code>
+        </p>
+        <dl class="system-type_specs text-style-small">
+          {specs.map(([label, value]) => (
+            <div>
+              <dt class="color-faded">{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+        {note && <p class="text-style-small color-faded">{note}</p>}
+      </div>
+      <Paragraph variant={variant} class="system-type_sample">
+        <Fragment set:html={sample} />
+      </Paragraph>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-type_wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-5) var(--space-7);
+      padding-block: var(--space-6);
+      border-top: var(--border-width) solid var(--border);
+      @media (width >= 48rem) {
+        grid-template-columns: 14rem minmax(0, 1fr);
+      }
+    }
+
+    .system-type_about {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+      & > * {
+        margin: 0;
+      }
+    }
+
+    .system-type_specs {
+      align-self: stretch;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-2) var(--space-4);
+      margin: 0;
+      &::before,
+      &::after {
+        content: none;
+      }
+      & dd {
+        margin: 0;
+      }
+    }
+
+    .system-type_sample {
+      margin: 0;
+      min-width: 0;
+      overflow-wrap: break-word;
+    }
+  }
+</style>

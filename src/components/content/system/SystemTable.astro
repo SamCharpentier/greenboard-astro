@@ -1,0 +1,99 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Accessible label. */
+  label?: string;
+  /** Column titles. */
+  head?: string[];
+  /** Table rows. The first cell names the row. Cells support inline markup. */
+  rows?: string[][];
+};
+
+const {
+  render = true,
+  label,
+  head = [],
+  rows = [],
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && rows.length > 0 && (
+    <div
+      class:list={["system-table_wrap", "text-style-small", className]}
+      role={label ? "region" : undefined}
+      aria-label={label}
+      tabindex={label ? "0" : undefined}
+      {...rest}
+    >
+      <table class="system-table_table">
+        {head.length > 0 && (
+          <thead>
+            <tr>
+              {head.map((title) => (
+                <th scope="col">{title}</th>
+              ))}
+            </tr>
+          </thead>
+        )}
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              {row.map((cell, index) =>
+                index === 0 ? (
+                  <th scope="row" set:html={cell} />
+                ) : (
+                  <td set:html={cell} />
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-table_wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .system-table_table {
+      width: 100%;
+      min-width: 36rem;
+      border-collapse: collapse;
+      text-align: left;
+      & :is(th, td) {
+        padding: var(--space-3) var(--space-4);
+        vertical-align: top;
+      }
+      & thead th {
+        color: var(--text-2);
+        font-weight: var(--primary-regular);
+      }
+      & tbody th {
+        font-weight: var(--primary-medium);
+      }
+      & code {
+        white-space: nowrap;
+      }
+      & tbody tr {
+        border-top: var(--border-width) solid var(--border);
+      }
+    }
+  }
+</style>

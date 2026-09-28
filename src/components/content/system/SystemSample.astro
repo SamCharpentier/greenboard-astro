@@ -1,0 +1,117 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Sample name. */
+  label?: string;
+  /** Where it is used. */
+  note?: string;
+  /** What the sample shows: a radius, a surface, or a font weight. */
+  variant?:
+    | "corner-small"
+    | "corner-main"
+    | "corner-round"
+    | "surface"
+    | "floating"
+    | "type-light"
+    | "type-regular"
+    | "type-medium"
+    | "type-bold";
+};
+
+const {
+  render = true,
+  label,
+  note,
+  variant = "surface",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const isWeight = [
+  "type-light",
+  "type-regular",
+  "type-medium",
+  "type-bold",
+].includes(variant);
+---
+
+{
+  render && label && (
+    <div class:list={["system-sample_wrap", variant, className]} {...rest}>
+      {isWeight ? (
+        <p class="system-sample_glyph text-style-display" aria-hidden="true">
+          Ag
+        </p>
+      ) : (
+        <div class="system-sample_visual" />
+      )}
+      <div class="system-sample_content">
+        <p class="text-style-h6">{label}</p>
+        {note && <p class="text-style-small color-faded">{note}</p>}
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-sample_wrap {
+      --_radius: var(--radius-main);
+      --_weight: var(--primary-regular);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      width: 100%;
+
+      &.corner-small {
+        --_radius: var(--radius-small);
+      }
+      &.corner-round {
+        --_radius: var(--radius-round);
+      }
+      &.type-light {
+        --_weight: var(--primary-light);
+      }
+      &.type-medium {
+        --_weight: var(--primary-medium);
+      }
+      &.type-bold {
+        --_weight: var(--primary-bold);
+      }
+    }
+
+    .system-sample_visual {
+      width: 100%;
+      height: 6rem;
+      border-radius: var(--_radius);
+      background-color: var(--background-3);
+
+      .surface > & {
+        background-color: var(--background-2);
+      }
+      .floating > & {
+        background-color: var(--ivory-50);
+        box-shadow: var(--shadow-float);
+      }
+    }
+
+    .system-sample_glyph {
+      margin: 0;
+      padding-top: var(--space-4);
+      border-top: var(--border-width) solid var(--border);
+      font-weight: var(--_weight);
+    }
+
+    .system-sample_content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      & > * {
+        margin: 0;
+      }
+    }
+  }
+</style>

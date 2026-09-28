@@ -1,0 +1,79 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"section"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Chapter number, shown above the title. */
+  number?: string;
+  /** Chapter title. */
+  heading?: string;
+  /** Introduction under the title. */
+  text?: string;
+  /** Anchor the index links to. */
+  id: string;
+};
+
+const {
+  render = true,
+  number,
+  heading,
+  text,
+  id,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const content = await slotContent(Astro.slots);
+const titleId = `${id}-title`;
+---
+
+{
+  render && heading && (
+    <section
+      class:list={["system-chapter_wrap", className]}
+      id={id}
+      aria-labelledby={titleId}
+      {...rest}
+    >
+      <div class="system-chapter_head margin-trim">
+        <Eyebrow>{number}</Eyebrow>
+        <Heading tag="h2" id={titleId} maxWidth={24}>
+          <Fragment set:html={heading} />
+        </Heading>
+        <Paragraph variant="large" maxWidth={56} class="color-faded">
+          <Fragment set:html={text} />
+        </Paragraph>
+      </div>
+      {content && (
+        <div class="system-chapter_body">
+          <Fragment set:html={content} />
+        </div>
+      )}
+    </section>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-chapter_wrap {
+      & + .system-chapter_wrap {
+        margin-top: var(--section-space-medium);
+      }
+    }
+
+    .system-chapter_head {
+      margin-bottom: var(--space-8);
+    }
+
+    .system-chapter_body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+  }
+</style>

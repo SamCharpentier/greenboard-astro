@@ -1,0 +1,86 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** What to do. Supports inline markup. */
+  use?: string[];
+  /** What to avoid. Supports inline markup. */
+  avoid?: string[];
+};
+
+const {
+  render = true,
+  use = [],
+  avoid = [],
+  class: className,
+  ...rest
+} = Astro.props;
+
+const groups = [
+  { label: "Do", items: use, tone: "use" },
+  { label: "Avoid", items: avoid, tone: "avoid" },
+].filter((group) => group.items.length > 0);
+---
+
+{
+  render && groups.length > 0 && (
+    <div class:list={["system-rules_wrap", className]} {...rest}>
+      {groups.map((group) => (
+        <div class:list={["system-rules_group", group.tone]}>
+          <p class="system-rules_label text-style-small">{group.label}</p>
+          <ul class="system-rules_list text-style-small">
+            {group.items.map((item) => (
+              <li set:html={item} />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-rules_wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6) var(--site-gutter);
+      width: 100%;
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .system-rules_group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding-top: var(--space-4);
+      border-top: var(--border-width) solid var(--border);
+      & > * {
+        margin: 0;
+      }
+    }
+
+    .system-rules_label {
+      font-weight: var(--primary-medium);
+      .use > & {
+        color: var(--heading-accent);
+      }
+    }
+
+    .system-rules_list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      padding-left: 1.25em;
+      list-style: disc;
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+  }
+</style>

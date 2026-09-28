@@ -1,0 +1,101 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { resolve } from "@/utils/tokens.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Color name. */
+  name?: string;
+  /** What the color is for. */
+  note?: string;
+  /** Swatch token in `base.css`, without the dashes. */
+  token?: string;
+  /** Swatch size. `compact` fits a tonal range on one row. */
+  variant?: "default" | "compact";
+};
+
+const {
+  render = true,
+  name,
+  note,
+  token,
+  variant = "default",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const value = token ? resolve(token) : undefined;
+const label = variant === "compact" ? token?.split("-").pop() : name;
+---
+
+{
+  render && token && value && (
+    <div
+      class:list={[
+        "system-swatch_wrap",
+        variant !== "default" && variant,
+        className,
+      ]}
+      {...rest}
+    >
+      <div class="system-swatch_chip" style={`--_swatch: var(--${token})`} />
+      <div class="system-swatch_content">
+        <p class="system-swatch_name text-style-h6">{label}</p>
+        <p class="system-swatch_meta text-style-small">
+          {variant === "default" && <code>--{token}</code>}
+          <span>{value.toUpperCase()}</span>
+        </p>
+        {note && (
+          <p class="system-swatch_note text-style-small color-faded">{note}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-swatch_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      width: 100%;
+      &.compact {
+        gap: var(--space-2);
+        .system-swatch_chip {
+          aspect-ratio: 4 / 3;
+        }
+      }
+    }
+
+    .system-swatch_chip {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      border-radius: var(--radius-main);
+      background-color: var(--_swatch);
+      box-shadow: inset 0 0 0 var(--border-width) var(--border);
+    }
+
+    .system-swatch_content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      & > * {
+        margin: 0;
+      }
+    }
+
+    .system-swatch_meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 var(--space-2);
+      color: var(--text-2);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+  }
+</style>

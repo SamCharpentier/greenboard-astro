@@ -1,0 +1,88 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Button from "@/components/Button.astro";
+import type { ThemeName } from "@/utils/tokens.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Theme name. */
+  name?: string;
+  /** The color the theme sits on. */
+  surface?: string;
+  /** Where the theme is used. */
+  text?: string;
+  /** Sample heading. `<strong>` takes the accent. */
+  heading?: string;
+  /** Color theme of element and its children. */
+  theme: ThemeName;
+};
+
+const {
+  render = true,
+  name,
+  surface,
+  text,
+  heading = "Compliance is mandatory, <strong>suffering is not.</strong>",
+  theme,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && name && (
+    <div
+      class:list={["system-theme_wrap", `theme-${theme}`, className]}
+      {...rest}
+    >
+      <div class="system-theme_about margin-trim">
+        <Heading tag="h4" variant="h5">
+          {name}
+        </Heading>
+        <Paragraph variant="small">
+          <code>theme-{theme}</code> on {surface}
+        </Paragraph>
+        <Paragraph variant="small" class="color-faded">
+          {text}
+        </Paragraph>
+      </div>
+      <div class="system-theme_sample margin-trim">
+        <Paragraph variant="h4" class="heading-accent">
+          <Fragment set:html={heading} />
+        </Paragraph>
+        <Paragraph variant="small" class="color-faded">
+          Muted text for supporting copy.
+        </Paragraph>
+        <ButtonWrapper>
+          <Button>Book a demo</Button>
+          <Button emphasis="secondary">Talk to us</Button>
+          <Button variant="link">See GreenboardGo</Button>
+        </ButtonWrapper>
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-theme_wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-5) var(--space-7);
+      padding: var(--space-6);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      @media (width >= 48rem) {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      }
+    }
+
+    .system-theme_about > .text {
+      margin-top: var(--space-2);
+    }
+  }
+</style>

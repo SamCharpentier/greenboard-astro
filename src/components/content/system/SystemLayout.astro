@@ -1,0 +1,124 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Chapters listed in the index, each with the id of its section. */
+  chapters?: { id: string; label: string }[];
+};
+
+const { render = true, chapters = [], class: className, ...rest } = Astro.props;
+
+const content = await slotContent(Astro.slots);
+---
+
+{
+  render && content && (
+    <div class:list={["system-layout_wrap", className]} {...rest}>
+      {chapters.length > 0 && (
+        <nav class="system-layout_index" aria-label="Web system chapters">
+          <ul class="system-layout_list" role="list">
+            {chapters.map((chapter) => (
+              <li>
+                <a
+                  class="system-layout_link text-style-small"
+                  href={`#${chapter.id}`}
+                >
+                  {chapter.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+      <div class="system-layout_main">
+        <Fragment set:html={content} />
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .system-layout_wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-8) var(--site-gutter);
+      width: 100%;
+      @media (width >= 64rem) {
+        grid-template-columns: 12rem minmax(0, 1fr);
+        .system-layout_index {
+          position: sticky;
+          top: calc(var(--nav-height) + var(--space-6));
+          align-self: start;
+        }
+        .system-layout_list {
+          flex-direction: column;
+          gap: var(--space-2);
+        }
+        .system-layout_link {
+          padding: 0;
+          border: 0;
+        }
+      }
+    }
+
+    .system-layout_list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .system-layout_link {
+      display: inline-flex;
+      padding: 0.25rem 0.75rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-round);
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color var(--hover-duration) var(--hover-ease);
+      &::before,
+      &::after {
+        content: none;
+      }
+      &:hover,
+      &[aria-current="true"] {
+        color: var(--text);
+      }
+    }
+
+    .system-layout_main {
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+  const links = [
+    ...document.querySelectorAll<HTMLAnchorElement>(".system-layout_link"),
+  ];
+  const chapters = links
+    .map((link) => document.getElementById(link.hash.slice(1)))
+    .filter((chapter): chapter is HTMLElement => !!chapter);
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => {
+          if (link.hash === `#${entry.target.id}`)
+            link.setAttribute("aria-current", "true");
+          else link.removeAttribute("aria-current");
+        });
+      });
+    },
+    { rootMargin: "-30% 0px -65% 0px" },
+  );
+
+  chapters.forEach((chapter) => observer.observe(chapter));
+</script>
