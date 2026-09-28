@@ -40,7 +40,7 @@ const { render = true, overlap = false } = Astro.props;
             <ul class="nav_links">
               <li>
                 <Dropdown label="Product">
-                  <div class="nav_panel">
+                  <div class="nav_panel theme-light">
                     <div class="nav_group">
                       <p class="nav_group_label text-style-small">Platform</p>
                       <ul class="nav_group_list">
@@ -65,7 +65,7 @@ const { render = true, overlap = false } = Astro.props;
               </li>
               <li>
                 <Dropdown label="Customers">
-                  <div class="nav_panel">
+                  <div class="nav_panel theme-light">
                     <div class="nav_group">
                       <p class="nav_group_label text-style-small">Firm types</p>
                       <ul class="nav_group_list">
@@ -93,12 +93,26 @@ const { render = true, overlap = false } = Astro.props;
                         <NavLink href="/#testimonials">In their words</NavLink>
                       </ul>
                     </div>
+                    <div class="nav_stats">
+                      <div>
+                        <p class="nav_stat_number text-style-h3">703+</p>
+                        <p class="nav_stat_label text-style-small">
+                          Regulated financial firms served last quarter, and counting
+                        </p>
+                      </div>
+                      <div>
+                        <p class="nav_stat_number text-style-h3">32 367+</p>
+                        <p class="nav_stat_label text-style-small">
+                          People served last quarter, and counting
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </Dropdown>
               </li>
               <li>
                 <Dropdown label="Company">
-                  <div class="nav_panel">
+                  <div class="nav_panel theme-light">
                     <div class="nav_group">
                       <p class="nav_group_label text-style-small">Company</p>
                       <ul class="nav_group_list">
@@ -113,9 +127,15 @@ const { render = true, overlap = false } = Astro.props;
               </li>
             </ul>
             <div class="nav_actions">
-              <a class="nav_login" href="#">Login</a>
-              <Button element="link" href="/#demo" icon="none">
-                Book a demo
+              <Button element="link" href="/#demo">Book a demo</Button>
+              <Button
+                element="link"
+                href="#"
+                emphasis="secondary"
+                icon="none"
+                class="nav_login"
+              >
+                Login
               </Button>
             </div>
           </div>
@@ -260,8 +280,15 @@ const { render = true, overlap = false } = Astro.props;
 
 <style is:global>
   @layer components {
+    /* The bar's own theme, kept under names the light menus can still read */
     .nav_wrap {
       --_fill: 1;
+      --_nav-background: var(--background);
+      --_nav-background-2: var(--background-2);
+      --_nav-text: var(--text);
+      --_nav-text-2: var(--text-2);
+      --_nav-border: var(--border);
+      --_nav-accent: var(--heading-accent);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -296,16 +323,11 @@ const { render = true, overlap = false } = Astro.props;
       gap: 0 var(--space-6);
     }
 
-    /* Bar height */
-    .nav_logo,
-    .nav_toggle {
-      min-height: var(--nav-height);
-    }
-
     .nav_logo {
       display: flex;
       align-items: center;
       width: 8.5rem;
+      min-height: var(--nav-height);
       transition: opacity var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
@@ -315,19 +337,20 @@ const { render = true, overlap = false } = Astro.props;
     }
 
     .nav_toggle {
-      --_icon-width: 1.5rem;
-      --_bar-gap: 0.5rem;
+      --_icon-width: 1rem;
+      --_bar-gap: 0.40625rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 2.75rem;
-      margin-right: calc((2.75rem - var(--_icon-width)) / -2);
+      width: 2.5rem;
+      aspect-ratio: 1 / 1;
       color: inherit;
-      border-radius: var(--radius-small);
-      transition: opacity var(--hover-duration) var(--hover-ease);
+      border: var(--border-width) solid var(--button-2-border);
+      border-radius: var(--radius-round);
+      transition: border-color var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
-          opacity: 0.6;
+          border-color: currentcolor;
         }
       }
     }
@@ -336,13 +359,14 @@ const { render = true, overlap = false } = Astro.props;
       position: relative;
       display: block;
       width: var(--_icon-width);
-      height: calc(var(--_bar-gap) + var(--border-width));
+      height: calc(var(--_bar-gap) + var(--icon-stroke-width));
       &::before,
       &::after {
         content: "";
         position: absolute;
         inset-inline: 0;
-        height: var(--border-width);
+        height: var(--icon-stroke-width);
+        border-radius: var(--radius-round);
         background-color: currentcolor;
         transition: transform var(--open-duration) var(--open-ease);
       }
@@ -363,6 +387,7 @@ const { render = true, overlap = false } = Astro.props;
       }
     }
 
+    /* On a phone the menu is a sheet under the bar, in the bar's theme */
     .nav_menu {
       position: absolute;
       top: 100%;
@@ -375,7 +400,7 @@ const { render = true, overlap = false } = Astro.props;
       overflow-y: auto;
       overscroll-behavior: contain;
       background-color: var(--background);
-      border-bottom: var(--border-width) solid var(--border);
+      border-top: var(--border-width) solid var(--border);
       transition:
         grid-template-rows var(--open-duration) var(--open-ease),
         visibility var(--open-duration) var(--open-ease);
@@ -390,6 +415,7 @@ const { render = true, overlap = false } = Astro.props;
     .nav_wrap.open .nav_menu {
       grid-template-rows: 1fr;
       visibility: visible;
+      min-height: calc(100svh - var(--nav-height));
     }
 
     .nav_wrap.open .nav_menu_inner {
@@ -400,19 +426,49 @@ const { render = true, overlap = false } = Astro.props;
     .nav_links {
       display: flex;
       flex-direction: column;
-      padding: var(--space-2) var(--site-margin) 0;
-      & > li + li {
-        border-top: var(--border-width) solid var(--border);
+      padding: var(--space-4) var(--site-margin) 0;
+      & > li {
+        border-bottom: var(--border-width) solid var(--border);
       }
       & .dropdown_wrap {
         display: block;
       }
       & .dropdown_toggle {
         justify-content: space-between;
-        padding-block: var(--space-4);
-        font-size: var(--text-large);
+        padding-block: var(--space-5);
+        font-size: var(--h4);
+        transition: color var(--hover-duration) var(--hover-ease);
+        @media (hover: hover) {
+          &:hover {
+            color: inherit;
+          }
+        }
+        /* A plus in a ring, turning to a cross while open */
+        &::after {
+          content: "";
+          flex: none;
+          width: 2.5rem;
+          aspect-ratio: 1 / 1;
+          border: var(--border-width) solid var(--border);
+          border-radius: var(--radius-round);
+          background:
+            linear-gradient(currentcolor, currentcolor) center / 0.875rem
+              var(--icon-stroke-width) no-repeat,
+            linear-gradient(currentcolor, currentcolor) center /
+              var(--icon-stroke-width) 0.875rem no-repeat;
+          transition: rotate var(--open-duration) var(--open-ease);
+        }
       }
-      /* Menus open in place in the column, not as floating panels */
+      & .dropdown_icon {
+        display: none;
+      }
+      & .dropdown_wrap:is([open], .stacki-opened) > .dropdown_toggle {
+        color: var(--heading-accent);
+        &::after {
+          rotate: 45deg;
+        }
+      }
+      /* Menus open in place in the sheet, not as floating panels */
       & .dropdown_content {
         position: static;
         width: auto;
@@ -422,7 +478,7 @@ const { render = true, overlap = false } = Astro.props;
         scale: none;
       }
       & .dropdown_body {
-        padding: 0 0 var(--space-5);
+        padding: 0 0 var(--space-6);
       }
     }
 
@@ -430,11 +486,20 @@ const { render = true, overlap = false } = Astro.props;
       display: flex;
       flex-direction: column;
       gap: var(--space-5) var(--space-7);
+      @media (width < 64rem) {
+        --background: var(--_nav-background);
+        --background-2: var(--_nav-background-2);
+        --text: var(--_nav-text);
+        --text-2: var(--_nav-text-2);
+        --border: var(--_nav-border);
+        --heading-accent: var(--_nav-accent);
+        color-scheme: inherit;
+      }
     }
 
     .nav_group_label {
-      margin-bottom: var(--space-2);
-      color: var(--text-2);
+      margin-bottom: var(--space-1);
+      color: var(--heading-accent);
     }
 
     .nav_group_list {
@@ -445,7 +510,9 @@ const { render = true, overlap = false } = Astro.props;
     .nav_link {
       display: block;
       padding-block: var(--space-1);
-      color: var(--text);
+      color: var(--text-2);
+      font-size: var(--text-large);
+      line-height: var(--line-height-medium);
       text-decoration: none;
       transition:
         color var(--hover-duration) var(--hover-ease),
@@ -455,27 +522,21 @@ const { render = true, overlap = false } = Astro.props;
       }
       @media (hover: hover) {
         &:hover {
-          color: var(--heading-accent);
+          color: var(--text);
         }
       }
+    }
+
+    .nav_stats {
+      display: none;
     }
 
     .nav_actions {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--space-3) var(--space-5);
-      padding: var(--space-5) var(--site-margin) var(--space-6);
-    }
-
-    .nav_login {
-      color: var(--text-2);
-      transition: color var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          color: var(--text);
-        }
-      }
+      gap: var(--space-3);
+      padding: var(--space-7) var(--site-margin) var(--space-6);
     }
 
     @media (width >= 64rem) {
@@ -509,8 +570,8 @@ const { render = true, overlap = false } = Astro.props;
         gap: var(--space-1);
         margin-left: calc(var(--space-3) * -1);
         padding: 0;
-        & > li + li {
-          border-top: 0;
+        & > li {
+          border-bottom: 0;
         }
         & .dropdown_wrap {
           display: inline-block;
@@ -524,6 +585,9 @@ const { render = true, overlap = false } = Astro.props;
           transition:
             background-color var(--hover-duration) var(--hover-ease),
             color var(--hover-duration) var(--hover-ease);
+          &::after {
+            content: none;
+          }
           @media (hover: hover) {
             &:hover {
               background-color: var(--background-2);
@@ -531,16 +595,17 @@ const { render = true, overlap = false } = Astro.props;
             }
           }
         }
-        & .dropdown_wrap[open] .dropdown_toggle {
+        & .dropdown_icon {
+          display: block;
+        }
+        & .dropdown_wrap:is([open], .stacki-opened) > .dropdown_toggle {
           background-color: var(--background-2);
           color: var(--text);
         }
         & .dropdown_content {
           position: absolute;
-          top: calc(100% + var(--space-2));
+          top: calc(100% + var(--space-3));
           width: max-content;
-          background-color: var(--background-2);
-          border-radius: var(--radius-main);
           translate: 0 -0.5rem;
           scale: 0.98;
         }
@@ -549,27 +614,92 @@ const { render = true, overlap = false } = Astro.props;
           scale: 1;
         }
         & .dropdown_body {
-          padding: var(--space-5);
+          padding: 0;
         }
       }
 
+      /* The open menu: always light, lifted off the page */
       .nav_panel {
         flex-direction: row;
+        padding: var(--space-5);
+        border-radius: var(--radius-main);
+        box-shadow: 0 1.5rem 3rem -1.5rem
+          color-mix(in srgb, var(--midnight-900) 55%, transparent);
       }
 
       .nav_group {
         min-width: 11rem;
       }
 
+      .nav_group_label {
+        margin-bottom: var(--space-3);
+        color: var(--text-2);
+      }
+
+      .nav_group_list {
+        gap: 0.125rem;
+        margin-left: calc(var(--space-2) * -1);
+      }
+
       .nav_link {
+        padding: 0.3125rem var(--space-2);
+        border-radius: var(--radius-small);
+        color: var(--text);
+        font-size: inherit;
         white-space: nowrap;
+        &[aria-current="page"] {
+          background-color: var(--background-2);
+        }
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--background-2);
+          }
+        }
+        &:focus-visible {
+          background-color: var(--background-2);
+        }
+      }
+
+      .nav_stats {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-5);
+        width: 13rem;
+        padding-left: var(--space-6);
+        border-left: var(--border-width) solid var(--border);
+      }
+
+      .nav_stat_number {
+        margin-bottom: var(--space-2);
+        font-weight: var(--primary-light);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .nav_stat_label {
+        color: var(--text-2);
       }
 
       .nav_actions {
         grid-area: actions;
-        justify-content: flex-end;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
         flex-wrap: nowrap;
+        gap: var(--space-4);
         padding: 0;
+        & .button_icon {
+          display: none;
+        }
+      }
+
+      /* Beside the main action, Login reads as plain text */
+      .nav_login.button_wrap {
+        --button-background: transparent;
+        --button-border: transparent;
+        --button-text: var(--text-2);
+        --button-background-hover: transparent;
+        --button-border-hover: transparent;
+        --button-text-hover: var(--text);
+        padding-inline: 0;
       }
     }
   }
