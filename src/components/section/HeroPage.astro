@@ -1,0 +1,126 @@
+---
+import type { ComponentProps, HTMLAttributes } from "astro/types";
+import Section from "@/components/wrapper/Section.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Img from "@/components/media/Img.astro";
+import { slotContent } from "@/utils/slots.ts";
+import { uid } from "@/utils/unique-id.ts";
+
+type Props = Pick<ComponentProps<typeof Section>, "render"> &
+  HTMLAttributes<"section"> & {
+    /** Short label above the title, set as a tag. */
+    eyebrow?: string;
+    /** Page title. `<strong>` takes the accent, `<em>` the highlight. */
+    heading?: string;
+    /** Background photo. With one, give the page layout `overlap`. */
+    image?: ImageMetadata;
+    /** Image alt text. Omit for decorative images. */
+    imageAlt?: string;
+    /**
+     * Maximum title line length in characters. Defaults to `22`.
+     *
+     * @min 1
+     * @int
+     */
+    maxWidth?: number;
+  };
+
+const {
+  render = true,
+  eyebrow,
+  heading,
+  image,
+  imageAlt,
+  maxWidth = 22,
+  ...rest
+} = Astro.props;
+
+const content = await slotContent(Astro.slots);
+const titleId = uid("hero-title");
+---
+
+<Section
+  render={render && !!heading}
+  class:list={["hero-page_wrap", image && "has-image"]}
+  theme="dark"
+  paddingTop={image ? "navoverlap" : "medium"}
+  paddingBottom="small"
+  data-nav-transparent={image ? "" : undefined}
+  aria-labelledby={titleId}
+  {...rest}
+>
+  {
+    image && (
+      <Img
+        slot="background"
+        src={image}
+        alt={imageAlt}
+        loading="eager"
+        fetchPriority="high"
+        class="hero-page_image"
+      />
+    )
+  }
+  {image && <div slot="background" class="hero-page_scrim" />}
+  <div class="hero-page_content margin-trim">
+    <Eyebrow variant="tag">{eyebrow}</Eyebrow>
+    <Heading tag="h1" class="heading-accent" maxWidth={maxWidth} id={titleId}>
+      <Fragment set:html={heading} />
+    </Heading>
+    <Fragment set:html={content} />
+  </div>
+</Section>
+
+<style is:global>
+  @layer components {
+    .hero-page_wrap.has-image {
+      overflow: clip;
+    }
+
+    .hero-page_scrim {
+      background-image:
+        linear-gradient(
+          to top,
+          color-mix(in srgb, var(--background) 96%, transparent) 0%,
+          color-mix(in srgb, var(--background) 72%, transparent) 45%,
+          color-mix(in srgb, var(--background) 45%, transparent) 100%
+        ),
+        linear-gradient(
+          to right,
+          color-mix(in srgb, var(--background) 60%, transparent) 0%,
+          transparent 75%
+        );
+    }
+
+    .hero-page_content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      & > .eyebrow_wrap + .heading {
+        margin-top: var(--space-6);
+      }
+      & > .heading {
+        margin-bottom: var(--space-7);
+      }
+      & > .text + .text {
+        margin-top: var(--space-4);
+      }
+      & > .text {
+        max-width: 38ch;
+      }
+      & > .form_wrap {
+        margin-top: var(--space-7);
+      }
+      & > .heading + .form_wrap {
+        margin-top: 0;
+      }
+      /* A facts row closes the hero, flush on its bottom edge */
+      & > .facts_wrap:last-child {
+        margin-top: var(--section-space-small);
+        margin-bottom: calc(-1 * var(--section-space-small));
+      }
+    }
+  }
+</style>

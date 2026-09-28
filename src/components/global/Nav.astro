@@ -602,6 +602,9 @@ const { render = true, overlap = false } = Astro.props;
           background-color: var(--background-2);
           color: var(--text);
         }
+        & .dropdown_wrap:has([aria-current="page"]) > .dropdown_toggle {
+          color: var(--heading-accent);
+        }
         & .dropdown_content {
           position: absolute;
           top: calc(100% + var(--space-3));

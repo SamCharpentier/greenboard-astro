@@ -6,7 +6,7 @@ type Props = HTMLAttributes<"ul"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
   /** List style. Items are `li` elements; a `strong` opening an item is its title. */
-  variant?: "check" | "steps" | "icons" | "inline";
+  variant?: "check" | "steps" | "icons" | "rows" | "inline";
 };
 
 const { render = true, variant = "check", class: className, ...rest } = Astro.props;
@@ -102,6 +102,29 @@ const content = await slotContent(Astro.slots);
           display: flex;
           align-items: center;
           gap: var(--space-3);
+          font-weight: var(--primary-medium);
+        }
+        & > li > .icon:first-child {
+          width: 2.5rem;
+          padding: 0.625rem;
+          border-radius: var(--radius-small);
+          background-color: var(--background-2);
+          color: var(--heading-accent);
+        }
+      }
+
+      /* The same icon tiles, one item per row between rules */
+      &.rows {
+        gap: 0;
+        border-top: var(--border-width) solid var(--border);
+        font-size: var(--text-large);
+        line-height: var(--text-large-line-height);
+        & > li {
+          display: flex;
+          align-items: center;
+          gap: var(--space-4);
+          padding-block: var(--space-5);
+          border-bottom: var(--border-width) solid var(--border);
           font-weight: var(--primary-medium);
         }
         & > li > .icon:first-child {

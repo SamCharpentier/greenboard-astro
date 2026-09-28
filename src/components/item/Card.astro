@@ -33,7 +33,7 @@ type Base = HTMLAttributes<"div"> & {
   /** Button destination. Omit for a `<button>`. */
   buttonHref?: string;
   /** Card layout. */
-  variant?: "default" | "cover" | "stacked" | "feature";
+  variant?: "default" | "cover" | "stacked" | "feature" | "split" | "person" | "row";
   /** Color theme of element and its children. */
   theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand" | "invert";
 };
@@ -68,6 +68,27 @@ type Props = Base &
         image?: never;
         imageAlt?: never;
       }
+    | {
+        variant: "split";
+        /** Image source. */
+        image?: ImageSource;
+        /** Image alt text. Omit for decorative images. */
+        imageAlt?: string;
+      }
+    | {
+        variant: "person";
+        /** Color theme of element and its children. */
+        theme?: never;
+        /** Image source. */
+        image?: ImageSource;
+        /** Image alt text. Omit for decorative images. */
+        imageAlt?: string;
+      }
+    | {
+        variant: "row";
+        image?: never;
+        imageAlt?: never;
+      }
   );
 
 type AllProps = Base & {
@@ -95,8 +116,15 @@ const {
 
 const details = await slotContent(Astro.slots);
 
-const surfaced = variant === "default" || variant === "cover";
-const hasImage = (variant === "cover" || variant === "stacked") && !!image;
+const surfaced = ["default", "cover", "split", "row"].includes(variant);
+const pictured = ["cover", "stacked", "split", "person"].includes(variant);
+const hasImage = pictured && !!image;
+
+/* Titles and text sized to the card, so a set of cards reads as one system */
+const headingVariant = ({ split: "h3", row: "h5", person: "h6" } as const)[
+  variant as "split" | "row" | "person"
+] ?? "h4";
+const textVariant = variant === "split" ? "main" : "small";
 const arrowOnly = !buttonLabel && !!buttonHref;
 const hasContent = !!(eyebrow || heading || text || details || buttonLabel || arrowOnly);
 const hasTheme = surfaced && theme !== "inherit";
@@ -117,12 +145,12 @@ if (import.meta.env.DEV && render) {
       `[lumos] <Card variant="${variant}"> has no surface to color, so \`theme\` was dropped. It keeps the theme around it.`,
     );
   }
-  if ((variant === "default" || variant === "feature") && image) {
+  if (!pictured && image) {
     console.warn(
-      `[lumos] <Card variant="${variant}"> holds no image, so \`image\` was dropped. Use the cover or stacked variant to show it.`,
+      `[lumos] <Card variant="${variant}"> holds no image, so \`image\` was dropped. Use the cover, stacked, split or person variant to show it.`,
     );
   }
-  if ((variant === "cover" || variant === "stacked") && !image) {
+  if (pictured && !image) {
     console.warn(
       `[lumos] <Card variant="${variant}"> has no \`image\`, so it renders as a plain card.`,
     );
@@ -157,11 +185,11 @@ if (import.meta.env.DEV && render) {
               {meta && <p class="card_meta text-style-small">{meta}</p>}
             </div>
           )}
-          <Heading tag={headingTag} variant="h4">
+          <Heading tag={headingTag} variant={headingVariant}>
             <Fragment set:html={heading} />
           </Heading>
           {lead && <p class="card_lead text-style-small">{lead}</p>}
-          <Paragraph variant="small" class="color-faded">
+          <Paragraph variant={textVariant} class="color-faded">
             <Fragment set:html={text} />
           </Paragraph>
           {details && (
@@ -216,6 +244,33 @@ if (import.meta.env.DEV && render) {
         border-top: var(--border-width) solid var(--border);
         border-radius: 0;
       }
+      &:is(.split, .row) {
+        border: var(--border-width) solid var(--border);
+        transition: border-color var(--hover-duration) var(--hover-ease);
+        @media (hover: hover) {
+          &:has(:is(.button_wrap, .card_arrow)):hover {
+            border-color: var(--background-2);
+          }
+        }
+      }
+      &.split {
+        gap: 0;
+        @media (width >= 48rem) {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          & > .card_visual {
+            grid-column: 2;
+            grid-row: 1;
+            min-height: 100%;
+          }
+        }
+      }
+      &.person {
+        --_padding: var(--space-4);
+        --_visual-ratio: 4 / 5;
+        background-color: transparent;
+        overflow: visible;
+      }
     }
 
     .card_visual {
@@ -225,8 +280,13 @@ if (import.meta.env.DEV && render) {
       border-radius: inherit;
       overflow: clip;
 
-      .stacked > & {
+      :is(.stacked, .split, .person) > & {
         aspect-ratio: var(--_visual-ratio);
+      }
+
+      .person > & {
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
       }
 
       .cover > & {
@@ -257,6 +317,11 @@ if (import.meta.env.DEV && render) {
       padding-top: var(--space-6);
     }
 
+    .row > .card_content > :is(.button-wrapper, .card_arrow):last-child {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
     .card_content {
       display: flex;
       flex-direction: column;
@@ -271,9 +336,27 @@ if (import.meta.env.DEV && render) {
         z-index: 1;
       }
 
-      :is(.stacked, .feature) > & {
+      :is(.stacked, .feature, .person) > & {
         padding-inline: 0;
         padding-top: 0;
+      }
+
+      .person > & {
+        padding-bottom: 0;
+      }
+
+      .split > & {
+        justify-content: space-between;
+        padding: var(--space-7) var(--space-6);
+      }
+
+      .row > & {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-3) var(--space-5);
+        padding: var(--space-5) var(--space-6);
       }
 
       .feature > & {

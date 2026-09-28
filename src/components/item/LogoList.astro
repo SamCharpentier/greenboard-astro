@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Accessible label. Defaults to `Logos`. */
+  label?: string;
+};
+
+const { render = true, label = "Logos", class: className, ...rest } = Astro.props;
+
+const logos = await slotContent(Astro.slots);
+---
+
+{
+  render && logos && (
+    <div
+      class:list={["logo-list_wrap", className]}
+      role="group"
+      aria-label={label}
+      {...rest}
+    >
+      <Fragment set:html={logos} />
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    /* A row of `Img` logos, each held to the same height and muted to one tone */
+    .logo-list_wrap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(6rem, 30%), 1fr));
+      align-items: center;
+      justify-items: center;
+      gap: var(--space-6) var(--site-gutter);
+      width: 100%;
+      & > .image {
+        width: auto;
+        max-width: 100%;
+        height: 2rem;
+        background-color: transparent;
+        object-fit: contain;
+        filter: grayscale(1);
+        opacity: 0.72;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Button from "@/components/Button.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+}
+
+const { render = true } = Astro.props;
+---
+
+<ContentWrapper render={render} centered>
+  <Heading tag="h2" variant="h1" class="heading-accent" maxWidth={16} id="cta-title">
+    Built for <strong>AI-native</strong> compliance teams.
+  </Heading>
+  <Paragraph variant="large" maxWidth={44} class="color-faded">
+    See how your program runs on one system. Implementation is measured in
+    weeks, not quarters.
+  </Paragraph>
+  <Form name="demo-request" variant="inline" class="margin-top-6">
+    <Input
+      variant="email"
+      label="Work email"
+      placeholder="Enter your work email address"
+      labelHidden
+      required
+    />
+    <Button type="submit">Book a demo</Button>
+  </Form>
+</ContentWrapper>

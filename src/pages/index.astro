@@ -24,6 +24,7 @@ import Icon from "@/components/media/Icon.astro";
 import Video from "@/components/media/Video.astro";
 import GoMark from "@/components/media/GoMark.astro";
 import CasePanel from "@/components/content/CasePanel.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
 import records from "@/assets/icons/records.svg";
 import shield from "@/assets/icons/shield.svg";
 import lock from "@/assets/icons/lock.svg";
@@ -565,24 +566,6 @@ import lock from "@/assets/icons/lock.svg";
 
   {/* Closing call to action */}
   <Section theme="dark" paddingTop="large" paddingBottom="large" id="demo" aria-labelledby="cta-title">
-    <ContentWrapper centered>
-      <Heading tag="h2" variant="h1" class="heading-accent" maxWidth={16} id="cta-title">
-        Built for <strong>AI-native</strong> compliance teams.
-      </Heading>
-      <Paragraph variant="large" maxWidth={44} class="color-faded">
-        See how your program runs on one system. Implementation is measured in
-        weeks, not quarters.
-      </Paragraph>
-      <Form name="demo-request" variant="inline" class="margin-top-6">
-        <Input
-          variant="email"
-          label="Work email"
-          placeholder="Enter your work email address"
-          labelHidden
-          required
-        />
-        <Button type="submit">Book a demo</Button>
-      </Form>
-    </ContentWrapper>
+    <CtaDemo />
   </Section>
 </Layout>

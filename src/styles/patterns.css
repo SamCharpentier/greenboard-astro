@@ -170,6 +170,11 @@
   font-weight: inherit;
 }
 
+.heading-accent em {
+  color: var(--highlight);
+  font-style: inherit;
+}
+
 .display-contents {
   display: contents;
   align-items: inherit;
