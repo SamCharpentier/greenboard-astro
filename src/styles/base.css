@@ -61,6 +61,9 @@
   --radius-main: 0.75rem;
   --radius-round: 100vw;
 
+  /* Shadow, only for what floats above the page */
+  --shadow-float: 0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--midnight-900) 55%, transparent);
+
   /* Fluid scale range */
   --viewport-min: 320;
   --viewport-max: 1440;
@@ -581,6 +584,15 @@ hr {
   width: 100%;
   border: 0;
   border-top: var(--border-width) solid var(--border);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-small);
+  background-color: var(--background-2);
+  overflow-wrap: anywhere;
 }
 
 select:has(option[value=""]:checked) {
