@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Card from "@/components/item/Card.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Button from "@/components/Button.astro";
+---
+
+<Layout
+  title="Compliance Products | All-in-One SEC & FINRA Platform"
+  description="88% of customers eliminated the need for multiple tools. Explore Greenboard's compliance products — from communications archiving to marketing review to firm oversight — all on one unified platform."
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow="Product"
+    heading="Enhance control and efficiency by integrating compliance tooling into a single, <strong>easy&#8209;to&#8209;use solution.</strong>"
+    maxWidth={24}
+  >
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
+      />
+      <Button type="submit">Get started</Button>
+    </Form>
+  </HeroPage>
+
+  {/* Modules */}
+  <Section theme="soft" aria-labelledby="modules-title">
+    <Heading tag="h2" maxWidth={44} id="modules-title">
+      Software built for a culture of compliance.
+    </Heading>
+    <Grid medium={2} large={3}>
+      <Card
+        heading="Platform"
+        text="Transform your compliance operations with the first true operating system for modern financial firms."
+        buttonLabel="Learn more"
+        buttonHref="/products/platform"
+      />
+      <Card
+        heading="Communications<br>Archiving & Supervision"
+        text="Transform your communications supervision with AI-powered oversight that’s more thorough and efficient than traditional methods."
+        buttonLabel="Learn more"
+        buttonHref="/products/communications-archiving-supervision"
+      />
+      <Card
+        heading="Employee Compliance"
+        text="Automate personal trading monitoring and attestations with a seamless employee experience."
+        buttonLabel="Learn more"
+        buttonHref="/products/employee-compliance"
+      />
+      <Card
+        heading="Marketing Compliance"
+        text="Transform marketing reviews from a bottleneck into a streamlined process with AI assistance."
+        buttonLabel="Learn more"
+        buttonHref="/products/marketing-compliance"
+      />
+      <Card
+        heading="Firm Compliance"
+        text="Turn your compliance program into a systematic operation with automated workflows and AI assistance."
+        buttonLabel="Learn more"
+        buttonHref="/products/firm-compliance"
+      />
+      <Card
+        heading="Third Party Compliance"
+        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
+        buttonLabel="Learn more"
+        buttonHref="/products/third-party-compliance"
+      />
+    </Grid>
+  </Section>
+</Layout>
