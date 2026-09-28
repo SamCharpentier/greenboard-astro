@@ -1,0 +1,174 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import alert from "@/assets/icons/alert.svg";
+import checkCircle from "@/assets/icons/check-circle.svg";
+
+type Props = HTMLAttributes<"form"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Submit button label. */
+  buttonLabel?: string;
+  /** Placeholder in the email field. */
+  placeholder?: string;
+  /** Message after a valid address. */
+  successMessage?: string;
+  /** Message after an invalid address. */
+  errorMessage?: string;
+  /** Page to send the address to as `?email=`. Omit to show the success message. */
+  next?: string;
+};
+
+const {
+  render = true,
+  buttonLabel = "Book a demo",
+  placeholder = "Enter your work email address",
+  successMessage = "Thanks. We will email you within one business day to pick a time.",
+  errorMessage = "Enter a work email like name@firm.com.",
+  next,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && (
+    <form class:list={["capture_wrap", className]} novalidate data-next={next} {...rest}>
+      <div class="capture_field">
+        <input
+          class="capture_input"
+          type="email"
+          name="email"
+          autocomplete="email"
+          required
+          aria-label="Work email address"
+          placeholder={placeholder}
+        />
+        <Button class="capture_button" type="submit">{buttonLabel}</Button>
+      </div>
+      <p class="capture_message error text-style-small" role="alert" hidden>
+        <Icon src={alert} variant="small" />
+        <span>{errorMessage}</span>
+      </p>
+      <p class="capture_message success text-style-small" role="status" hidden>
+        <Icon src={checkCircle} variant="small" />
+        <span>{successMessage}</span>
+      </p>
+    </form>
+  )
+}
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>(".capture_wrap")) {
+    const field = form.querySelector<HTMLElement>(".capture_field");
+    const input = form.querySelector<HTMLInputElement>(".capture_input");
+    const error = form.querySelector<HTMLElement>(".capture_message.error");
+    const success = form.querySelector<HTMLElement>(".capture_message.success");
+    if (!field || !input || !error || !success) continue;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const valid = input.value.trim() !== "" && input.checkValidity();
+      field.classList.toggle("is-invalid", !valid);
+      input.setAttribute("aria-invalid", String(!valid));
+      error.hidden = valid;
+      if (!valid) {
+        success.hidden = true;
+        input.focus();
+        return;
+      }
+      if (form.dataset.next) {
+        const url = new URL(form.dataset.next, location.href);
+        url.searchParams.set("email", input.value.trim());
+        location.assign(url);
+        return;
+      }
+      success.hidden = false;
+    });
+
+    input.addEventListener("input", () => {
+      if (!field.classList.contains("is-invalid")) return;
+      field.classList.remove("is-invalid");
+      input.setAttribute("aria-invalid", "false");
+      error.hidden = true;
+    });
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .capture_wrap {
+      width: 100%;
+      max-width: 34rem;
+    }
+
+    /* Focus is quiet on purpose: the border darkens from 55% to the full text color, no ring */
+    .capture_field {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-2);
+      padding: 0.375rem;
+      border: var(--border-width) solid color-mix(in srgb, var(--text) 55%, transparent);
+      border-radius: var(--radius-main);
+      background-color: var(--background-2);
+      color: var(--text);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+      @media (width >= 38rem) {
+        flex-direction: row;
+        align-items: center;
+        border-radius: var(--radius-round);
+      }
+      &:focus-within {
+        border-color: var(--text);
+      }
+      &.is-invalid {
+        border-color: var(--error);
+      }
+    }
+
+    .capture_input {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      min-height: var(--button-size-medium);
+      padding: 0 var(--space-4);
+      border: 0;
+      border-radius: var(--radius-round);
+      background-color: transparent;
+      color: var(--text);
+      font-size: var(--text-main);
+      outline-style: none;
+      &::placeholder {
+        color: var(--text-2);
+        opacity: 1;
+      }
+    }
+
+    .capture_button {
+      flex-shrink: 0;
+    }
+
+    .capture_message {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+      padding-left: var(--space-4);
+      &::before,
+      &::after {
+        content: none;
+      }
+      &.error {
+        color: var(--error);
+      }
+      &.success {
+        color: var(--accent);
+      }
+      .icon {
+        --_size: 1.125rem;
+      }
+    }
+  }
+</style>

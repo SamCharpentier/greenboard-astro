@@ -1,41 +1,178 @@
 ---
 import Layout from "@/layouts/BaseLayout.astro";
 import Section from "@/components/wrapper/Section.astro";
-import Heading from "@/components/typography/Heading.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
-import Img from "@/components/media/Img.astro";
-import lumos_background from "@/assets/graphics/lumos-background.svg";
-import Icon from "@/components/media/Icon.astro";
-import logo_icon from "@/assets/logo/logo-icon.svg";
 import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Tag from "@/components/Tag.astro";
+import Icon from "@/components/media/Icon.astro";
+import Card from "@/components/item/Card.astro";
+import Stat from "@/components/item/Stat.astro";
+import ProofList from "@/components/item/ProofList.astro";
+import Tabs from "@/components/interactive/Tabs.astro";
+import TabLink from "@/components/interactive/TabLink.astro";
+import HeroHome from "@/components/section/HeroHome.astro";
+import Trust from "@/components/content/Trust.astro";
+import Modules from "@/components/content/Modules.astro";
+import Testimonials from "@/components/content/Testimonials.astro";
+import CasePanel from "@/components/content/CasePanel.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+import go from "@/assets/logo/go.svg";
+import records from "@/assets/icons/records.svg";
+import shield from "@/assets/icons/shield.svg";
+import lock from "@/assets/icons/lock.svg";
+import home from "@/data/home.json";
+import modules from "@/data/modules.json";
+
+const proofIcons = { records, shield, lock } as const;
 ---
 
-<Layout theme="dark">
-  <Section
-    paddingBottom="even"
-    containerClass="flex-grow"
-    paddingTop="even"
-    class="flex-grow"
-    style="min-height: calc(100svh - var(--nav-height));"
+<Layout
+  title="AI-native compliance for SEC and FINRA firms"
+  description="Greenboard is the AI-native system of action for SEC and FINRA compliance."
+>
+  {/* Hero */}
+  <HeroHome
+    lines={["Compliance is mandatory,", "suffering is not."]}
+    video="/video/greenboard-hero.mp4"
+    poster="/images/hero-poster.jpg"
+    caption="Yes, this video was made with AI. Your next deficiency letter might be too, so let’s get ahead of it together, with Go."
   >
-    <ContentWrapper
-      class="flex-grow theme-brand"
-      variant="card"
-      mediaOpacity={100}
-    >
-      <Icon src={logo_icon} variant="large" />
-      <Heading variant="display" tag="h1" class="margin-block-8"
-        >Style Guide</Heading
-      >
-      <Eyebrow variant="tag">v0.0.4</Eyebrow>
-      <Img
-        slot="column2"
-        src={lumos_background}
-        width={1920}
-        height={1080}
-        loading="eager"
-        fetchPriority="high"
-      />
+    <Tag variant="inline" theme="brand" href="#platform" label="GreenboardGo">
+      <Icon src={go} class="tag_logo" />
+    </Tag> makes compliance better for the people we serve.
+  </HeroHome>
+
+  {/* Trust */}
+  <Section theme="light" paddingTop="small" paddingBottom="small" gap="7" aria-label="Firms served">
+    <Trust
+      stats={[
+        { number: "703+", label: "Regulated financial firms served last quarter, and counting" },
+        { number: "32 367+", label: "People served last quarter, and counting" },
+      ]}
+      customers={home.customers}
+    />
+  </Section>
+
+  {/* Statement */}
+  <Section theme="light" class="padding-top-8" aria-label="About Greenboard">
+    <ContentWrapper variant="split" class="gap-row-7" style="--_main-span: 8; --_aside-start: 10">
+      <Paragraph variant="h2" class="heading-accent" maxWidth={30}>
+        Founded in 2023 to build compliance software so good not using it would
+        be <strong>negligent vendor selection.</strong>
+      </Paragraph>
+      <Stat slot="column2" number="99%" label="Industry-leading retention" />
     </ContentWrapper>
+  </Section>
+
+  {/* Modules */}
+  <Section theme="dark" id="platform" aria-labelledby="platform-title">
+    <Heading tag="h2" maxWidth={26} id="platform-title">
+      Fully configurable, built on top of WORM and 17a-4 compliant backbone modules
+    </Heading>
+    <Modules modules={modules} />
+  </Section>
+
+  {/* Principles */}
+  <Section theme="soft" id="principles" aria-labelledby="principles-title">
+    <ContentWrapper variant="split" style="--_aside-alignment: end">
+      <Eyebrow>What we believe</Eyebrow>
+      <Heading tag="h2" maxWidth={20} id="principles-title">Our principles</Heading>
+      <Button slot="column2" element="link" href="/#platform" variant="link">
+        See GreenboardGo
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3} class="gap-row-7">
+      {home.principles.map((item) => (
+        <Card variant="feature" heading={item.title} lead={item.lead} text={item.text} />
+      ))}
+    </Grid>
+  </Section>
+
+  {/* Testimonials */}
+  <Section theme="soft" paddingTop="none" id="testimonials" aria-labelledby="words-title">
+    <Testimonials quotes={home.quotes} />
+  </Section>
+
+  {/* Firm types */}
+  <Section theme="light" id="segments" aria-labelledby="segments-title">
+    <ContentWrapper variant="split">
+      <Heading tag="h2" maxWidth={22} id="segments-title">
+        All-in-one compliance for financial services
+      </Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        Configured during implementation to match your team’s roles, groups, and
+        the exact standards of your program.
+      </Paragraph>
+    </ContentWrapper>
+    <Grid ruled medium={2} large={3}>
+      {home.segments.map((item) => (
+        <Card variant="link" heading={item.title} text={item.text} href="/solutions" />
+      ))}
+    </Grid>
+    <ProofList
+      ruled
+      items={home.proof.map((item) => ({
+        icon: proofIcons[item.icon as keyof typeof proofIcons],
+        text: item.text,
+      }))}
+    />
+  </Section>
+
+  {/* Firm sizes */}
+  <Section theme="soft" id="firm-sizes" aria-labelledby="sizes-title">
+    <ContentWrapper variant="split">
+      <Heading tag="h2" maxWidth={16} id="sizes-title">Right-sized for your firm</Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        The same records backbone whether you’re one person or a multi-entity
+        organization, configured to the program you actually run.
+      </Paragraph>
+    </ContentWrapper>
+    <Grid large={3}>
+      {home.tiers.map((tier) => (
+        <Card
+          variant="tier"
+          eyebrow={tier.name}
+          meta={tier.meta}
+          heading={tier.title}
+          text={tier.text}
+          items={tier.items}
+          buttonLabel="Talk to us"
+          buttonHref="/#demo"
+        />
+      ))}
+    </Grid>
+  </Section>
+
+  {/* Case studies */}
+  <Section theme="deep" id="case-studies" aria-labelledby="cases-title">
+    <ContentWrapper variant="split">
+      <Eyebrow>Case studies</Eyebrow>
+      <Heading tag="h2" maxWidth={20} id="cases-title">
+        Real results from teams running on Greenboard
+      </Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        Private funds, advisors, and service partners use Greenboard to surface
+        risk, prioritize reviews, and recover time across the program.
+      </Paragraph>
+    </ContentWrapper>
+    <Tabs variant="pills" id="case">
+      {home.cases.map((item) => (
+        <TabLink slot="links">{item.firm}</TabLink>
+      ))}
+      {home.cases.map((item) => (
+        <div>
+          <CasePanel firm={item.firm} quote={item.quote} author={item.author} results={item.results} />
+        </div>
+      ))}
+    </Tabs>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section theme="dark" paddingTop="large" paddingBottom="large" id="demo" aria-labelledby="cta-title">
+    <CtaDemo />
   </Section>
 </Layout>

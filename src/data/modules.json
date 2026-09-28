@@ -1,0 +1,249 @@
+[
+  {
+    "key": "archiving",
+    "label": "eComms",
+    "title": "Archiving & Supervision",
+    "eyebrow": "Archiving",
+    "intro": "Capture every channel your firm uses, then supervise it with a risk graph you configure yourself — AI rules and lexicons working together, cutting false positives by 99.14% and leaving a reviewable trail behind every decision.",
+    "headline": [
+      "Every channel,",
+      "one record."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Email, chat, text, voice, and social — captured where your people actually talk, then written once to a WORM, 17a-4 compliant record that supervision, review, and exams all read from."
+      },
+      {
+        "type": "paragraph",
+        "text": "Supervision runs on a risk graph you configure — combining AI rules and lexicons, so what gets escalated reflects your program, not a vendor’s default keyword list."
+      }
+    ],
+    "capabilities": [
+      "Gmail",
+      "Outlook",
+      "Slack",
+      "Teams",
+      "Zoom",
+      "WhatsApp",
+      "WeChat",
+      "Telegram",
+      "Signal",
+      "iMessage",
+      "Bloomberg Chat",
+      "LinkedIn",
+      "X",
+      "Instagram",
+      "Facebook",
+      "YouTube",
+      "Email",
+      "Website",
+      "Social",
+      "SMS"
+    ]
+  },
+  {
+    "key": "employee",
+    "label": "People",
+    "title": "Employee Compliance",
+    "eyebrow": "Employee compliance",
+    "intro": "Personal trading, gifts and entertainment, outside business activities, and attestations in one place — with reminders your team will actually act on.",
+    "headline": [
+      "Every person,",
+      "one regulatory profile."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Trading, gifts, outside activities, and attestations all hang off the same employee record — so you see one person’s full picture instead of six disconnected spreadsheets."
+      },
+      {
+        "type": "paragraph",
+        "text": "Requests are pre-cleared against your restricted lists in seconds, reminders go out where people already work, and every approval writes itself to the record."
+      }
+    ],
+    "capabilities": [
+      "Personal trading & pre-clearance",
+      "Gifts & entertainment",
+      "Outside business activities",
+      "Political contributions",
+      "Code of ethics attestations",
+      "Licensing & registrations"
+    ]
+  },
+  {
+    "key": "firm",
+    "label": "Program",
+    "title": "Firm Compliance",
+    "eyebrow": "Firm compliance",
+    "intro": "Every process, risk, and control mapped and documented in one place — built as workflows with Go Agents doing the monitoring, so the calendar and the evidence keep themselves current.",
+    "headline": [
+      "No more spreadsheets.",
+      "No more clunky calendars."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Every compliance process, risk, and control — mapped, documented, and connected to the program it belongs to, so nothing lives in someone’s tab or someone’s head."
+      },
+      {
+        "type": "paragraph",
+        "text": "Build each process as a workflow, drop a Go Agent into any step to do the watching and the drafting, and let the evidence write itself as the work happens."
+      }
+    ],
+    "capabilities": [
+      "Process & risk mapping",
+      "Control library",
+      "Compliance calendar",
+      "Policy management",
+      "Workflows & Go Agents",
+      "Risk assessments",
+      "Regulatory change monitoring"
+    ]
+  },
+  {
+    "key": "third-party",
+    "label": "3rd party risk",
+    "title": "Third-Party Diligence",
+    "eyebrow": "Third-party diligence",
+    "intro": "Onboard and re-review every third party you rely on — questionnaires drafted from the web and their own documents, risk ratings set by your team, and the whole file kept with the rest of your records.",
+    "headline": [
+      "Intelligent questionnaire",
+      "and risk automation."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Go pulls from the public web, the documents a counterparty sends you, and last year’s review, then drafts every answer with the source attached — so the questionnaire arrives mostly finished."
+      },
+      {
+        "type": "paragraph",
+        "text": "Your team reviews what actually needs judgment, sets the risk rating, and the whole file — evidence, findings, sign-off — lands in your records on a re-review schedule."
+      }
+    ],
+    "capabilities": [
+      "Vendors & service providers",
+      "Sub-advisers",
+      "Solicitors & promoters",
+      "Outsourced providers",
+      "Counterparties",
+      "Annual re-reviews"
+    ]
+  },
+  {
+    "key": "content",
+    "label": "Reviews",
+    "title": "Content Reviews",
+    "eyebrow": "Content reviews",
+    "intro": "One integrated workflow from first draft to exam file — Go pre-reviews content wherever creators work, your team runs the review process you configure, and every version, flag, and approval is preserved.",
+    "headline": [
+      "Pre-review and post-review,",
+      "one workflow."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "{go} catches the obvious problems before anything reaches your queue, and everything that does arrive comes with its history intact."
+      },
+      {
+        "type": "steps",
+        "items": [
+          {
+            "title": "Pre-review, wherever the work happens",
+            "text": "Creators ask Go for feedback from Slack, Teams, or the browser and get it against your policies, your past decisions, and the rules — then submit for review from the same conversation, by chat or MCP."
+          },
+          {
+            "title": "A review process you configure",
+            "text": "Set your own stages, reviewer questions, and approval logic. Reviewers see Go’s flags with the rule cited, leave comments on the piece, and route it onward — nothing leaves the system."
+          },
+          {
+            "title": "Exam production in a click",
+            "text": "Every version, comment, flag, and approval stays attached to the piece, so producing the file for an exam is a query rather than a week of assembly."
+          }
+        ]
+      }
+    ],
+    "capabilities": []
+  },
+  {
+    "key": "records",
+    "label": "Recordkeeping",
+    "title": "Unified Books & Records",
+    "eyebrow": "Unified books & records",
+    "intro": "One WORM-based, 17a-4 compliant record for the whole firm — every message, approval, and attestation captured as it happens, so an exam request is a search instead of a scramble across vendors.",
+    "headline": [
+      "Exam-ready, the day",
+      "it happens."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "Most firms keep their records in five systems and rebuild the file when a request arrives. Here every action — a supervised message, an attestation, a pre-clearance, a content approval, a vendor file — writes to one WORM-based, 17a-4 compliant record the moment it happens."
+      },
+      {
+        "type": "checks",
+        "items": [
+          {
+            "lead": "No reconstruction.",
+            "text": "Produce a complete, timestamped file for a deficiency letter or sweep in minutes, not the weeks it takes to pull exports from separate vendors and stitch them together."
+          },
+          {
+            "lead": "Nothing falls between systems.",
+            "text": "One record means no gaps, no duplicates, and no arguing about which system is authoritative when two of them disagree."
+          },
+          {
+            "lead": "Evidence, not assertions.",
+            "text": "Every entry carries who did it, when, under which policy version, and what they saw — so you can show a control operated, not just that it existed."
+          },
+          {
+            "lead": "Immutable by design.",
+            "text": "WORM storage and 17a-4 retention are enforced by the architecture, so nothing can be quietly edited or deleted after the fact."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Because it’s one record on modern data infrastructure, it’s searchable by your team and callable by {go} — ask for every communication with a client over two years and get the file, not a project."
+      }
+    ],
+    "capabilities": [
+      "eComms archive",
+      "Employee attestations",
+      "Pre-clearance requests",
+      "Content reviews",
+      "Third-party files",
+      "Workflow evidence",
+      "Filings",
+      "Exception reports"
+    ]
+  },
+  {
+    "key": "security",
+    "label": "Trust",
+    "title": "Privacy & Security",
+    "eyebrow": "Privacy & security",
+    "intro": "SOC 2 Type 2 controls, granular permissions, and smarter supervision methods that protect the firm without invasive oversight of your people.",
+    "headline": [
+      "Protect the firm,",
+      "respect your people."
+    ],
+    "blocks": [
+      {
+        "type": "paragraph",
+        "text": "SOC 2 Type 2 controls and permissions down to the individual record mean everyone sees exactly what their role requires — and nothing more."
+      },
+      {
+        "type": "paragraph",
+        "text": "Supervision focuses on real risk instead of blanket surveillance, so your program stays rigorous without making your people feel watched."
+      }
+    ],
+    "capabilities": [
+      "SOC 2 Type 2",
+      "Granular permissions",
+      "Role-based access",
+      "Encryption in transit & at rest",
+      "SSO & SCIM",
+      "Full audit trail"
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+---
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Capture from "@/components/form/Capture.astro";
+
+type Props = {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+};
+
+const { render = true } = Astro.props;
+---
+
+{
+  render && (
+    <ContentWrapper centered>
+      <Heading tag="h2" variant="h1" class="heading-accent" maxWidth={16} id="cta-title">
+        Built for <strong>AI-native</strong> compliance teams.
+      </Heading>
+      <Paragraph variant="large" maxWidth={44} class="color-faded">
+        See how your program runs on one system. Implementation is measured in
+        weeks, not quarters.
+      </Paragraph>
+      <div class="cta-demo_form">
+        <Capture />
+      </div>
+    </ContentWrapper>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .cta-demo_form {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: var(--space-6);
+    }
+  }
+</style>

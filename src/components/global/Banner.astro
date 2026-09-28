@@ -1,0 +1,117 @@
+---
+import Icon from "@/components/media/Icon.astro";
+import arrow from "@/assets/icons/arrow-right.svg";
+import close from "@/assets/icons/close.svg";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Announcement text. Supports inline markup. */
+  text?: string;
+  /** Link destination. */
+  href?: string;
+}
+
+const {
+  render = true,
+  text = "Greenboard announces <strong>GreenboardGo and $20M in funding</strong>",
+  href = "/#platform",
+} = Astro.props;
+---
+
+{
+  render && text && (
+    <div class="banner_wrap theme-soft">
+      <div class="banner_inner">
+        <a class="banner_link" href={href}>
+          <span class="banner_text text-style-small">
+            <Fragment set:html={text} />
+          </span>
+          <Icon class="banner_icon" src={arrow} variant="small" />
+        </a>
+        <button class="banner_close" type="button" aria-label="Dismiss announcement">
+          <Icon src={close} variant="small" />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  for (const banner of document.querySelectorAll<HTMLElement>(".banner_wrap")) {
+    banner.querySelector(".banner_close")?.addEventListener("click", () => {
+      banner.hidden = true;
+      dispatchEvent(new Event("resize"));
+    });
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .banner_wrap {
+      position: relative;
+      z-index: 21;
+    }
+
+    .banner_inner {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: var(--site-width);
+      max-width: var(--max-width-main);
+      min-height: var(--banner-height);
+      margin-inline: auto;
+      padding: 0.375rem 2.75rem;
+    }
+
+    .banner_link {
+      --_shift: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--text);
+      text-align: center;
+      transition: color var(--hover-duration) var(--hover-ease);
+      @media (hover: hover) {
+        &:hover {
+          --_shift: 1;
+          color: var(--accent);
+        }
+      }
+      &:focus-visible {
+        --_shift: 1;
+        color: var(--accent);
+      }
+      strong {
+        font-weight: var(--primary-medium);
+      }
+    }
+
+    .banner_icon {
+      translate: calc(0.1875rem * var(--_shift)) 0;
+      transition: translate var(--hover-duration) var(--hover-ease);
+    }
+
+    .banner_close {
+      position: absolute;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 2rem;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-round);
+      color: var(--text);
+      transition: background-color var(--hover-duration) var(--hover-ease);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--background-2);
+        }
+      }
+      &:focus-visible {
+        background-color: var(--background-2);
+      }
+    }
+  }
+</style>

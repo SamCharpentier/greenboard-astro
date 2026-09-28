@@ -1,0 +1,240 @@
+---
+import type { ComponentProps, HTMLAttributes } from "astro/types";
+import Section from "@/components/wrapper/Section.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Capture from "@/components/form/Capture.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = Pick<ComponentProps<typeof Section>, "render"> &
+  HTMLAttributes<"section"> & {
+  /** Title lines. The last line takes the heading accent. */
+  lines?: string[];
+  /** Background video URL. */
+  video?: string;
+  /** Poster image URL, shown before the video plays. */
+  poster?: string;
+  /** Caption beside the video toggle. */
+  caption?: string;
+};
+
+const {
+  render = true,
+  lines = [],
+  video,
+  poster,
+  caption,
+  ...rest
+} = Astro.props;
+
+const intro = await slotContent(Astro.slots);
+---
+
+<Section
+  render={render && lines.length > 0}
+  class="hero-home_wrap"
+  theme="dark"
+  data-nav-transparent
+  aria-labelledby="hero-title"
+  containerClass="hero-home_contain flex-grow"
+  {...rest}
+>
+  <div slot="background" class="hero-home_background" aria-hidden="true">
+    {video && (
+      <video
+        class="hero-home_video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={poster}
+      >
+        <source src={video} type="video/mp4" />
+      </video>
+    )}
+    <div class="hero-home_scrim" />
+  </div>
+  <div class="hero-home_layout">
+    <div class="hero-home_content margin-trim">
+      <Heading tag="h1" variant="display" class="hero-home_title heading-accent" id="hero-title">
+        {lines.map((line, index) => (
+          <span class="hero-home_line">
+            <span class="hero-home_line_text">
+              {index === lines.length - 1 ? <strong>{line}</strong> : line}
+            </span>
+          </span>
+        ))}
+      </Heading>
+      {intro && (
+        <Paragraph variant="large" class="hero-home_text" data-reveal>
+          <Fragment set:html={intro} />
+        </Paragraph>
+      )}
+      <div class="hero-home_form" data-reveal>
+        <Capture />
+      </div>
+    </div>
+    {video && (
+      <div class="hero-home_aside" data-reveal>
+        <Button
+          variant="play"
+          emphasis="secondary"
+          size="small"
+          pressed
+          label="Pause background video"
+          class="hero-home_toggle"
+        />
+        {caption && <p class="hero-home_caption text-style-small">{caption}</p>}
+      </div>
+    )}
+  </div>
+</Section>
+
+<script>
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  for (const hero of document.querySelectorAll<HTMLElement>(".hero-home_wrap")) {
+    const video = hero.querySelector<HTMLVideoElement>(".hero-home_video");
+    const toggle = hero.querySelector<HTMLButtonElement>(".hero-home_toggle");
+    if (video && toggle) {
+      const sync = () => {
+        const playing = !video.paused;
+        toggle.setAttribute("aria-pressed", String(playing));
+        toggle.setAttribute("aria-label", playing ? "Pause background video" : "Play background video");
+      };
+      video.addEventListener("play", sync);
+      video.addEventListener("pause", sync);
+      toggle.addEventListener("click", () => {
+        if (video.paused) video.play().catch(sync);
+        else video.pause();
+      });
+      if (reduceMotion) {
+        video.pause();
+        hero.querySelector<HTMLElement>(".hero-home_aside")?.setAttribute("hidden", "");
+      } else {
+        video.play().catch(sync);
+      }
+      sync();
+    }
+
+    if (reduceMotion) continue;
+    hero.querySelectorAll<HTMLElement>(".hero-home_line_text").forEach((line, index) => {
+      line.animate([{ transform: "translateY(105%)" }, { transform: "translateY(0)" }], {
+        duration: 1100,
+        delay: 150 + index * 120,
+        easing: "cubic-bezier(.16, 1, .3, 1)",
+        fill: "backwards",
+      });
+    });
+    hero.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element, index) => {
+      element.animate(
+        [
+          { opacity: 0, transform: "translateY(0.75rem)" },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 800, delay: 550 + index * 110, easing: "cubic-bezier(.16, 1, .3, 1)", fill: "backwards" },
+      );
+    });
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .hero-home_wrap {
+      justify-content: flex-end;
+      min-height: min(100svh, calc(60rem + var(--nav-height)));
+      margin-top: calc(-1 * var(--nav-height));
+      padding-top: calc(var(--nav-height) + var(--section-space-large));
+      padding-bottom: var(--space-8);
+      overflow: clip;
+    }
+
+    .hero-home_video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--background-skeleton);
+      @media (prefers-reduced-motion: reduce) {
+        display: none;
+      }
+    }
+
+    .hero-home_scrim {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(
+          to top,
+          color-mix(in srgb, var(--background) 94%, transparent) 0%,
+          color-mix(in srgb, var(--background) 70%, transparent) 38%,
+          color-mix(in srgb, var(--background) 25%, transparent) 75%,
+          color-mix(in srgb, var(--background) 35%, transparent) 100%
+        ),
+        linear-gradient(
+          to right,
+          color-mix(in srgb, var(--background) 55%, transparent) 0%,
+          color-mix(in srgb, var(--background) 0%, transparent) 70%
+        );
+    }
+
+    .hero-home_contain {
+      z-index: 1;
+    }
+
+    .hero-home_layout {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7) var(--site-gutter);
+      width: 100%;
+      @media (width >= 54rem) {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        align-items: end;
+      }
+    }
+
+    .hero-home_content {
+      grid-column: 1 / span 8;
+      width: 100%;
+    }
+
+    .hero-home_title {
+      margin-bottom: var(--space-6);
+    }
+
+    /* Each line rises into view from behind its own mask */
+    .hero-home_line {
+      display: block;
+      margin-bottom: -0.28em;
+      padding-bottom: 0.28em;
+      overflow: clip;
+    }
+
+    .hero-home_line_text {
+      display: block;
+    }
+
+    .hero-home_text {
+      max-width: 34ch;
+      margin-bottom: var(--space-6);
+      text-wrap: balance;
+    }
+
+    .hero-home_aside {
+      display: flex;
+      grid-column: 9 / span 4;
+      justify-self: end;
+      align-items: flex-start;
+      gap: var(--space-3);
+      width: 100%;
+      max-width: 24rem;
+    }
+
+    .hero-home_caption {
+      color: var(--text-2);
+    }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import type { HTMLAttributes, SvgComponent } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+
+type Props = HTMLAttributes<"ul"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Statements, each with its icon. */
+  items?: { icon: SvgComponent; text: string }[];
+  /** One ruled column with larger text, in place of the grid. */
+  variant?: "grid" | "stacked";
+  /** Rule above the grid. */
+  ruled?: boolean;
+};
+
+const {
+  render = true,
+  items = [],
+  variant = "grid",
+  ruled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && items.length > 0 && (
+    <ul class:list={["proof_wrap", variant !== "grid" && variant, ruled && "ruled", className]} {...rest}>
+      {items.map((item) => (
+        <li class="proof_item">
+          <span class="proof_icon">
+            <Icon src={item.icon} />
+          </span>
+          <p class:list={["proof_text", variant === "stacked" ? "text-style-large" : "text-style-small"]}>
+            {item.text}
+          </p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .proof_wrap {
+      --_gap: var(--space-3);
+      --_padding: 0rem;
+      --_rule: transparent;
+      --_text-width: 28ch;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-5) var(--site-gutter);
+      @media (width >= 54rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      &.ruled {
+        padding-top: var(--space-6);
+        border-top: var(--border-width) solid var(--border);
+      }
+      &.stacked {
+        --_gap: var(--space-4);
+        --_padding: var(--space-5);
+        --_rule: var(--border);
+        --_text-width: none;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        border-top: var(--border-width) solid var(--border);
+      }
+    }
+
+    .proof_item {
+      display: flex;
+      align-items: center;
+      gap: var(--_gap);
+      width: 100%;
+      padding-block: var(--_padding);
+      border-bottom: var(--border-width) solid var(--_rule);
+    }
+
+    .proof_icon {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      align-items: center;
+      width: 2.5rem;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-small);
+      background-color: var(--background-2);
+      color: var(--accent);
+      .icon {
+        --_size: 1.25rem;
+      }
+    }
+
+    .proof_text {
+      max-width: var(--_text-width);
+    }
+  }
+</style>

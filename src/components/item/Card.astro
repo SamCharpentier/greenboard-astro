@@ -7,6 +7,10 @@ import Button from "@/components/Button.astro";
 import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
 import Img from "@/components/media/Img.astro";
 import Overlay from "@/components/media/Overlay.astro";
+import Icon from "@/components/media/Icon.astro";
+import Tag from "@/components/Tag.astro";
+import Checklist from "@/components/item/Checklist.astro";
+import diagonal from "@/assets/icons/arrow-up-right.svg";
 
 type ImageSource = ImageMetadata | string;
 
@@ -26,39 +30,75 @@ type Base = HTMLAttributes<"div"> & {
   /** Button destination. Omit for a `<button>`. */
   buttonHref?: string;
   /** Card layout. */
-  variant?: "default" | "cover" | "stacked";
+  variant?: "default" | "cover" | "stacked" | "feature" | "link" | "tier";
   /** Color theme of element and its children. */
-  theme?: "inherit" | "light" | "dark" | "brand" | "invert";
+  theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand" | "invert";
+};
+
+type None = {
+  image?: never;
+  imageAlt?: never;
+  index?: never;
+  lead?: never;
+  filled?: never;
+  layout?: never;
+  href?: never;
+  meta?: never;
+  items?: never;
 };
 
 type Props = Base &
   (
-    | {
-        variant?: "default";
-        image?: never;
-        imageAlt?: never;
-      }
-    | {
+    | ({ variant?: "default" } & None)
+    | ({
         variant: "cover";
         /** Image source. */
         image?: ImageSource;
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
-      }
-    | {
+      } & Omit<None, "image" | "imageAlt">)
+    | ({
         variant: "stacked";
         /** Color theme of element and its children. */
         theme?: never;
-        /** Image source. */
         image?: ImageSource;
-        /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
-      }
+      } & Omit<None, "image" | "imageAlt">)
+    | ({
+        variant: "feature";
+        /** Number or short marker before the title. */
+        index?: string;
+        /** Short line in the accent under the title. */
+        lead?: string;
+        /** Fill the card with the surface color instead of a rule above it. */
+        filled?: boolean;
+        /** Put the index above the title instead of beside it. */
+        layout?: "row" | "stacked";
+      } & Omit<None, "index" | "lead" | "filled" | "layout">)
+    | ({
+        variant: "link";
+        /** Card destination. The whole card is the link. */
+        href?: string;
+      } & Omit<None, "href">)
+    | ({
+        variant: "tier";
+        /** Small detail beside the eyebrow, such as a size range. */
+        meta?: string;
+        /** Checklist under the text. */
+        items?: string[];
+      } & Omit<None, "meta" | "items">)
   );
 
 type AllProps = Base & {
   image?: ImageSource;
   imageAlt?: string;
+  index?: string;
+  lead?: string;
+  filled?: boolean;
+  layout?: "row" | "stacked";
+  href?: string;
+  meta?: string;
+  items?: string[];
 };
 
 const {
@@ -73,11 +113,19 @@ const {
   theme = "inherit",
   image,
   imageAlt,
+  index,
+  lead,
+  filled = false,
+  layout = "row",
+  href,
+  meta,
+  items = [],
   class: className,
   ...rest
 } = Astro.props as AllProps;
 
-const hasImage = variant !== "default" && !!image;
+const framework = variant === "default" || variant === "cover" || variant === "stacked";
+const hasImage = (variant === "cover" || variant === "stacked") && !!image;
 const hasContent = !!(eyebrow || heading || text || buttonLabel);
 const hasTheme = variant !== "stacked" && theme !== "inherit";
 
@@ -99,25 +147,26 @@ if (import.meta.env.DEV && render) {
       '[lumos] <Card variant="default"> holds no image, so `image` was dropped. Use the cover or stacked variant to show it.',
     );
   }
-  if (variant !== "default" && !image) {
+  if ((variant === "cover" || variant === "stacked") && !image) {
     console.warn(
       `[lumos] <Card variant="${variant}"> has no \`image\`, so it renders as a plain card.`,
     );
   }
 }
+
+const classes = [
+  "card_wrap",
+  variant !== "default" && variant,
+  filled && "filled",
+  variant === "feature" && layout === "stacked" && "stacked-index",
+  hasTheme && `theme-${theme}`,
+  className,
+];
 ---
 
 {
-  render && (hasContent || hasImage) && (
-    <div
-      class:list={[
-        "card_wrap",
-        variant !== "default" && variant,
-        hasTheme && `theme-${theme}`,
-        className,
-      ]}
-      {...rest}
-    >
+  render && framework && (hasContent || hasImage) && (
+    <div class:list={classes} {...rest}>
       {hasImage && (
         <div class="card_visual">
           <Img src={image!} alt={imageAlt} />
@@ -147,6 +196,68 @@ if (import.meta.env.DEV && render) {
         </div>
       )}
     </div>
+  )
+}
+
+{
+  render && variant === "feature" && heading && (
+    <article class:list={classes} {...rest}>
+      {index && <span class="card_index text-style-label">{index}</span>}
+      <div class="card_content margin-trim">
+        <Heading tag={headingTag} variant="h4" class="card_title">
+          <Fragment set:html={heading} />
+        </Heading>
+        {lead && <p class="card_lead text-style-small">{lead}</p>}
+        <Paragraph variant="small" class="card_text">
+          <Fragment set:html={text} />
+        </Paragraph>
+      </div>
+    </article>
+  )
+}
+
+{
+  render && variant === "link" && heading && (
+    <article class:list={classes} {...rest}>
+      <div class="card_content margin-trim">
+        <Heading tag={headingTag} variant="h5" class="card_title">
+          <a class="card_link" href={href ?? "#"}>
+            <Fragment set:html={heading} />
+          </a>
+        </Heading>
+        <Paragraph variant="small" class="card_text">
+          <Fragment set:html={text} />
+        </Paragraph>
+      </div>
+      <Icon class="card_icon" src={diagonal} />
+    </article>
+  )
+}
+
+{
+  render && variant === "tier" && heading && (
+    <article class:list={classes} {...rest}>
+      <div class="card_header">
+        <Tag variant="solid">{eyebrow}</Tag>
+        {meta && <span class="card_meta text-style-small">{meta}</span>}
+      </div>
+      <div class="card_content margin-trim">
+        <Heading tag={headingTag} variant="h4" class="card_title">
+          <Fragment set:html={heading} />
+        </Heading>
+        <Paragraph variant="small" class="card_text">
+          <Fragment set:html={text} />
+        </Paragraph>
+      </div>
+      {items.length > 0 && <Checklist class="card_list" items={items} />}
+      {buttonLabel && (
+        <div class="card_footer">
+          <Button element="link" href={buttonHref ?? "#"} variant="link" size="small" icon="diagonal">
+            {buttonLabel}
+          </Button>
+        </div>
+      )}
+    </article>
   )
 }
 
@@ -233,7 +344,7 @@ if (import.meta.env.DEV && render) {
       }
     }
 
-    .card_wrap:has(.button_wrap) {
+    .card_wrap:has(.button_wrap):not(.tier) {
       .button_wrap::after {
         content: "";
         position: absolute;
@@ -253,6 +364,122 @@ if (import.meta.env.DEV && render) {
         &:hover .image {
           scale: 1.04;
         }
+      }
+    }
+
+    /* Shared by the Greenboard variants */
+    .card_wrap:is(.feature, .link, .tier) {
+      .card_content {
+        padding: 0;
+      }
+      .card_title {
+        margin-bottom: var(--space-2);
+      }
+      .card_text {
+        color: var(--text-2);
+      }
+    }
+
+    /* Feature: a principle or capability, ruled above or filled */
+    .card_wrap.feature {
+      flex-direction: row;
+      gap: var(--space-3);
+      height: 100%;
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+      border-radius: 0;
+      background-color: transparent;
+      overflow: visible;
+      &.stacked-index {
+        flex-direction: column;
+        gap: var(--space-5);
+      }
+      &.filled {
+        padding: var(--space-6);
+        border-top-style: none;
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
+      }
+      .card_index {
+        width: 2.25rem;
+        flex-shrink: 0;
+        color: var(--text-2);
+        font-variant-numeric: tabular-nums;
+      }
+      /* The text below keeps its own top margin, which is the gap */
+      .card_lead {
+        color: var(--accent);
+        font-weight: var(--primary-medium);
+      }
+      .card_text {
+        max-width: 46ch;
+      }
+    }
+
+    /* Link: one cell of a ruled grid; the whole card is the link */
+    .card_wrap.link {
+      --_shift: 0;
+      justify-content: space-between;
+      gap: var(--space-6);
+      padding: var(--space-5);
+      border-radius: 0;
+      background-color: var(--background);
+      transition: background-color var(--hover-duration) var(--hover-ease);
+      &:has(.card_link:hover),
+      &:has(.card_link:focus-visible) {
+        --_shift: 1;
+        background-color: var(--background-2);
+      }
+      .card_link::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+      .card_link:focus-visible {
+        outline: none;
+      }
+      &:has(.card_link:focus-visible) {
+        outline: var(--focus-width) solid var(--accent);
+        outline-offset: var(--focus-offset-inner);
+      }
+      .card_text {
+        max-width: 40ch;
+      }
+      .card_icon {
+        --_size: 1.25rem;
+        color: color-mix(in srgb, var(--accent) calc(100% * var(--_shift)), var(--text-2));
+        translate: calc(0.1875rem * var(--_shift)) calc(-0.1875rem * var(--_shift));
+        transition:
+          translate var(--hover-duration) var(--hover-ease),
+          color var(--hover-duration) var(--hover-ease);
+      }
+    }
+
+    /* Tier: a plan or firm size on a surface */
+    .card_wrap.tier {
+      gap: var(--space-5);
+      height: 100%;
+      padding: var(--space-6);
+      .card_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-3);
+      }
+      .card_meta {
+        color: var(--text-2);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .card_title {
+        margin-bottom: var(--space-3);
+      }
+      .card_list {
+        padding-top: var(--space-5);
+        border-top: var(--border-width) solid var(--border);
+      }
+      .card_footer {
+        margin-top: auto;
       }
     }
   }

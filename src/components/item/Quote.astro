@@ -1,0 +1,107 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"figure"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** The quote, without quotation marks. */
+  text?: string;
+  /** Person quoted. */
+  name?: string;
+  /** Their position and firm. */
+  position?: string;
+  /** Initials shown in the avatar. */
+  initials?: string;
+  /** Quote size. */
+  variant?: "h2" | "h3";
+};
+
+const {
+  render = true,
+  text,
+  name,
+  position,
+  initials,
+  variant = "h3",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && text && (
+    <figure class:list={["quote_wrap", className]} {...rest}>
+      <blockquote class={`quote_text text-style-${variant}`}>
+        <p>
+          <span class="quote_mark">“</span>{text}”
+        </p>
+      </blockquote>
+      {name && (
+        <figcaption class="quote_author">
+          {initials && (
+            <span class="quote_avatar text-style-label" aria-hidden="true">{initials}</span>
+          )}
+          <span class="quote_author_content">
+            <span class="quote_name text-style-small">{name}</span>
+            {position && <span class="quote_role text-style-small">{position}</span>}
+          </span>
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .quote_text {
+      max-width: 34ch;
+      margin-bottom: var(--space-6);
+      & p {
+        text-wrap: inherit;
+      }
+    }
+
+    /* The opening mark hangs outside the text block */
+    .quote_mark {
+      margin-left: -0.42em;
+    }
+
+    .quote_author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .quote_avatar {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      align-items: center;
+      width: 3rem;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-round);
+      background-color: var(--text);
+      color: var(--background);
+      overflow: clip;
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .quote_author_content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      min-width: 0;
+    }
+
+    .quote_name {
+      font-weight: var(--primary-medium);
+    }
+
+    .quote_role {
+      color: var(--text-2);
+    }
+  }
+</style>

@@ -5,6 +5,8 @@ import { slotContent } from "@/utils/slots.ts";
 type Base = HTMLAttributes<"div"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
+  /** Hairline rules between cells and around the grid, in place of the gap. */
+  ruled?: boolean;
 };
 
 type Props = Base &
@@ -13,7 +15,7 @@ type Props = Base &
         /** Grid mode. */
         variant?: "columns";
         /**
-         * Columns below 30rem. Defaults to `1`.
+         * Columns below 23rem. Defaults to `1`.
          *
          * @min 1
          * @max 12
@@ -21,7 +23,7 @@ type Props = Base &
          */
         xsmall?: number;
         /**
-         * Columns from 30rem. Inherits `xsmall`.
+         * Columns from 23rem. Inherits `xsmall`.
          *
          * @min 1
          * @max 12
@@ -29,7 +31,7 @@ type Props = Base &
          */
         small?: number;
         /**
-         * Columns from 48rem. Inherits `small`.
+         * Columns from 38rem. Inherits `small`.
          *
          * @min 1
          * @max 12
@@ -37,7 +39,7 @@ type Props = Base &
          */
         medium?: number;
         /**
-         * Columns from 64rem. Inherits `medium`.
+         * Columns from 54rem. Inherits `medium`.
          *
          * @min 1
          * @max 12
@@ -80,6 +82,7 @@ type AllProps = Base & {
 
 const {
   render = true,
+  ruled = false,
   variant = "columns",
   xsmall = 1,
   small,
@@ -128,7 +131,7 @@ const columns =
 {
   render && content && (
     <div
-      class:list={["grid", variant !== "columns" && variant, className]}
+      class:list={["grid", variant !== "columns" && variant, ruled && "ruled", className]}
       style={columns}
       {...rest}
     >
@@ -151,13 +154,13 @@ const columns =
       grid-column-gap: var(--_gap-size);
       grid-row-gap: var(--_gap-size);
       grid-template-columns: repeat(var(--_cols), minmax(0, 1fr));
-      @media (width >= 30rem) {
+      @media (width >= 23rem) {
         --_cols: var(--_cols-sm);
       }
-      @media (width >= 48rem) {
+      @media (width >= 38rem) {
         --_cols: var(--_cols-md);
       }
-      @media (width >= 64rem) {
+      @media (width >= 54rem) {
         --_cols: var(--_cols-lg);
       }
       &:is(.autofit, .autofill) {
@@ -175,6 +178,13 @@ const columns =
       }
       &.autofill {
         grid-template-columns: repeat(auto-fill, minmax(var(--_track), 1fr));
+      }
+      &.ruled {
+        --_gap-size: var(--border-width);
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-main);
+        background-color: var(--border);
+        overflow: clip;
       }
     }
   }

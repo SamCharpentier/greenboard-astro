@@ -8,6 +8,8 @@ type Props = HTMLAttributes<"div"> & {
   render?: boolean;
   /** Accessible label. Defaults to `Marquee`. */
   label?: string;
+  /** Visible caption before the strip. */
+  caption?: string;
   /** Travel direction. */
   direction?: "forwards" | "backwards";
 };
@@ -15,6 +17,7 @@ type Props = HTMLAttributes<"div"> & {
 const {
   render = true,
   label = "Marquee",
+  caption,
   direction = "forwards",
   class: className,
   ...rest
@@ -81,6 +84,7 @@ const locals = `--_count: ${count}`;
       aria-label={label}
       {...rest}
     >
+      {caption && <p class="marquee_caption text-style-small">{caption}</p>}
       <div class="marquee_viewport">
         <div class="marquee_track">
           <div class="marquee_panel">
@@ -98,6 +102,7 @@ const locals = `--_count: ${count}`;
       <Button
         variant="play"
         emphasis="secondary"
+        size="small"
         pressed={true}
         class="marquee_toggle"
         data-marquee-toggle
@@ -136,7 +141,7 @@ const locals = `--_count: ${count}`;
 <style is:global>
   @layer components {
     .marquee_wrap {
-      --_gap-size: var(--space-6);
+      --_gap-size: var(--space-8);
       --_item-height: 3rem;
       /* Seconds spent on each item, so a strip keeps its pace however many it
          holds — the count comes in on the element. */
@@ -221,6 +226,13 @@ const locals = `--_count: ${count}`;
 
     .marquee_toggle {
       flex: none;
+    }
+
+    .marquee_caption {
+      flex-shrink: 0;
+      max-width: 12ch;
+      margin: 0;
+      color: var(--text-2);
     }
 
     @keyframes marquee {

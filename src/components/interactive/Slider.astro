@@ -10,22 +10,22 @@ type Props = HTMLAttributes<"div"> & {
   label?: string;
   /** Slider bounds. */
   variant?: "bleed" | "crop-start" | "contained";
-  /** Slides shown below 30rem. Defaults to `1.02`.
+  /** Slides shown below 23rem. Defaults to `1.02`.
    *
    * @min 1
    * @max 12 */
   xsmall?: number;
-  /** Slides shown from 30rem. Inherits `xsmall`.
+  /** Slides shown from 23rem. Inherits `xsmall`.
    *
    * @min 1
    * @max 12 */
   small?: number;
-  /** Slides shown from 48rem. Inherits `small`.
+  /** Slides shown from 38rem. Inherits `small`.
    *
    * @min 1
    * @max 12 */
   medium?: number;
-  /** Slides shown from 64rem. Inherits `medium`.
+  /** Slides shown from 54rem. Inherits `medium`.
    *
    * @min 1
    * @max 12 */
@@ -296,13 +296,13 @@ const slides = await slotContent(Astro.slots);
       gap: var(--space-6);
       width: 100%;
 
-      @media (width >= 30rem) {
+      @media (width >= 23rem) {
         --_visible: var(--_visible-sm);
       }
-      @media (width >= 48rem) {
+      @media (width >= 38rem) {
         --_visible: var(--_visible-md);
       }
-      @media (width >= 64rem) {
+      @media (width >= 54rem) {
         --_visible: var(--_visible-lg);
       }
     }

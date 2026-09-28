@@ -1,0 +1,132 @@
+---
+import type { HTMLAttributes, SvgComponent } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import diagonal from "@/assets/icons/arrow-up-right.svg";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = Omit<HTMLAttributes<"a">, "href"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Link destination. A linked tag ends with a diagonal arrow. */
+  href?: string;
+  /** Accessible name, for a tag whose content is a logo. */
+  label?: string;
+  /** Leading icon. */
+  icon?: SvgComponent;
+  /** Tag style. `inline` sits inside a sentence and scales with it. */
+  variant?: "default" | "solid" | "outline" | "inline";
+  /** Color theme of element and its children. */
+  theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand";
+};
+
+const {
+  render = true,
+  href,
+  label,
+  icon,
+  variant = "default",
+  theme = "inherit",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const content = await slotContent(Astro.slots);
+const Tag = href ? "a" : "span";
+---
+
+{
+  render && content && (
+    <Tag
+      class:list={[
+        "tag_wrap",
+        variant !== "default" && variant,
+        theme !== "inherit" && `theme-${theme}`,
+        className,
+      ]}
+      href={href}
+      aria-label={label}
+      {...rest}
+    >
+      {icon && <Icon class="tag_icon" src={icon} variant="small" />}
+      <span class="tag_text text-style-label">
+        <Fragment set:html={content} />
+      </span>
+      {href && <Icon class="tag_icon tag_arrow" src={diagonal} variant="small" />}
+    </Tag>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .tag_wrap {
+      --_icon-size: 1rem;
+      --_icon-color: var(--accent);
+      --_shift: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      min-height: 1.75rem;
+      padding: 0.25rem 0.625rem;
+      border: var(--border-width) solid var(--background-2);
+      border-radius: var(--radius-small);
+      background-color: var(--background-2);
+      color: var(--text);
+      text-decoration: none;
+      vertical-align: middle;
+      &.solid {
+        border-color: var(--background);
+        background-color: var(--background);
+      }
+      &.outline {
+        border-color: var(--border);
+        background-color: transparent;
+      }
+      /* Inside a sentence: pair it with a theme so it stands off the text */
+      &.inline {
+        --_icon-size: 0.66em;
+        --_icon-color: currentcolor;
+        border-color: var(--background);
+        background-color: var(--background);
+        gap: 0.28em;
+        min-height: 0;
+        padding: 0.24em 0.42em 0.24em 0.5em;
+        vertical-align: baseline;
+        font-size: inherit;
+        .tag_text {
+          font-size: inherit;
+          line-height: 1;
+          &::before,
+          &::after {
+            content: none;
+          }
+        }
+      }
+      @media (hover: hover) {
+        &:is(a):hover {
+          --_shift: 1;
+        }
+      }
+      &:is(a):focus-visible {
+        --_shift: 1;
+      }
+      .tag_icon {
+        --_size: var(--_icon-size);
+        color: var(--_icon-color);
+      }
+      .tag_arrow {
+        translate: calc(0.1em * var(--_shift)) calc(-0.1em * var(--_shift));
+        transition: translate var(--hover-duration) var(--hover-ease);
+      }
+      .tag_text {
+        white-space: nowrap;
+      }
+      /* A logo in place of text: sits on the baseline at cap height */
+      .tag_logo {
+        width: auto;
+        height: 0.7em;
+        aspect-ratio: auto;
+        fill: currentcolor;
+      }
+    }
+  }
+</style>

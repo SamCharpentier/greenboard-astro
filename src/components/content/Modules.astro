@@ -1,0 +1,272 @@
+---
+import Accordion from "@/components/interactive/Accordion.astro";
+import AccordionItem from "@/components/interactive/AccordionItem.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Checklist from "@/components/item/Checklist.astro";
+import Button from "@/components/Button.astro";
+import Icon from "@/components/media/Icon.astro";
+import go from "@/assets/logo/go.svg";
+
+type Block = {
+  /** paragraph, steps or checks */
+  type: string;
+  text?: string;
+  items?: { title?: string; lead?: string; text: string }[];
+};
+
+type Module = {
+  key: string;
+  label: string;
+  title: string;
+  eyebrow: string;
+  intro: string;
+  headline: string[];
+  blocks: Block[];
+  capabilities: string[];
+};
+
+type Props = {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** The modules, in order. `{go}` in any text is the Go wordmark. */
+  modules?: Module[];
+};
+
+const { render = true, modules = [] } = Astro.props;
+
+/* Splits text on the {go} token so the wordmark can sit inside the sentence */
+const parts = (text: string) => text.split("{go}");
+---
+
+{
+  render && modules.length > 0 && (
+    <Accordion single={false} class="modules_wrap">
+      {modules.map((module, index) => (
+        <AccordionItem
+          heading={module.title}
+          label={module.label}
+          headingVariant="h3"
+          open={index === 0}
+          openTheme={index % 2 === 0 ? "deep" : "soft"}
+          data-module={module.key}
+        >
+          <Paragraph slot="intro" variant="large" class="modules_intro">
+            {parts(module.intro).map((part, i) => (
+              <Fragment>
+                {i > 0 && <Icon src={go} class="go_inline" role="img" aria-label="Go" />}
+                {part}
+              </Fragment>
+            ))}
+          </Paragraph>
+          <Eyebrow>{module.eyebrow}</Eyebrow>
+          <Heading tag="h4" variant="h3" class="modules_headline">
+            {module.headline.map((line, i) => (
+              <Fragment>
+                {i > 0 && <br />}
+                {line}
+              </Fragment>
+            ))}
+          </Heading>
+          <div class="modules_body">
+            {module.blocks.map((block) =>
+              block.type === "paragraph" ? (
+                <p class="modules_body_text text-style-main">
+                  {parts(block.text ?? "").map((part, i) => (
+                    <Fragment>
+                      {i > 0 && <Icon src={go} class="go_inline" role="img" aria-label="Go" />}
+                      {part}
+                    </Fragment>
+                  ))}
+                </p>
+              ) : block.type === "steps" ? (
+                <ol class="modules_steps">
+                  {(block.items ?? []).map((step, i) => (
+                    <li class="modules_step">
+                      <span class="modules_step_number text-style-label">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span class="modules_step_content">
+                        <span class="modules_step_title text-style-main">{step.title}</span>
+                        <span class="modules_step_text text-style-small">{step.text}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <Checklist
+                  class="modules_checks"
+                  items={(block.items ?? []).map((item) => ({ lead: item.lead ?? "", text: item.text }))}
+                  detailed
+                />
+              ),
+            )}
+          </div>
+          {module.capabilities.length > 0 && (
+            <ul class="modules_capabilities">
+              {module.capabilities.map((capability) => (
+                <li class="text-style-small color-faded">{capability}</li>
+              ))}
+              <li>
+                <Button
+                  element="link"
+                  href="#"
+                  variant="link"
+                  size="small"
+                  icon="diagonal"
+                  aria-label={`More ${module.title} capabilities`}
+                >
+                  and more
+                </Button>
+              </li>
+            </ul>
+          )}
+          <div slot="visual" class="modules_media">
+            <video
+              class="modules_video"
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster={`/images/modules/${module.key}.jpg`}
+              aria-hidden="true"
+            >
+              <source src={`/video/modules/${module.key}.mp4`} type="video/mp4" />
+            </video>
+          </div>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  )
+}
+
+<script>
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  for (const wrap of document.querySelectorAll<HTMLElement>(".modules_wrap")) {
+    const items = [...wrap.querySelectorAll<HTMLDetailsElement>(".accordion_item")];
+    let inView = false;
+
+    /* Play only the open module's animation, and only while it is on screen */
+    const update = () => {
+      for (const item of items) {
+        const video = item.querySelector<HTMLVideoElement>(".modules_video");
+        if (!video) continue;
+        if (item.open && inView && !reduceMotion) {
+          video.preload = "auto";
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      }
+    };
+
+    items.forEach((item) => item.addEventListener("toggle", update));
+    new IntersectionObserver(
+      (entries) => {
+        inView = entries[0].isIntersecting;
+        update();
+      },
+      { threshold: 0.15 },
+    ).observe(wrap);
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .modules_intro {
+      max-width: 58ch;
+      margin-bottom: var(--space-4);
+      color: var(--text-2);
+    }
+
+    .modules_headline {
+      margin-bottom: var(--space-5);
+    }
+
+    .modules_body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      max-width: 48ch;
+      color: var(--text-2);
+    }
+
+    .modules_steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      margin-top: var(--space-2);
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .modules_step {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .modules_step_number {
+      width: 1.75rem;
+      flex-shrink: 0;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .modules_step_content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      min-width: 0;
+    }
+
+    .modules_step_title {
+      color: var(--text);
+      font-weight: var(--primary-medium);
+    }
+
+    .modules_checks {
+      margin-block: var(--space-2);
+    }
+
+    .modules_capabilities {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3) var(--space-4);
+      max-width: 36rem;
+      margin-top: var(--space-6);
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .modules_media {
+      position: relative;
+      width: 100%;
+      max-width: 30rem;
+      margin-left: auto;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-main);
+      background-color: var(--background-2);
+      overflow: clip;
+    }
+
+    .modules_video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* The Go wordmark in running text, on the baseline at cap height */
+    .icon.go_inline {
+      display: inline-block;
+      width: auto;
+      height: 0.7em;
+      aspect-ratio: auto;
+      vertical-align: baseline;
+      color: var(--accent);
+    }
+  }
+</style>

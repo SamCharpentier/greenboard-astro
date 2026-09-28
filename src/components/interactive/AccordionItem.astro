@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "astro/types";
 import Heading from "@/components/typography/Heading.astro";
 import Icon from "@/components/media/Icon.astro";
-import arrow from "@/assets/icons/arrow.svg";
+import plus from "@/assets/icons/plus.svg";
 import { slotContent } from "@/utils/slots.ts";
 
 type Props = HTMLAttributes<"details"> & {
@@ -10,65 +10,135 @@ type Props = HTMLAttributes<"details"> & {
   render?: boolean;
   /** Item heading. */
   heading?: string;
+  /** Short label in its own column before the heading. */
+  label?: string;
   /** Heading level. */
   headingTag?: "h2" | "h3" | "h4" | "h5" | "h6";
+  /** Heading size. */
+  headingVariant?: "h3" | "h4" | "h5";
   /** Open on load. */
   open?: boolean;
+  /** Theme the item takes while open, drawn edge to edge behind it. */
+  openTheme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand";
 };
 
 const {
   render = true,
   heading,
+  label,
   headingTag = "h3",
+  headingVariant = "h5",
   open = false,
+  openTheme = "inherit",
   class: className,
   ...rest
 } = Astro.props;
 
 const content = await slotContent(Astro.slots);
+const intro = await slotContent(Astro.slots, "intro");
+const visual = await slotContent(Astro.slots, "visual");
+const columns = Boolean(label || intro || visual);
+const themed = openTheme !== "inherit";
 ---
 
 {
   render && heading && content && (
     <details
-      class:list={["accordion_item", className]}
+      class:list={[
+        "accordion_item",
+        themed && open && `theme-${openTheme}`,
+        className,
+      ]}
       open={open}
       data-accordion-group
+      data-open-theme={themed ? `theme-${openTheme}` : undefined}
       {...rest}
     >
       <summary class="accordion_toggle">
-        <Heading tag={headingTag} variant="h5" class="accordion_title">
-          {heading}
-        </Heading>
-        <Icon class="accordion_icon" src={arrow} variant="small" />
+        <span class="accordion_toggle_group">
+          {label && (
+            <span class="accordion_label text-style-label">{label}</span>
+          )}
+          <Heading
+            tag={headingTag}
+            variant={headingVariant}
+            class="accordion_title"
+          >
+            {heading}
+          </Heading>
+        </span>
+        <span class="accordion_icon_wrap">
+          <Icon class="accordion_icon" src={plus} variant="small" />
+        </span>
       </summary>
 
-      <div class="accordion_body margin-trim">
-        <Fragment set:html={content} />
+      <div class:list={["accordion_body", columns && "columns"]}>
+        {intro && (
+          <div class="accordion_intro margin-trim">
+            <Fragment set:html={intro} />
+          </div>
+        )}
+        <div class="accordion_text margin-trim">
+          <Fragment set:html={content} />
+        </div>
+        {visual && (
+          <div class="accordion_visual margin-trim">
+            <Fragment set:html={visual} />
+          </div>
+        )}
       </div>
     </details>
   )
 }
 
+<script>
+  for (const item of document.querySelectorAll<HTMLDetailsElement>(
+    ".accordion_item[data-open-theme]",
+  )) {
+    const theme = item.dataset.openTheme!;
+    const sync = () => item.classList.toggle(theme, item.open);
+    item.addEventListener("toggle", sync);
+    sync();
+  }
+</script>
+
 <style is:global>
   @layer components {
     .accordion_item {
       interpolate-size: allow-keywords;
+      position: relative;
+      background-color: transparent;
       border-bottom: var(--border-width) solid var(--border);
-      transition: border-color var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          border-bottom-color: currentcolor;
-        }
+      transition:
+        color var(--hover-duration) var(--hover-ease),
+        border-color var(--hover-duration) var(--hover-ease);
+    }
+
+    /* The open theme's color, edge to edge behind the item. The shadow spreads
+       the background sideways; the clip keeps it to the item's own height.
+       Set --accordion-bleed to hold it inside a narrower frame. */
+    .accordion_item[data-open-theme] {
+      --_bleed: var(--accordion-bleed, 100vmax);
+      box-shadow: 0 0 0 var(--_bleed) transparent;
+      clip-path: inset(0 calc(-1 * var(--_bleed)));
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        box-shadow var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease),
+        border-color var(--hover-duration) var(--hover-ease);
+      &[open] {
+        background-color: var(--background);
+        box-shadow: 0 0 0 var(--_bleed) var(--background);
       }
     }
 
     .accordion_toggle {
+      position: relative;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: var(--space-4);
       padding-block: var(--space-5);
+      color: var(--text);
       list-style: none;
       cursor: pointer;
       &::-webkit-details-marker {
@@ -76,37 +146,119 @@ const content = await slotContent(Astro.slots);
       }
     }
 
+    .accordion_toggle_group {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: start;
+      gap: var(--space-2) var(--space-4);
+      min-width: 0;
+      @media (width >= 38rem) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .accordion_label {
+      flex-shrink: 0;
+      color: var(--text-2);
+      @media (width >= 38rem) {
+        width: 8rem;
+      }
+      @media (width >= 54rem) {
+        width: 10rem;
+      }
+    }
+
     .accordion_title {
+      min-width: 0;
       margin-block: 0;
+      transition: color var(--hover-duration) var(--hover-ease);
+    }
+
+    .accordion_item[open] > .accordion_toggle .accordion_title {
+      color: var(--heading-accent);
+    }
+
+    .accordion_icon_wrap {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      align-items: center;
+      width: var(--button-size-small);
+      aspect-ratio: 1 / 1;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-round);
+      transition: border-color var(--hover-duration) var(--hover-ease);
+    }
+
+    @media (hover: hover) {
+      .accordion_toggle:hover .accordion_icon_wrap {
+        border-color: var(--text);
+      }
+    }
+    .accordion_toggle:focus-visible .accordion_icon_wrap {
+      border-color: var(--text);
     }
 
     .accordion_icon {
-      rotate: 90deg;
-      transition: rotate var(--open-duration) var(--open-ease);
+      --_size: 1.125rem;
+      transition: rotate var(--hover-duration) var(--hover-ease);
     }
 
-    .accordion_item:is([open], .stacki-opened) .accordion_icon,
-    .stacki-designer .accordion_wrap.preview .accordion_icon {
-      rotate: -90deg;
+    .accordion_item[open] > .accordion_toggle .accordion_icon {
+      rotate: 45deg;
     }
 
     .accordion_item::details-content {
       block-size: 0;
-      overflow: hidden;
+      overflow: clip;
       content-visibility: hidden;
       transition:
         block-size var(--open-duration) var(--open-ease),
         content-visibility var(--open-duration) var(--open-ease) allow-discrete;
     }
 
-    .accordion_item:is([open], .stacki-opened)::details-content,
-    .stacki-designer .accordion_wrap.preview .accordion_item::details-content {
+    .accordion_item[open]::details-content {
       block-size: auto;
       content-visibility: visible;
     }
 
     .accordion_body {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
       padding-bottom: var(--space-5);
+      &.columns {
+        /* Room above the first trimmed line, so the clip never cuts ascenders */
+        padding-top: var(--space-2);
+        padding-bottom: var(--space-7);
+        @media (width >= 54rem) {
+          display: grid;
+          grid-template-columns: 10rem minmax(0, 1fr) minmax(0, 1fr);
+          column-gap: var(--space-4);
+        }
+      }
+    }
+
+    .accordion_intro {
+      width: 100%;
+      grid-column: 2 / span 2;
+    }
+
+    .accordion_text {
+      width: 100%;
+      grid-column: 2;
+      @media (width >= 54rem) {
+        padding-right: var(--space-6);
+      }
+    }
+
+    .accordion_visual {
+      grid-column: 3;
+      align-self: center;
+      width: 100%;
     }
   }
 </style>

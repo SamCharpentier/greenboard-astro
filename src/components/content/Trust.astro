@@ -1,0 +1,56 @@
+---
+import Grid from "@/components/wrapper/Grid.astro";
+import Stat from "@/components/item/Stat.astro";
+import Marquee from "@/components/interactive/Marquee.astro";
+
+type Props = {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Figures across the top. Real figures only. */
+  stats?: { number: string; unit?: string; label: string }[];
+  /** Customer names in the moving strip. */
+  customers?: string[];
+  /** Caption before the strip. */
+  caption?: string;
+};
+
+const {
+  render = true,
+  stats = [],
+  customers = [],
+  caption = "Trusted by firms like",
+} = Astro.props;
+---
+
+{
+  render && (stats.length > 0 || customers.length > 0) && (
+    <div class="trust_wrap">
+      <Grid xsmall={1} small={2} large={4} class="gap-row-6">
+        {stats.map((stat) => (
+          <Stat number={stat.number} unit={stat.unit} label={stat.label} />
+        ))}
+      </Grid>
+      <Marquee class="trust_marquee" caption={caption} label="Customers">
+        {customers.map((name) => (
+          <span class="text-style-h5 color-faded">{name}</span>
+        ))}
+      </Marquee>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .trust_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+      width: 100%;
+    }
+
+    .trust_marquee {
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+    }
+  }
+</style>

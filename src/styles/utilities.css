@@ -909,7 +909,7 @@
 }
 
 .color-faded {
-  color: color-mix(in srgb, currentColor 70%, transparent);
+  color: var(--text-2);
 }
 
 /* Background & radius */

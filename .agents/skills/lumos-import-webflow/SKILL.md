@@ -19,22 +19,22 @@ it is answered, not at the end** — the end is exactly when the Webflow site
 gets unpublished and the answers stop being checkable.
 
 ```markdown
-- **Live URL** — what every page is compared against, until cutover
-- **Provenance** — Lumos for Webflow, or hand-built
-- **Code export** — path to the unzipped folder
-- **Collection CSVs** — path
-- **301 redirects** — path to the CSV from Site Settings → Publishing
-- **Webflow site ID** — `data-wf-site`, how every MCP call addresses the site
-- **CMS** — content collections, a headless CMS, or Webflow headless; and why
-- **Forms** — provider, and where submissions go
-- **Search** — what replaced Webflow's, or that the site has none
-- **Hosting** — where it deploys, and the domain cutover plan
-- **Breakpoints** — the site's own, in rem, replacing the framework's
-- **Collections** — each one, and the route or component it landed in
-- **List filters and sorts** — per list, since nothing but the Designer records them
-- **Out of scope** — Ecommerce, Memberships, Logic, and what was agreed instead
-- **Decisions** — anything the site's owner chose that the code cannot explain
-- **Still open** — questions waiting on an answer
+- **Live URL** — two sources. The design is the approved prototype (Official Partner's coded prototype on Lumos for Webflow conventions, published as a claude.ai artifact; local copy `/home/claude/gb/site`, pages home, product, about, solutions). The content is the live Webflow site, www.greenboard.com.
+- **Provenance** — hand-built prototype written in Lumos for Webflow conventions (`u-*` classes, `--_theme---*` variables, `data-trigger` / `data-state`). No Webflow components or IX2. Its generators: `/home/claude/gb/gbsite.py`, `gbcomp.py`, `build_*.py`.
+- **Code export** — design: `/home/claude/gb/site`. Content: Webflow export `/home/claude/gb/wf/export` and the cleaned extraction `greenboard-webflow-content.zip` (README, sitemap-old-to-new.csv, content/, assets/).
+- **Collection CSVs** — not used; items pulled through the Webflow API into `content/cms/*.json` of the extraction.
+- **301 redirects** — not exported yet. Copy from Webflow Site settings before cutover.
+- **Webflow site ID** — `67d0a8a9156b7b7bd46ffdfd` (Greenboard, greenboard-00).
+- **CMS** — Sanity (client decision, Sept 2026). Collections (blog, case studies, partners, customers, comparisons, events, prospect pages, site settings) go to Sanity; page layouts stay in code, edited with Stacki. Jobs come from Ashby at build time.
+- **Forms** — HubSpot (portal 243932974) is the likely target: the live site already posts to it. Not wired yet; capture forms validate client side only.
+- **Search** — none on the site.
+- **Hosting** — open. Client mentioned AWS; their booking widget already runs on AWS Amplify.
+- **Breakpoints** — the prototype switched layouts with container queries on `.u-container` at 50em, 35em and 20em (medium, small, xsmall), and the nav at 62em. Converted to viewport widths including the site margin: small from 23rem, medium from 38rem, large from 54rem, desktop nav from 66rem.
+- **Collections** — not bound yet (pass 3 waits on Sanity).
+- **List filters and sorts** — n/a until pass 3.
+- **Out of scope** — none of Ecommerce, Memberships, Logic or native search is used.
+- **Decisions** — the new design system (tokens, themes light, soft, dark, deep, brand, text styles incl. a `label` style, components) wins over the live Webflow build; the live site is content only. Repo: github.com/SamCharpentier/greenboard-astro (to transfer to the client before hosting is connected).
+- **Still open** — demo flow (Amplify widget vs HubSpot router), product and firm-type names, Prediction Markets page, FAQ content, hosting.
 ```
 
 **This section belongs to the project, not to the framework.** In a fresh

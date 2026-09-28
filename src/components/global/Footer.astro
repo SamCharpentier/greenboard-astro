@@ -1,7 +1,11 @@
 ---
 import Icon from "@/components/media/Icon.astro";
+import Button from "@/components/Button.astro";
+import Tag from "@/components/Tag.astro";
 import logo from "@/assets/logo/logo.svg";
-import { SITE_NAME } from "@/consts.ts";
+import shield from "@/assets/icons/shield.svg";
+import lock from "@/assets/icons/lock.svg";
+import { footerGroups, legalLinks, isCurrent } from "@/data/navigation.ts";
 
 interface Props {
   /** Set to `false` to omit the component. */
@@ -9,117 +13,193 @@ interface Props {
 }
 
 const { render = true } = Astro.props;
+const path = Astro.url.pathname;
+const current = (href: string) => (isCurrent(href, path) ? "page" : undefined);
 ---
 
 {
   render && (
-    <footer class="footer_wrap">
+    <footer class="footer_wrap theme-light">
       <div class="footer_inner">
-        <div class="footer_top">
-          <a class="footer_logo" href="/" aria-label={SITE_NAME}>
-            <Icon src={logo} variant="full-width" />
-          </a>
-          <nav aria-label="Footer">
-            <ul class="footer_links">
-              <li>
-                <a class="footer_link" href="/">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a class="footer_link" href="/example-components">
-                  Example Components
-                </a>
-              </li>
-            </ul>
+        <div class="footer_layout">
+          <div class="footer_brand">
+            <a class="footer_logo" href="#main" aria-label="Greenboard, back to top">
+              <Icon src={logo} variant="full-width" />
+            </a>
+            <p class="footer_text text-style-large">
+              The AI-native system of action for SEC and FINRA compliance. New York
+              and Scottsdale.
+            </p>
+            <address class="footer_address text-style-small">
+              99 Madison Ave, Floor 10<br />New York, NY 10016
+            </address>
+            <div class="footer_badges">
+              <Tag variant="outline" icon={shield}>SOC 2 Type 2</Tag>
+              <Tag variant="outline" icon={lock}>GDPR</Tag>
+              <Button element="link" href="#" variant="link" size="small" icon="diagonal">
+                LinkedIn
+              </Button>
+            </div>
+          </div>
+          <nav class="footer_groups" aria-label="Footer">
+            {footerGroups.map((group) => (
+              <div>
+                <h2 class="footer_group_title text-style-label">{group.label}</h2>
+                <ul class="footer_list">
+                  {group.links.map((link) => (
+                    <li>
+                      <a
+                        class="footer_link text-style-small"
+                        href={link.href}
+                        aria-current={current(link.href)}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </nav>
         </div>
         <div class="footer_bottom">
           <p class="footer_copyright text-style-small">
-            &copy; <span id="year">{new Date().getFullYear()}</span>&#160;
-            {SITE_NAME}
+            &copy; {new Date().getFullYear()} Greenboard, Inc. All rights reserved.
           </p>
+          <ul class="footer_legal">
+            {legalLinks.map((link) => (
+              <li>
+                <a class="footer_link text-style-small" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>
   )
 }
 
-<script>
-  const year = document.querySelector<HTMLSpanElement>("#year");
-
-  if (year) {
-    year.textContent = new Date().getFullYear().toString();
-  }
-</script>
-
 <style is:global>
   @layer components {
     .footer_wrap {
-      display: flex;
-      justify-content: center;
-      padding-block: var(--section-space-small);
-      padding-inline: var(--site-margin);
-      background-color: var(--background);
-      color: var(--text);
-      border-top: var(--border-width) solid var(--border);
+      padding-top: var(--section-space-medium);
+      padding-bottom: var(--space-6);
     }
 
     .footer_inner {
-      width: 100%;
-      max-width: var(--max-width-main);
       display: flex;
       flex-direction: column;
-      gap: var(--space-6);
+      gap: var(--space-8);
+      width: var(--site-width);
+      max-width: var(--max-width-main);
+      margin-inline: auto;
     }
 
-    .footer_top {
+    .footer_layout {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-4) var(--space-6);
+      flex-direction: column;
+      gap: var(--space-8) var(--site-gutter);
+      @media (width >= 54rem) {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+    }
+
+    .footer_brand {
+      grid-column: 1 / span 4;
+      width: 100%;
     }
 
     .footer_logo {
       display: block;
-      width: 7.5rem;
-      max-width: 100%;
-      transition: opacity var(--hover-duration) var(--hover-ease);
-      @media (hover: hover) {
-        &:hover {
-          opacity: 0.6;
-        }
-      }
+      width: 9.5rem;
+      margin-bottom: var(--space-6);
+      color: var(--text);
     }
 
-    .footer_links {
+    .footer_text {
+      max-width: 34ch;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer_address {
+      margin-bottom: var(--space-5);
+      color: var(--text-2);
+      font-style: normal;
+    }
+
+    .footer_badges {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--space-4);
-      font-size: var(--text-small);
-      font-weight: var(--primary-medium);
+      gap: var(--space-2) var(--space-4);
+    }
+
+    .footer_groups {
+      display: grid;
+      grid-column: 6 / span 7;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-7) var(--site-gutter);
+      width: 100%;
+      @media (width >= 23rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (width >= 38rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .footer_group_title {
+      margin-bottom: var(--space-4);
+      color: var(--text);
+      font-weight: var(--primary-bold);
+    }
+
+    .footer_list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
     }
 
     .footer_link {
-      color: var(--text-2);
-      text-decoration: none;
+      display: inline-block;
+      color: var(--text);
       transition: color var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
-          color: var(--text);
+          color: var(--accent);
         }
+      }
+      &:focus-visible {
+        color: var(--accent);
+      }
+      /* Current page: the accent, in Medium */
+      &[aria-current="page"] {
+        color: var(--accent);
+        font-weight: var(--primary-medium);
       }
     }
 
     .footer_bottom {
-      padding-top: var(--space-4);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-3) var(--space-6);
+      padding-top: var(--space-5);
       border-top: var(--border-width) solid var(--border);
     }
 
     .footer_copyright {
       color: var(--text-2);
+    }
+
+    .footer_legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
     }
   }
 </style>

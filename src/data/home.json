@@ -1,0 +1,213 @@
+{
+  "customers": [
+    "Betterment",
+    "Kroll",
+    "Fiduciary Financial",
+    "Root Financial",
+    "JMG Financial Group",
+    "FSG / ICA",
+    "S2 Capital",
+    "Retirable",
+    "Chicago Partners",
+    "Harbert Management Corporation",
+    "Summit Global",
+    "Compound",
+    "Accolade Partners",
+    "Matter Family Office",
+    "Triad",
+    "Tobias"
+  ],
+  "principles": [
+    {
+      "title": "One system of action",
+      "lead": "Independence from fragmented tools.",
+      "text": "Archiving, firm compliance, employee compliance, and marketing review belong in one system, where the work and the record of the work live together."
+    },
+    {
+      "title": "Automation everywhere",
+      "lead": "That’s Go.",
+      "text": "AI-native automation built into every workflow rather than a chatbot layered on old tools. It drafts, triages, and routes so your people decide."
+    },
+    {
+      "title": "Software your team will love",
+      "lead": "Decades of usability research, applied.",
+      "text": "Every workflow is built to reduce friction for the people outside compliance, because a culture of compliance only happens when the tool actually gets used."
+    },
+    {
+      "title": "Exam-ready by default",
+      "lead": "WORM-based and 17a-4 compliant.",
+      "text": "Unified recordkeeping designed for CCO peace of mind, so an exam request becomes a query instead of a fire drill."
+    },
+    {
+      "title": "Privacy worth trusting",
+      "lead": "Enterprise-grade security, humane supervision.",
+      "text": "Protect the firm’s critical data with smarter supervision methods that build trust with your people instead of eroding it."
+    },
+    {
+      "title": "Fiduciary care",
+      "lead": "A pact with our users, not just a promise.",
+      "text": "Greenboard holds a strong fiduciary pact toward the betterment of our users, with governance mechanisms in place to ensure that responsibility continues no matter how the company grows."
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Greenboard helps us detect risk and automate more of our compliance program than was previously possible — and it’s easy to use.",
+      "initials": "BP",
+      "name": "Brook Powers",
+      "position": "CEO, Fiduciary Financial"
+    },
+    {
+      "text": "I can’t say they like compliance, but I can tell you that advisors love Greenboard.",
+      "initials": "AB",
+      "name": "Adam Boyer",
+      "position": "COO & CCO, JMG Financial Group"
+    },
+    {
+      "text": "The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable… knowing that we’re doing things the right way.",
+      "initials": "DT",
+      "name": "Doug Thalhammer",
+      "position": "CCO, FSG / ICA"
+    },
+    {
+      "text": "Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved.",
+      "initials": "AS",
+      "name": "Alex Stickelman",
+      "position": "CCO & COO, Root Financial"
+    }
+  ],
+  "segments": [
+    {
+      "title": "Financial Advisors",
+      "text": "RIAs running lean programs that still need to pass a full SEC exam."
+    },
+    {
+      "title": "Private Funds",
+      "text": "Fund managers juggling investor commitments, side letters, and personal trading."
+    },
+    {
+      "title": "Hedge Funds",
+      "text": "High-velocity trading desks that need supervision without slowing the floor."
+    },
+    {
+      "title": "Broker Dealers",
+      "text": "FINRA-registered firms with layered supervisory structures and 17a-4 obligations."
+    },
+    {
+      "title": "Service Partners",
+      "text": "Outsourced CCOs and consultants managing many firms from one console."
+    },
+    {
+      "title": "Regulatory Registration",
+      "text": "New registrants standing up a compliance program from day one."
+    }
+  ],
+  "proof": [
+    {
+      "icon": "records",
+      "text": "Leading auditability and recordkeeping"
+    },
+    {
+      "icon": "shield",
+      "text": "Built-in regulatory guidance: WORM and 17a-4 compliant"
+    },
+    {
+      "icon": "lock",
+      "text": "Enterprise-grade security and privacy: SOC 2 Type 2"
+    }
+  ],
+  "tiers": [
+    {
+      "name": "Small firms",
+      "meta": "1–25 people",
+      "title": "A full program without a full team.",
+      "text": "One person often carries the whole program. Greenboard gives them the archive, the calendar, the attestations, and the exam file in one place, with Go handling the busywork.",
+      "items": [
+        "Fast, guided setup",
+        "Templates for every policy",
+        "Exam-ready from day one"
+      ]
+    },
+    {
+      "name": "Growing businesses",
+      "meta": "25–250 people",
+      "title": "Scale the program, not the headcount.",
+      "text": "As headcount and channels multiply, supervision has to keep pace. Configure your own risk graph, route work to the right reviewers, and keep everything on one record.",
+      "items": [
+        "Roles, groups, and delegation",
+        "Custom Go Agents",
+        "Consolidate point solutions"
+      ]
+    },
+    {
+      "name": "Enterprise",
+      "meta": "250+ people",
+      "title": "Built for layered supervisory structures.",
+      "text": "Multi-entity firms, complex hierarchies, and heavy recordkeeping obligations, served on WORM-based, 17a-4 compliant infrastructure with SOC 2 Type 2 controls.",
+      "items": [
+        "Multi-entity and hierarchy support",
+        "SSO, SCIM, granular permissions",
+        "Dedicated implementation team"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "firm": "Root Financial",
+      "quote": "Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved.",
+      "author": "Alex Stickelman, CCO & COO, Root Financial",
+      "results": [
+        {
+          "number": "24",
+          "unit": "hrs",
+          "label": "Estimated weekly time saved on marketing review"
+        },
+        {
+          "number": "70+",
+          "label": "Greenboard users"
+        },
+        {
+          "number": "20%",
+          "label": "Month over month headcount growth enabled"
+        }
+      ]
+    },
+    {
+      "firm": "JMG Financial Group",
+      "quote": "I can’t say they like compliance, but I can tell you that advisors love Greenboard.",
+      "author": "Adam Boyer, COO & CCO, JMG Financial Group",
+      "results": [
+        {
+          "number": "100+",
+          "label": "Greenboard users"
+        },
+        {
+          "number": "3",
+          "label": "Legacy systems consolidated"
+        },
+        {
+          "number": "60%+",
+          "label": "Estimated reduction in compliance onboarding time"
+        }
+      ]
+    },
+    {
+      "firm": "FSG / ICA",
+      "quote": "The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable… knowing that we’re doing things the right way.",
+      "author": "Doug Thalhammer, CCO, FSG / ICA",
+      "results": [
+        {
+          "number": "99%",
+          "label": "Less time on vendor diligence: one to two hours instead of a week"
+        },
+        {
+          "number": "2",
+          "label": "Legacy systems replaced"
+        },
+        {
+          "number": "25+",
+          "label": "Greenboard users"
+        }
+      ]
+    }
+  ]
+}

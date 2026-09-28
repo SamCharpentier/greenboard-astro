@@ -1,0 +1,113 @@
+---
+import Stat from "@/components/item/Stat.astro";
+import Button from "@/components/Button.astro";
+
+type Props = {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Firm name, used in the link label. */
+  firm?: string;
+  /** Customer quote, without quotation marks. */
+  quote?: string;
+  /** Who said it, with role and firm. */
+  author?: string;
+  /** Link to the full story. */
+  href?: string;
+  /** Results beside the quote. Real figures only. */
+  results?: { number: string; unit?: string; label: string }[];
+};
+
+const {
+  render = true,
+  firm,
+  quote,
+  author,
+  href = "#",
+  results = [],
+} = Astro.props;
+---
+
+{
+  render && quote && (
+    <div class="case-panel_wrap">
+      <div class="case-panel_content">
+        <blockquote class="case-panel_quote text-style-h3">
+          <p>
+            <span class="case-panel_mark">“</span>{quote}”
+          </p>
+        </blockquote>
+        {author && <p class="case-panel_author text-style-small">{author}</p>}
+        {firm && (
+          <Button element="link" href={href} variant="link" size="small" icon="diagonal" class="case-panel_link">
+            {`Read the ${firm} story`}
+          </Button>
+        )}
+      </div>
+      {results.length > 0 && (
+        <div class="case-panel_results">
+          {results.map((result) => (
+            <Stat number={result.number} unit={result.unit} label={result.label} highlight />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .case-panel_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7) var(--site-gutter);
+      width: 100%;
+      padding: var(--space-7);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      @media (width >= 54rem) {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+    }
+
+    .case-panel_content {
+      grid-column: 1 / span 7;
+      align-self: start;
+      width: 100%;
+    }
+
+    .case-panel_quote {
+      max-width: 30ch;
+      margin-bottom: var(--space-5);
+      & p {
+        text-wrap: inherit;
+      }
+    }
+
+    /* The opening mark hangs outside the text block */
+    .case-panel_mark {
+      margin-left: -0.42em;
+    }
+
+    .case-panel_author {
+      color: var(--text-2);
+    }
+
+    .case-panel_link {
+      margin-top: var(--space-6);
+    }
+
+    .case-panel_results {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      grid-column: 9 / span 4;
+      gap: var(--space-6);
+      width: 100%;
+      @media (width >= 54rem) {
+        padding-left: var(--site-gutter);
+        border-left: var(--border-width) solid var(--border);
+      }
+    }
+  }
+</style>

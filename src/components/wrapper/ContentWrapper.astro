@@ -5,6 +5,7 @@ import { slotContent } from "@/utils/slots.ts";
 type ContentWrapperVariant =
   | "stack"
   | "auto-width"
+  | "split"
   | "columns"
   | "breakout"
   | "contain"
@@ -36,7 +37,7 @@ type Props = Base &
         mediaOpacity?: never;
       }
     | {
-        variant: "auto-width";
+        variant: "auto-width" | "split";
         reverse?: never;
         centered?: never;
         mediaOpacity?: never;
@@ -211,10 +212,31 @@ const column2 = await slotContent(Astro.slots, "column2");
           min-width: min(4rem, 100%);
         }
       }
+      /* Main content and a narrower aside on a 12-column grid, bottoms aligned.
+         Move the columns with --_main-span (default 7) and --_aside-start (9);
+         --_aside-alignment: end pushes the aside to the right edge. */
+      &.split {
+        row-gap: var(--space-5);
+        @media (width >= 54rem) {
+          --_column-count: 12;
+          display: grid;
+          align-items: end;
+          & > * {
+            align-self: end;
+          }
+          & > :first-child {
+            grid-column: 1 / span var(--_main-span, 7);
+          }
+          & > :last-child:not(:first-child) {
+            grid-column: var(--_aside-start, 9) / -1;
+            align-items: var(--_aside-alignment, var(--_alignment, start));
+          }
+        }
+      }
       &.columns {
         display: grid;
         column-gap: var(--section-space-small);
-        @media (width >= 64rem) {
+        @media (width >= 54rem) {
           --_column-count: 2;
           &.reversed {
             & > :last-child {
@@ -226,7 +248,7 @@ const column2 = await slotContent(Astro.slots, "column2");
       &.sticky-content {
         --_visual-ratio: 1 / 1;
         display: grid;
-        @media (width >= 64rem) {
+        @media (width >= 54rem) {
           --_column-count: 2;
           & > :first-child {
             align-self: start;
@@ -238,7 +260,7 @@ const column2 = await slotContent(Astro.slots, "column2");
       &.sticky-visual {
         --_visual-ratio: 1 / 1;
         display: grid;
-        @media (width >= 64rem) {
+        @media (width >= 54rem) {
           --_column-count: 2;
           & > :first-child {
             align-self: start;
@@ -268,7 +290,7 @@ const column2 = await slotContent(Astro.slots, "column2");
         & > :last-child {
           border-radius: 0;
         }
-        @media (width >= 64rem) {
+        @media (width >= 54rem) {
           --_column-count: 2;
           & > :first-child {
             max-width: calc(var(--max-width-main) / 2);
@@ -302,7 +324,7 @@ const column2 = await slotContent(Astro.slots, "column2");
         & > :last-child {
           border-radius: 0;
         }
-        @media (width >= 64rem) {
+        @media (width >= 54rem) {
           --_column-count: 2;
           &.reversed {
             & > :last-child {

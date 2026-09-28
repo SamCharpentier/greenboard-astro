@@ -2,12 +2,16 @@
 import type { HTMLAttributes } from "astro/types";
 import Icon from "@/components/media/Icon.astro";
 import arrow from "@/assets/icons/arrow-full.svg";
+import diagonal from "@/assets/icons/arrow-up-right.svg";
+import back from "@/assets/icons/arrow-left.svg";
 import close from "@/assets/icons/close.svg";
 import play from "@/assets/icons/play.svg";
 import pause from "@/assets/icons/pause.svg";
 import { slotContent } from "@/utils/slots.ts";
 
 type Emphasis = "primary" | "secondary";
+
+type Size = "small" | "medium" | "large";
 
 type Tag =
   | (HTMLAttributes<"button"> & {
@@ -25,6 +29,13 @@ type Tag =
       href?: string;
       type?: never;
       disabled?: never;
+    })
+  | (HTMLAttributes<"span"> & {
+      /** `span` draws the button without an action, for a card that is itself the link. */
+      element: "span";
+      href?: never;
+      type?: never;
+      disabled?: never;
     });
 
 type Kind =
@@ -33,6 +44,10 @@ type Kind =
       variant?: "main";
       /** Visual emphasis. */
       emphasis?: Emphasis;
+      /** Button size. */
+      size?: Size;
+      /** Trailing icon. */
+      icon?: "arrow" | "none";
       label?: never;
       pressed?: never;
       direction?: never;
@@ -41,6 +56,10 @@ type Kind =
       variant: "link";
       /** A link carries no weight of its own: it is already the quietest. */
       emphasis?: never;
+      /** Text size. */
+      size?: "small" | "medium";
+      /** Trailing icon. `diagonal` marks an external or index link. */
+      icon?: "arrow" | "diagonal" | "none";
       label?: never;
       pressed?: never;
       direction?: never;
@@ -48,26 +67,32 @@ type Kind =
   | {
       variant: "play";
       emphasis?: Emphasis;
+      size?: Size;
       /** Accessible label. Defaults to `Play` or `Pause`. */
       label?: string;
       /** Show the pause icon and pressed state. */
       pressed?: boolean;
+      icon?: never;
       direction?: never;
     }
   | {
       variant: "close";
       emphasis?: Emphasis;
+      size?: Size;
       /** Accessible label. Defaults to `Close`. */
       label?: string;
       pressed?: never;
+      icon?: never;
       direction?: never;
     }
   | {
       variant: "arrow";
       emphasis?: Emphasis;
+      size?: Size;
       /** Accessible label. Defaults to `Next` or `Previous`. */
       label?: string;
       pressed?: never;
+      icon?: never;
       /** Arrow direction. */
       direction?: "forward" | "back";
     };
@@ -83,10 +108,12 @@ type AllProps = HTMLAttributes<"button"> &
     render?: boolean;
     variant?: "main" | "link" | "play" | "close" | "arrow";
     emphasis?: Emphasis;
+    size?: Size;
+    icon?: "arrow" | "diagonal" | "none";
     label?: string;
     pressed?: boolean;
     direction?: "forward" | "back";
-    element?: "button" | "link";
+    element?: "button" | "link" | "span";
     href?: string;
     type?: "button" | "submit" | "reset";
   };
@@ -95,6 +122,8 @@ const {
   render = true,
   variant = "main",
   emphasis = "primary",
+  size = "medium",
+  icon = "arrow",
   label,
   pressed = false,
   direction = "forward",
@@ -105,13 +134,11 @@ const {
   ...rest
 } = Astro.props as AllProps;
 
-const isLink = element === "link";
-const Tag = isLink ? "a" : "button";
-const tagAttrs = isLink
-  ? { href: href || "#" }
-  : { type: type === "submit" ? undefined : type };
+/* `span` renders like the other two; typed as one of them so the shared attributes check */
+const Tag = (element === "link" ? "a" : element === "span" ? "span" : "button") as "a" | "button";
+const tagAttrs: Record<string, string> =
+  element === "link" ? { href: href || "#" } : element === "span" ? {} : { type };
 
-const marks = { play, close, arrow };
 /* main and link are written, the rest are marks with a label. */
 const isWritten = variant === "main" || variant === "link";
 const content = isWritten ? await slotContent(Astro.slots) : "";
@@ -121,6 +148,8 @@ const named = {
   close: "Close",
   arrow: direction === "back" ? "Previous" : "Next",
 };
+
+const trailing = isWritten && icon !== "none" ? (icon === "diagonal" ? diagonal : arrow) : undefined;
 ---
 
 {
@@ -128,9 +157,10 @@ const named = {
     <Tag
       class:list={[
         "button_wrap",
-        emphasis !== "primary" && emphasis,
+        emphasis !== "primary" && variant !== "link" && emphasis,
         variant !== "main" && variant,
-        variant === "arrow" && direction === "back" && "back",
+        size !== "medium" && size,
+        icon === "diagonal" && "diagonal",
         className,
       ]}
       aria-label={isWritten ? undefined : (label ?? named[variant])}
@@ -139,10 +169,16 @@ const named = {
       {...rest}
     >
       {isWritten && (
-        <span class="button_text text-style-trim">
+        <span
+          class:list={[
+            "button_text",
+            variant === "link" && size === "small" ? "text-style-small" : "text-style-main",
+          ]}
+        >
           <Fragment set:html={content} />
         </span>
       )}
+      {trailing && <Icon class="button_icon" src={trailing} variant="small" />}
       {variant === "play" && (
         <Fragment>
           <Icon class="button_mark button_play" src={play} variant="small" />
@@ -150,10 +186,14 @@ const named = {
         </Fragment>
       )}
       {variant === "close" && (
-        <Icon class="button_mark" src={marks.close} variant="small" />
+        <Icon class="button_mark" src={close} variant="small" />
       )}
       {variant === "arrow" && (
-        <Icon class="button_mark" src={marks.arrow} variant="small" />
+        <Icon
+          class="button_mark"
+          src={direction === "back" ? back : arrow}
+          variant="small"
+        />
       )}
     </Tag>
   )
@@ -162,16 +202,22 @@ const named = {
 <style is:global>
   @layer components {
     .button_wrap {
+      --_height: var(--button-size-medium);
+      --_pad-block: var(--space-2);
+      --_pad-inline: var(--space-5);
+      --_shift: 0;
+      position: relative;
       display: inline-flex;
+      flex-shrink: 0;
       justify-content: center;
       align-items: center;
-      gap: 0.5em;
-      padding: 0.75em 1.5em;
+      gap: var(--space-2);
+      min-height: var(--_height);
+      padding: var(--_pad-block) var(--_pad-inline);
       background-color: var(--button-background);
       color: var(--button-text);
       border: var(--border-width) solid var(--button-border);
-      border-radius: 0.5em;
-      line-height: 1.2;
+      border-radius: var(--radius-round);
       text-decoration: none;
       text-align: center;
       transition:
@@ -180,10 +226,26 @@ const named = {
         border-color var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover:not(:disabled) {
+          --_shift: 1;
           background-color: var(--button-background-hover);
           color: var(--button-text-hover);
           border-color: var(--button-border-hover);
         }
+      }
+      &:focus-visible {
+        --_shift: 1;
+        background-color: var(--button-background-hover);
+        color: var(--button-text-hover);
+        border-color: var(--button-border-hover);
+      }
+      &.small {
+        --_height: var(--button-size-small);
+        --_pad-block: var(--space-1);
+        --_pad-inline: var(--space-4);
+      }
+      &.large {
+        --_height: var(--button-size-large);
+        --_pad-inline: var(--space-6);
       }
       &.secondary {
         --button-background: var(--button-2-background);
@@ -193,44 +255,68 @@ const named = {
         --button-text-hover: var(--button-2-text-hover);
         --button-border-hover: var(--button-2-border-hover);
       }
+      .button_text {
+        font-weight: var(--primary-medium);
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .button_icon {
+        margin-right: calc(var(--space-1) * -1);
+        translate: calc(0.1875rem * var(--_shift)) 0;
+        transition: translate var(--hover-duration) var(--hover-ease);
+      }
+
+      /* Text link: inline action with an arrow */
       &.link {
         --button-background: transparent;
-        --button-text: var(--link-text);
-        --button-border: var(--link-border);
+        --button-border: transparent;
         --button-background-hover: transparent;
+        --button-border-hover: transparent;
+        --button-text: var(--link-text);
         --button-text-hover: var(--link-text-hover);
-        --button-border-hover: var(--link-border);
-
-        padding: 0.4em 0;
+        min-height: 0;
+        gap: var(--space-1);
+        padding: 0;
         border: 0;
-        border-bottom: var(--border-width) solid var(--button-border);
         border-radius: 0;
-        background-image: linear-gradient(
-          var(--link-border-hover),
-          var(--link-border-hover)
-        );
-        background-repeat: no-repeat;
-        background-origin: border-box;
-        background-position: 100% 100%;
-        background-size: 0 var(--border-width);
-        transition:
-          background-size calc(var(--hover-duration) * 2) var(--hover-ease),
-          color var(--hover-duration) var(--hover-ease),
-          border-color var(--hover-duration) var(--hover-ease);
-        @media (hover: hover) {
-          &:hover:not(:disabled) {
-            background-position: 0 100%;
-            background-size: 100% var(--border-width);
+        /* Untrimmed, so the underline keeps its distance below the descenders */
+        .button_text {
+          padding-bottom: 0.125em;
+          border-bottom: var(--border-width) solid var(--link-border);
+          line-height: var(--line-height-huge);
+          white-space: normal;
+          transition: border-color var(--hover-duration) var(--hover-ease);
+          &::before,
+          &::after {
+            content: none;
           }
         }
+        .button_icon {
+          --_size: 1em;
+          margin-right: 0;
+        }
+        &.diagonal .button_icon {
+          translate: calc(0.125em * var(--_shift)) calc(-0.125em * var(--_shift));
+        }
+        @media (hover: hover) {
+          &:hover .button_text {
+            border-bottom-color: var(--link-border-hover);
+          }
+        }
+        &:focus-visible .button_text {
+          border-bottom-color: var(--link-border-hover);
+        }
       }
+
+      /* Marks: round buttons with one icon */
       &:is(.play, .close, .arrow) {
+        width: var(--_height);
+        aspect-ratio: 1 / 1;
         gap: 0;
-        padding: 0.75em;
-        border-radius: var(--radius-round);
-      }
-      &.back .button_mark {
-        rotate: 180deg;
+        padding: 0;
+        .button_mark {
+          --_size: 1.125rem;
+        }
       }
       &.play .button_pause {
         display: none;

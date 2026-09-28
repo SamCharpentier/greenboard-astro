@@ -1,0 +1,272 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Button from "@/components/Button.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Accessible label. Defaults to `Carousel`. */
+  label?: string;
+  /** What one slide is, for the controls' labels. Defaults to `slide`. */
+  itemName?: string;
+};
+
+const {
+  render = true,
+  label = "Carousel",
+  itemName = "slide",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const slides = await slotContent(Astro.slots);
+---
+
+{
+  render && slides && (
+    <div
+      class:list={["carousel_wrap", className]}
+      aria-roledescription="carousel"
+      aria-label={label}
+      data-item-name={itemName}
+      {...rest}
+    >
+      <div class="carousel_list" aria-live="polite">
+        <div class="carousel_track">
+          <Fragment set:html={slides} />
+        </div>
+      </div>
+      <div class="carousel_controls">
+        <div class="carousel_dots" />
+        <div class="carousel_arrows">
+          <Button
+            variant="arrow"
+            emphasis="secondary"
+            direction="back"
+            label={`Previous ${itemName}`}
+            data-step="-1"
+          />
+          <Button
+            variant="arrow"
+            emphasis="secondary"
+            label={`Next ${itemName}`}
+            data-step="1"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  for (const carousel of document.querySelectorAll<HTMLElement>(".carousel_wrap")) {
+    const list = carousel.querySelector<HTMLElement>(".carousel_list");
+    const track = carousel.querySelector<HTMLElement>(".carousel_track");
+    const dotsWrap = carousel.querySelector<HTMLElement>(".carousel_dots");
+    if (!list || !track || !dotsWrap) continue;
+
+    const slides = [...track.children] as HTMLElement[];
+    const count = slides.length;
+    const name = carousel.dataset.itemName ?? "slide";
+    if (count < 2) {
+      carousel.querySelector(".carousel_controls")?.remove();
+      continue;
+    }
+
+    slides.forEach((slide, index) => {
+      slide.classList.add("carousel_slide");
+      slide.setAttribute("role", "group");
+      slide.setAttribute("aria-roledescription", "slide");
+      slide.setAttribute("aria-label", `${index + 1} of ${count}`);
+    });
+
+    const dots = slides.map((_, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "carousel_dot";
+      dot.setAttribute("aria-label", `Show ${name} ${index + 1} of ${count}`);
+      dotsWrap.append(dot);
+      return dot;
+    });
+
+    /* Infinite loop: the position counts up or down forever, and each slide
+       moves by whole slots so it sits in the window around that position.
+       side -1 keeps the window reaching left (moving forward), +1 right. */
+    let position = 0;
+    let side = -1;
+    const wrap = (value: number) => ((value % count) + count) % count;
+    const layout = () => {
+      const start = side < 0 ? Math.min(-1, 2 - count) : Math.max(1, count - 2) - (count - 1);
+      const first = position + start;
+      slides.forEach((slide, index) => {
+        const slot = first + wrap(index - first);
+        slide.style.setProperty("--_slot", String(slot - index));
+      });
+    };
+
+    const goTo = (target: number) => {
+      if (target !== position) side = target > position ? -1 : 1;
+      position = target;
+      layout();
+      carousel.style.setProperty("--_index", String(position));
+      const current = wrap(position);
+      slides.forEach((slide, index) => {
+        slide.inert = index !== current;
+        slide.setAttribute("aria-hidden", String(index !== current));
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === current);
+        dot.setAttribute("aria-current", String(index === current));
+      });
+    };
+    const step = (delta: number) => goTo(position + delta);
+
+    /* Dots take the shortest way round the loop */
+    dots.forEach((dot, index) =>
+      dot.addEventListener("click", () => {
+        let delta = index - wrap(position);
+        if (delta > count / 2) delta -= count;
+        if (delta <= -count / 2) delta += count;
+        step(delta);
+      }),
+    );
+    carousel.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((button) =>
+      button.addEventListener("click", () => step(Number(button.dataset.step))),
+    );
+
+    /* Drag with a mouse, swipe with touch: the track follows, then snaps */
+    let startX: number | null = null;
+    let startY = 0;
+    let dragging = false;
+    const endDrag = (event: PointerEvent) => {
+      if (startX === null) return;
+      const deltaX = event.clientX - startX;
+      const moved = dragging;
+      startX = null;
+      dragging = false;
+      track.classList.remove("is-dragging");
+      carousel.style.setProperty("--_drag", "0rem");
+      if (moved && Math.abs(deltaX) > list.offsetWidth * 0.12) step(deltaX < 0 ? 1 : -1);
+    };
+    list.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (event.pointerType === "mouse") event.preventDefault();
+      startX = event.clientX;
+      startY = event.clientY;
+    });
+    list.addEventListener("pointermove", (event) => {
+      if (startX === null) return;
+      const deltaX = event.clientX - startX;
+      const deltaY = event.clientY - startY;
+      if (!dragging) {
+        if (Math.abs(deltaX) < 6 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+        dragging = true;
+        track.classList.add("is-dragging");
+        list.setPointerCapture(event.pointerId);
+      }
+      /* Make sure the neighbour on the side being revealed is in place */
+      const reveal = deltaX < 0 ? 1 : -1;
+      if (reveal !== side) {
+        side = reveal;
+        layout();
+      }
+      carousel.style.setProperty("--_drag", `${deltaX}px`);
+    });
+    list.addEventListener("pointerup", endDrag);
+    list.addEventListener("pointercancel", endDrag);
+
+    carousel.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") step(1);
+      if (event.key === "ArrowLeft") step(-1);
+    });
+
+    goTo(0);
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    /* The list bleeds out on every side (negative margin, equal padding), so the
+       hanging quote mark and the tops of trimmed capitals are never cropped, and
+       slides sit two bleeds apart so the next one never shows at the edge. Keep
+       the bleed at or below the space around the carousel. */
+    .carousel_wrap {
+      --_index: 0;
+      --_drag: 0rem;
+      --_bleed: var(--site-margin);
+      --_duration: 1000ms;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+      width: 100%;
+    }
+
+    .carousel_list {
+      margin: calc(-1 * var(--_bleed));
+      padding: var(--_bleed);
+      overflow: clip;
+      touch-action: pan-y;
+    }
+
+    .carousel_track {
+      display: flex;
+      align-items: stretch;
+      gap: calc(2 * var(--_bleed));
+      translate: calc(var(--_index) * (-100% - 2 * var(--_bleed)) + var(--_drag)) 0;
+      transition: translate var(--_duration) var(--ease-in-out);
+      cursor: grab;
+      &.is-dragging {
+        transition: none;
+        cursor: grabbing;
+      }
+      & > * {
+        --_slot: 0;
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 0;
+        translate: calc(var(--_slot) * (100% + 2 * var(--_bleed))) 0;
+      }
+    }
+
+    .carousel_controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .carousel_dots {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .carousel_dot {
+      display: flex;
+      align-items: center;
+      height: 1.5rem;
+      &::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.25rem;
+        border-radius: var(--radius-round);
+        background-color: color-mix(in srgb, var(--text) 30%, transparent);
+        transition:
+          width var(--hover-duration) var(--hover-ease),
+          background-color var(--hover-duration) var(--hover-ease);
+      }
+      &.is-active::before {
+        width: 2rem;
+        background-color: var(--text);
+      }
+    }
+
+    .carousel_arrows {
+      display: flex;
+      gap: var(--space-2);
+    }
+  }
+</style>

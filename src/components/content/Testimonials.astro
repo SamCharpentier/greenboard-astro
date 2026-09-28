@@ -1,0 +1,69 @@
+---
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Carousel from "@/components/interactive/Carousel.astro";
+import Quote from "@/components/item/Quote.astro";
+import Button from "@/components/Button.astro";
+
+type Props = {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Section label, set as the heading. */
+  heading?: string;
+  /** Quotes, one per slide. */
+  quotes?: { text: string; initials?: string; name: string; position?: string }[];
+  /** Link label under the carousel. */
+  linkLabel?: string;
+  /** Link destination. */
+  linkHref?: string;
+};
+
+const {
+  render = true,
+  heading = "In their words",
+  quotes = [],
+  linkLabel = "Read customer stories",
+  linkHref = "#case-studies",
+} = Astro.props;
+---
+
+{
+  render && quotes.length > 0 && (
+    <div class="testimonials_wrap">
+      <Eyebrow tag="h2" id="words-title">{heading}</Eyebrow>
+      <Carousel label="Customer quotes" itemName="quote">
+        {quotes.map((quote) => (
+          <div>
+            <Quote
+              text={quote.text}
+              initials={quote.initials}
+              name={quote.name}
+              position={quote.position}
+              variant="h2"
+            />
+          </div>
+        ))}
+      </Carousel>
+      <div class="testimonials_footer">
+        <Button element="link" href={linkHref} variant="link">{linkLabel}</Button>
+      </div>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .testimonials_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      width: 100%;
+      padding-top: var(--section-space-medium);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .testimonials_footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+</style>

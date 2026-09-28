@@ -12,6 +12,10 @@
   margin-top: 0;
 }
 
+.eyebrow_wrap + .heading {
+  margin-top: var(--eyebrow-gap);
+}
+
 .section {
   padding-top: var(--section-space-medium);
   padding-bottom: var(--section-space-medium);
@@ -164,6 +168,12 @@
 .heading-accent strong {
   color: var(--heading-accent);
   font-weight: inherit;
+}
+
+/* A second, rarer stress in the same heading takes the highlight (lime on dark) */
+.heading-accent em {
+  color: var(--highlight);
+  font-style: normal;
 }
 
 .display-contents {

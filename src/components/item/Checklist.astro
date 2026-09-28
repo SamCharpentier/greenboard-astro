@@ -1,0 +1,84 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import check from "@/assets/icons/check.svg";
+
+type Item = string | { lead: string; text: string };
+
+type Props = HTMLAttributes<"ul"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Points. A point with a lead starts with it in bold. */
+  items?: Item[];
+  /** Muted text with a bold lead and more room between points. */
+  detailed?: boolean;
+};
+
+const {
+  render = true,
+  items = [],
+  detailed = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && items.length > 0 && (
+    <ul class:list={["checklist_wrap", detailed && "detailed", className]} {...rest}>
+      {items.map((item) => (
+        <li class="checklist_item">
+          <Icon class="checklist_icon" src={check} variant="small" />
+          <span class="checklist_text text-style-small">
+            {typeof item === "string" ? (
+              item
+            ) : (
+              <Fragment>
+                <strong class="checklist_lead">{item.lead}</strong> {item.text}
+              </Fragment>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .checklist_wrap {
+      --_text: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      &.detailed {
+        --_text: var(--text-2);
+        gap: var(--space-4);
+      }
+    }
+
+    .checklist_item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+    }
+
+    .checklist_icon {
+      --_size: 1.125em;
+      font-size: var(--text-small);
+      /* The text is trimmed to its cap height: center the icon on the first line's caps */
+      margin-top: calc((var(--primary-trim-top) + var(--primary-trim-bottom) - 1.125em) / 2);
+      color: var(--accent);
+    }
+
+    .checklist_text {
+      min-width: 0;
+      color: var(--_text);
+    }
+
+    .checklist_lead {
+      color: var(--text);
+      font-weight: var(--primary-medium);
+    }
+  }
+</style>
