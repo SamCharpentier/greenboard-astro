@@ -1,6 +1,9 @@
 ---
 import Icon from "@/components/media/Icon.astro";
+import Button from "@/components/Button.astro";
 import logo from "@/assets/logo/logo.svg";
+import shield from "@/assets/icons/shield.svg";
+import lock from "@/assets/icons/lock.svg";
 import { SITE_NAME } from "@/consts.ts";
 
 interface Props {
@@ -13,32 +16,104 @@ const { render = true } = Astro.props;
 
 {
   render && (
-    <footer class="footer_wrap">
+    <footer class="footer_wrap theme-light">
       <div class="footer_inner">
         <div class="footer_top">
-          <a class="footer_logo" href="/" aria-label={SITE_NAME}>
-            <Icon src={logo} variant="full-width" />
-          </a>
-          <nav aria-label="Footer">
-            <ul class="footer_links">
-              <li>
-                <a class="footer_link" href="/">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a class="footer_link" href="/example-components">
-                  Example Components
-                </a>
-              </li>
-            </ul>
+          <div class="footer_brand">
+            <a class="footer_logo" href="/" aria-label={SITE_NAME}>
+              <Icon src={logo} variant="full-width" />
+            </a>
+            <p class="footer_text text-style-large">
+              The AI-native system of action for SEC and FINRA compliance. New
+              York and Scottsdale.
+            </p>
+            <address class="footer_address text-style-small">
+              99 Madison Ave, Floor 10
+              <br />
+              New York, NY 10016
+            </address>
+            <div class="footer_badges">
+              <span class="footer_badge text-style-small">
+                <Icon src={shield} variant="small" />
+                SOC 2 Type 2
+              </span>
+              <span class="footer_badge text-style-small">
+                <Icon src={lock} variant="small" />
+                GDPR
+              </span>
+              <Button element="link" href="#" variant="link" icon="diagonal">
+                LinkedIn
+              </Button>
+            </div>
+          </div>
+          <nav class="footer_groups" aria-label="Footer">
+            <div>
+              <h2 class="footer_group_title text-style-small">Product</h2>
+              <ul class="footer_links">
+                <li><a class="footer_link" href="/products">Product overview</a></li>
+                <li><a class="footer_link" href="/#platform">Archiving & supervision</a></li>
+                <li><a class="footer_link" href="/#platform">Employee compliance</a></li>
+                <li><a class="footer_link" href="/#platform">Firm compliance</a></li>
+                <li><a class="footer_link" href="/#platform">Third-party diligence</a></li>
+                <li><a class="footer_link" href="/#platform">Content reviews</a></li>
+                <li><a class="footer_link" href="/#platform">Unified books & records</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer_group_title text-style-small">GreenboardGo</h2>
+              <ul class="footer_links">
+                <li><a class="footer_link" href="#">Overview</a></li>
+                <li><a class="footer_link" href="#">Capabilities</a></li>
+                <li><a class="footer_link" href="#">Go Agents</a></li>
+                <li><a class="footer_link" href="#">Slack & Teams</a></li>
+                <li><a class="footer_link" href="/#demo">Book a demo</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer_group_title text-style-small">Customers</h2>
+              <ul class="footer_links">
+                <li><a class="footer_link" href="/solutions">Solutions overview</a></li>
+                <li><a class="footer_link" href="#">Financial advisors</a></li>
+                <li><a class="footer_link" href="#">Private funds</a></li>
+                <li><a class="footer_link" href="#">Hedge funds</a></li>
+                <li><a class="footer_link" href="#">Broker dealers</a></li>
+                <li><a class="footer_link" href="#">Partnerships</a></li>
+                <li><a class="footer_link" href="#">Small firms</a></li>
+                <li><a class="footer_link" href="#">Growing businesses</a></li>
+                <li><a class="footer_link" href="#">Enterprise</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer_group_title text-style-small">Customer love</h2>
+              <ul class="footer_links">
+                <li><a class="footer_link" href="#">Case studies</a></li>
+                <li><a class="footer_link" href="#">In their words</a></li>
+                <li><a class="footer_link" href="#">Trusted by 500+ firms</a></li>
+              </ul>
+            </div>
+            <div>
+              <h2 class="footer_group_title text-style-small">Company</h2>
+              <ul class="footer_links">
+                <li><a class="footer_link" href="/about">About</a></li>
+                <li><a class="footer_link" href="#">Our fiduciary commitment</a></li>
+                <li><a class="footer_link" href="#">Security & privacy</a></li>
+                <li><a class="footer_link" href="#">Trust Center</a></li>
+                <li><a class="footer_link" href="#">Contact</a></li>
+              </ul>
+            </div>
           </nav>
         </div>
         <div class="footer_bottom">
           <p class="footer_copyright text-style-small">
             &copy; <span id="year">{new Date().getFullYear()}</span>&#160;
-            {SITE_NAME}
+            Greenboard, Inc. All rights reserved.
           </p>
+          <ul class="footer_legal">
+            <li><a class="footer_link" href="#">Privacy policy</a></li>
+            <li><a class="footer_link" href="#">Terms</a></li>
+            <li><a class="footer_link" href="#">Security</a></li>
+            <li><a class="footer_link" href="#">Trust Center</a></li>
+          </ul>
         </div>
       </div>
     </footer>
@@ -58,11 +133,11 @@ const { render = true } = Astro.props;
     .footer_wrap {
       display: flex;
       justify-content: center;
-      padding-block: var(--section-space-small);
+      padding-top: var(--section-space-medium);
+      padding-bottom: var(--space-6);
       padding-inline: var(--site-margin);
       background-color: var(--background);
       color: var(--text);
-      border-top: var(--border-width) solid var(--border);
     }
 
     .footer_inner {
@@ -70,21 +145,27 @@ const { render = true } = Astro.props;
       max-width: var(--max-width-main);
       display: flex;
       flex-direction: column;
-      gap: var(--space-6);
+      gap: var(--space-8);
     }
 
     .footer_top {
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-4) var(--space-6);
+      flex-direction: column;
+      gap: var(--space-8) var(--site-gutter);
+      @media (width >= 64rem) {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+    }
+
+    .footer_brand {
+      grid-column: 1 / span 4;
     }
 
     .footer_logo {
       display: block;
-      width: 7.5rem;
-      max-width: 100%;
+      width: 9.5rem;
+      margin-bottom: var(--space-6);
       transition: opacity var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
@@ -93,33 +174,94 @@ const { render = true } = Astro.props;
       }
     }
 
-    .footer_links {
+    .footer_text {
+      max-width: 34ch;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer_address {
+      margin-bottom: var(--space-5);
+      color: var(--text-2);
+      font-style: normal;
+    }
+
+    .footer_badges {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--space-4);
+      gap: var(--space-2) var(--space-4);
       font-size: var(--text-small);
+    }
+
+    .footer_badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: 0.25rem 0.625rem;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-small);
       font-weight: var(--primary-medium);
+      &::before,
+      &::after {
+        content: none;
+      }
+      & .icon {
+        color: var(--heading-accent);
+      }
+    }
+
+    .footer_groups {
+      display: grid;
+      grid-column: 6 / span 7;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7) var(--site-gutter);
+      @media (width >= 64rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .footer_group_title {
+      margin-bottom: var(--space-4);
+      font-weight: var(--primary-bold);
+    }
+
+    .footer_links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      font-size: var(--text-small);
     }
 
     .footer_link {
-      color: var(--text-2);
+      color: var(--text);
       text-decoration: none;
       transition: color var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
-          color: var(--text);
+          color: var(--heading-accent);
         }
       }
     }
 
     .footer_bottom {
-      padding-top: var(--space-4);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-3) var(--space-6);
+      padding-top: var(--space-5);
       border-top: var(--border-width) solid var(--border);
     }
 
     .footer_copyright {
       color: var(--text-2);
+    }
+
+    .footer_legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
+      font-size: var(--text-small);
     }
   }
 </style>

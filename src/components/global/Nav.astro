@@ -1,13 +1,15 @@
 ---
 import Icon from "@/components/media/Icon.astro";
 import NavLink from "@/components/global/NavLink.astro";
+import Dropdown from "@/components/interactive/Dropdown.astro";
+import Button from "@/components/Button.astro";
 import logo from "@/assets/logo/logo.svg";
 import { SITE_NAME } from "@/consts.ts";
 
 interface Props {
   /** Set to `false` to omit the component. */
   render?: boolean;
-  /** Fix the nav over the page. */
+  /** Let the first section run up under the bar, which starts clear. */
   overlap?: boolean;
 }
 
@@ -16,7 +18,10 @@ const { render = true, overlap = false } = Astro.props;
 
 {
   render && (
-    <header class:list={["nav_wrap", overlap && "overlap"]}>
+    <header
+      class:list={["nav_wrap", overlap && "overlap theme-dark"]}
+      style={overlap ? "--_fill: 0" : undefined}
+    >
       <div class="nav_inner">
         <a class="nav_logo" href="/" aria-label={SITE_NAME}>
           <Icon src={logo} variant="full-width" />
@@ -33,9 +38,86 @@ const { render = true, overlap = false } = Astro.props;
         <nav class="nav_menu" id="nav-menu" aria-label="Main">
           <div class="nav_menu_inner">
             <ul class="nav_links">
-              <NavLink href="/">Home</NavLink>
-              <NavLink href="/example-components">Example Components</NavLink>
+              <li>
+                <Dropdown label="Product">
+                  <div class="nav_panel">
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">Platform</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/products">Product overview</NavLink>
+                        <NavLink href="/#platform">GreenboardGo</NavLink>
+                        <NavLink href="/#platform">Go Agents</NavLink>
+                      </ul>
+                    </div>
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">Modules</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/#platform">Archiving & supervision</NavLink>
+                        <NavLink href="/#platform">Employee compliance</NavLink>
+                        <NavLink href="/#platform">Firm compliance</NavLink>
+                        <NavLink href="/#platform">Third-party diligence</NavLink>
+                        <NavLink href="/#platform">Content reviews</NavLink>
+                        <NavLink href="/#platform">Unified books & records</NavLink>
+                      </ul>
+                    </div>
+                  </div>
+                </Dropdown>
+              </li>
+              <li>
+                <Dropdown label="Customers">
+                  <div class="nav_panel">
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">Firm types</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/solutions">Solutions overview</NavLink>
+                        <NavLink href="/#segments">Financial advisors</NavLink>
+                        <NavLink href="/#segments">Private funds</NavLink>
+                        <NavLink href="/#segments">Hedge funds</NavLink>
+                        <NavLink href="/#segments">Broker dealers</NavLink>
+                        <NavLink href="/#segments">Service partners</NavLink>
+                        <NavLink href="/#segments">Partnerships</NavLink>
+                      </ul>
+                    </div>
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">By firm size</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/#firm-sizes">Small firms</NavLink>
+                        <NavLink href="/#firm-sizes">Growing businesses</NavLink>
+                        <NavLink href="/#firm-sizes">Enterprise</NavLink>
+                      </ul>
+                    </div>
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">Customer love</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/#case-studies">Case studies</NavLink>
+                        <NavLink href="/#testimonials">In their words</NavLink>
+                      </ul>
+                    </div>
+                  </div>
+                </Dropdown>
+              </li>
+              <li>
+                <Dropdown label="Company">
+                  <div class="nav_panel">
+                    <div class="nav_group">
+                      <p class="nav_group_label text-style-small">Company</p>
+                      <ul class="nav_group_list">
+                        <NavLink href="/about">About</NavLink>
+                        <NavLink href="#">Our fiduciary commitment</NavLink>
+                        <NavLink href="#">Security & privacy</NavLink>
+                        <NavLink href="#">Contact the team</NavLink>
+                      </ul>
+                    </div>
+                  </div>
+                </Dropdown>
+              </li>
             </ul>
+            <div class="nav_actions">
+              <a class="nav_login" href="#">Login</a>
+              <Button element="link" href="/#demo" icon="none">
+                Book a demo
+              </Button>
+            </div>
           </div>
         </nav>
       </div>
@@ -62,11 +144,17 @@ const { render = true, overlap = false } = Astro.props;
 <script>
   const nav = document.querySelector<HTMLElement>(".nav_wrap");
   const toggle = nav?.querySelector<HTMLButtonElement>(".nav_toggle");
+  const desktop = matchMedia("(width >= 64rem)");
 
   if (nav && toggle) {
+    const menus = [
+      ...nav.querySelectorAll<HTMLDetailsElement>(".nav_links .dropdown_wrap"),
+    ];
+
     const setOpen = (open: boolean) => {
       nav.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", String(open));
+      match();
     };
 
     toggle.addEventListener("click", () => {
@@ -74,7 +162,10 @@ const { render = true, overlap = false } = Astro.props;
     });
 
     nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => setOpen(false));
+      link.addEventListener("click", () => {
+        setOpen(false);
+        menus.forEach((menu) => (menu.open = false));
+      });
     });
 
     document.addEventListener("keydown", (event) => {
@@ -90,30 +181,109 @@ const { render = true, overlap = false } = Astro.props;
       if (!nav.contains(target)) setOpen(false);
     });
 
-    window
-      .matchMedia("(width >= 48rem)")
-      .addEventListener("change", (event) => {
-        if (event.matches) setOpen(false);
+    desktop.addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+      menus.forEach((menu) => (menu.open = false));
+    });
+
+    /* One menu at a time. With a mouse, a menu opens on hover and a click
+       straight after keeps it open rather than closing it again. */
+    let closeTimer: number | undefined;
+    for (const menu of menus) {
+      let hoveredAt = 0;
+      menu.addEventListener("toggle", () => {
+        if (menu.open) menus.forEach((other) => other !== menu && (other.open = false));
       });
+      menu.querySelector("summary")?.addEventListener("click", (event) => {
+        if (menu.open && Date.now() - hoveredAt < 600) event.preventDefault();
+      });
+      if (!matchMedia("(hover: hover)").matches) continue;
+      menu.addEventListener("mouseenter", () => {
+        if (!desktop.matches) return;
+        window.clearTimeout(closeTimer);
+        if (!menu.open) hoveredAt = Date.now();
+        menu.open = true;
+      });
+      menu.addEventListener("mouseleave", () => {
+        if (!desktop.matches) return;
+        closeTimer = window.setTimeout(() => (menu.open = false), 180);
+      });
+    }
+
+    /* The bar takes the theme of the section under its bottom edge, and turns
+       see-through over one marked data-nav-transparent. An open menu keeps it
+       filled. */
+    const themes = [
+      "theme-light",
+      "theme-soft",
+      "theme-dark",
+      "theme-deep",
+      "theme-brand",
+    ];
+    const themed = () =>
+      [...document.querySelectorAll<HTMLElement>("main .section, [data-open-theme]")].filter(
+        (element) => themes.some((name) => element.classList.contains(name)),
+      );
+    let frame = 0;
+    function match() {
+      frame = 0;
+      const line = nav!.getBoundingClientRect().bottom + 1;
+      const candidates = themed();
+      const under =
+        candidates.filter((element) => {
+          const box = element.getBoundingClientRect();
+          return box.top <= line && box.bottom > line;
+        }).at(-1) ?? null;
+      if (under) {
+        nav!.classList.remove(...themes);
+        const theme = themes.find((name) => under.classList.contains(name));
+        if (theme) nav!.classList.add(theme);
+      }
+      const filled =
+        nav!.classList.contains("open") ||
+        menus.some((menu) => menu.open) ||
+        !under?.hasAttribute("data-nav-transparent");
+      nav!.style.setProperty("--_fill", filled ? "1" : "0");
+    }
+    const request = () => {
+      if (!frame) frame = requestAnimationFrame(match);
+    };
+    menus.forEach((menu) => menu.addEventListener("toggle", request));
+    addEventListener("scroll", request, { passive: true });
+    addEventListener("resize", request);
+    for (const item of document.querySelectorAll("[data-open-theme]")) {
+      item.addEventListener("toggle", () => setTimeout(request, 500));
+    }
+    match();
   }
 </script>
 
 <style is:global>
   @layer components {
     .nav_wrap {
+      --_fill: 1;
       position: sticky;
       top: 0;
       z-index: 100;
       display: flex;
       justify-content: center;
       padding-inline: var(--site-margin);
-      background-color: var(--background);
+      background-color: color-mix(
+        in srgb,
+        var(--background) calc(100% * var(--_fill)),
+        transparent
+      );
       color: var(--text);
-      border-bottom: var(--border-width) solid var(--border);
+      border-bottom: var(--border-width) solid
+        color-mix(in srgb, var(--border) calc(100% * var(--_fill)), transparent);
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        border-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
 
+      /* The page runs up under the bar rather than starting below it */
       &.overlap {
-        position: fixed;
-        inset-inline: 0;
+        margin-bottom: calc(-1 * var(--nav-height) - var(--border-width));
       }
     }
 
@@ -135,7 +305,7 @@ const { render = true, overlap = false } = Astro.props;
     .nav_logo {
       display: flex;
       align-items: center;
-      width: 6.5rem;
+      width: 8.5rem;
       transition: opacity var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
@@ -230,25 +400,77 @@ const { render = true, overlap = false } = Astro.props;
     .nav_links {
       display: flex;
       flex-direction: column;
-      padding: var(--space-2) var(--site-margin) var(--space-4);
-      font-size: var(--text-main);
-      font-weight: var(--primary-medium);
+      padding: var(--space-2) var(--site-margin) 0;
       & > li + li {
         border-top: var(--border-width) solid var(--border);
       }
+      & .dropdown_wrap {
+        display: block;
+      }
+      & .dropdown_toggle {
+        justify-content: space-between;
+        padding-block: var(--space-4);
+        font-size: var(--text-large);
+      }
+      /* Menus open in place in the column, not as floating panels */
+      & .dropdown_content {
+        position: static;
+        width: auto;
+        max-width: none;
+        background-color: transparent;
+        translate: none;
+        scale: none;
+      }
+      & .dropdown_body {
+        padding: 0 0 var(--space-5);
+      }
+    }
+
+    .nav_panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5) var(--space-7);
+    }
+
+    .nav_group_label {
+      margin-bottom: var(--space-2);
+      color: var(--text-2);
+    }
+
+    .nav_group_list {
+      display: flex;
+      flex-direction: column;
     }
 
     .nav_link {
       display: block;
-      padding-block: var(--space-3);
-      color: color-mix(in lab, currentcolor 60%, transparent);
+      padding-block: var(--space-1);
+      color: var(--text);
       text-decoration: none;
-      text-underline-offset: 0.4em;
-      text-decoration-thickness: var(--border-width);
-      transition: color var(--hover-duration) var(--hover-ease);
+      transition:
+        color var(--hover-duration) var(--hover-ease),
+        background-color var(--hover-duration) var(--hover-ease);
       &[aria-current="page"] {
-        color: var(--text);
+        color: var(--heading-accent);
       }
+      @media (hover: hover) {
+        &:hover {
+          color: var(--heading-accent);
+        }
+      }
+    }
+
+    .nav_actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3) var(--space-5);
+      padding: var(--space-5) var(--site-margin) var(--space-6);
+    }
+
+    .nav_login {
+      color: var(--text-2);
+      transition: color var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {
           color: var(--text);
@@ -256,41 +478,98 @@ const { render = true, overlap = false } = Astro.props;
       }
     }
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
+      .nav_inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-areas: "links logo actions";
+      }
+
+      .nav_logo {
+        grid-area: logo;
+        width: 9.5rem;
+      }
+
       .nav_toggle {
         display: none;
       }
 
-      .nav_menu {
-        position: static;
-        display: block;
-        visibility: visible;
-        background-color: transparent;
-        border-bottom: 0;
-      }
-
+      /* The menu's parts join the bar's grid */
+      .nav_menu,
       .nav_menu_inner {
-        overflow: visible;
+        display: contents;
+        visibility: visible;
         opacity: 1;
       }
 
       .nav_links {
+        grid-area: links;
         flex-direction: row;
-        flex-wrap: wrap;
         align-items: center;
+        gap: var(--space-1);
+        margin-left: calc(var(--space-3) * -1);
         padding: 0;
-        gap: var(--space-4);
-        font-size: var(--text-small);
         & > li + li {
           border-top: 0;
         }
+        & .dropdown_wrap {
+          display: inline-block;
+        }
+        & .dropdown_toggle {
+          gap: 0.375em;
+          padding: var(--space-2) var(--space-3);
+          border-radius: var(--radius-round);
+          color: var(--text-2);
+          font-size: inherit;
+          transition:
+            background-color var(--hover-duration) var(--hover-ease),
+            color var(--hover-duration) var(--hover-ease);
+          @media (hover: hover) {
+            &:hover {
+              background-color: var(--background-2);
+              color: var(--text);
+            }
+          }
+        }
+        & .dropdown_wrap[open] .dropdown_toggle {
+          background-color: var(--background-2);
+          color: var(--text);
+        }
+        & .dropdown_content {
+          position: absolute;
+          top: calc(100% + var(--space-2));
+          width: max-content;
+          background-color: var(--background-2);
+          border-radius: var(--radius-main);
+          translate: 0 -0.5rem;
+          scale: 0.98;
+        }
+        & .dropdown_wrap:is([open], .stacki-opened) .dropdown_content {
+          translate: 0 0;
+          scale: 1;
+        }
+        & .dropdown_body {
+          padding: var(--space-5);
+        }
+      }
+
+      .nav_panel {
+        flex-direction: row;
+      }
+
+      .nav_group {
+        min-width: 11rem;
       }
 
       .nav_link {
-        padding-block: 0;
-        &[aria-current="page"] {
-          text-decoration: underline;
-        }
+        white-space: nowrap;
+      }
+
+      .nav_actions {
+        grid-area: actions;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        padding: 0;
       }
     }
   }
