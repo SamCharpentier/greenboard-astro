@@ -14,5 +14,5 @@ enc "Greenboard-ProductPage-10-Marketing-Compliance_v2.mp4" marketing-compliance
 enc "Greenboard-ProductPage-05-Supervise_v2.mp4" marketing-compliance-2
 enc "Greenboard-ProductPage-11-Firm-Compliance_v2.mp4" firm-compliance-1
 enc "Greenboard-ProductPage-12-Third-Party-Management_v2.mp4" third-party-compliance-1
-enc "GG05_Greenboard_Q2WebAnimations_Automation_v2 (online-video-cutter.com) (1).mp4" greenboardgo-hero
+enc "GG05_Greenboard_Q2WebAnimations_Automation_v2 (online-video-cutter.com) (1).mp4" ../greenboardgo
 echo done
