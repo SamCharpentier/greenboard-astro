@@ -224,6 +224,7 @@ if (import.meta.env.DEV && render) {
       --_padding: var(--space-6);
       --_min-height: 20rem;
       --_visual-ratio: 3 / 2;
+      --_tag-background: var(--background);
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -232,6 +233,23 @@ if (import.meta.env.DEV && render) {
       background-color: var(--background-2);
       border-radius: var(--radius-main);
       overflow: clip;
+
+      /* In a ruled grid the card sits flush on the section color, so a linked
+         card lifts to the surface color while it is hovered or focused */
+      .ruled > & {
+        --_tag-background: var(--background-2);
+      }
+      .ruled > &:has(:is(.button_wrap, .card_arrow)) {
+        transition: background-color var(--hover-duration) var(--hover-ease);
+        &:has(:focus-visible) {
+          background-color: var(--background-2);
+        }
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--background-2);
+          }
+        }
+      }
 
       &.cover {
         min-height: var(--_min-height);
@@ -399,7 +417,9 @@ if (import.meta.env.DEV && render) {
     .card_arrow {
       display: flex;
       color: var(--text);
-      transition: translate var(--hover-duration) var(--hover-ease);
+      transition:
+        translate var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
     }
 
     .card_wrap:has(:is(.button_wrap, .card_arrow)) {
@@ -424,6 +444,7 @@ if (import.meta.env.DEV && render) {
         }
         &:hover .card_arrow {
           translate: 0.125em -0.125em;
+          color: var(--link-text-hover);
         }
       }
     }
