@@ -1,0 +1,108 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Card from "@/components/item/Card.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Button from "@/components/Button.astro";
+import hero from "@/assets/images/solutions/hero.jpg";
+import financialAdvisors from "@/assets/images/solutions/financial-advisors.jpg";
+import registration from "@/assets/images/solutions/registration.jpg";
+import privateFunds from "@/assets/images/solutions/private-funds.jpg";
+import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
+import brokerDealers from "@/assets/images/solutions/broker-dealers.jpg";
+import servicePartners from "@/assets/images/solutions/service-partners.jpg";
+---
+
+<Layout
+  title="Compliance Solutions by Firm Type"
+  description="Compliance solutions tailored for RIAs, broker-dealers, private funds, and hedge funds. 88% of customers eliminated multiple tools. See how Greenboard fits your firm type."
+  overlap
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow="Solutions"
+    heading="Intuitive compliance software that <strong>puts people first.</strong>"
+    image={hero}
+    maxWidth={20}
+  >
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
+      />
+      <Button type="submit">Get started</Button>
+    </Form>
+  </HeroPage>
+
+  {/* Solutions by firm type */}
+  <Section theme="soft" aria-labelledby="solutions-intro">
+    <Heading tag="h2" class="heading-accent" maxWidth={40} id="solutions-intro">
+      <strong>Greenboard</strong> is an AI-native, cloud-based operating system that
+      streamlines compliance management, helping financial firms stay organized,
+      efficient, and audit-ready—all in one place.
+    </Heading>
+    <Grid>
+      <Card
+        variant="split"
+        heading="Financial Advisors"
+        text="A single, AI-powered operating system automates archiving, marketing, trading, and employee compliance so RIAs can stay focused on clients."
+        image={financialAdvisors}
+        imageAlt="Two advisors reviewing a report together at a laptop"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/financial-advisors"
+      />
+      <Card
+        variant="split"
+        heading="Registration"
+        text="Expert help paired with modern software and customizable defaults make brand-new firms exam-ready in weeks, not months."
+        image={registration}
+        imageAlt="A team talking through a plan around a table"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/ria-registration"
+      />
+      <Card
+        variant="split"
+        heading="Private Funds"
+        text="Unified audit trails, automated vendor diligence, and AI-driven risk assessments deliver institutional-grade oversight for every fund structure."
+        image={privateFunds}
+        imageAlt="A fund professional working at his desk"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/private-funds"
+      />
+      <Card
+        variant="split"
+        heading="Hedge Funds"
+        text="Best in-class functionality catered to hedge fund compliance scenarios to drive compliance program efficiency."
+        image={hedgeFunds}
+        imageAlt="A portfolio manager working on a laptop outdoors"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/hedge-funds"
+      />
+      <Card
+        variant="split"
+        heading="Broker Dealers"
+        text="End-to-end compliance tooling and automation and 17a-4 recordkeeping to replace fragmented tools and reduce exam risk."
+        image={brokerDealers}
+        imageAlt="A hand pointing at a trading chart on a screen"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/broker-dealers"
+      />
+      <Card
+        variant="split"
+        heading="Service Partners"
+        text="White-label portals let compliance consultants orchestrate tasks, alerts, and reporting across all clients from one command center."
+        image={servicePartners}
+        imageAlt="A compliance consultant working at her laptop"
+        buttonLabel="Learn more"
+        buttonHref="/solutions/service-provider-platform"
+      />
+    </Grid>
+  </Section>
+</Layout>
