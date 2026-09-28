@@ -1,0 +1,293 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Facts from "@/components/item/Facts.astro";
+import List from "@/components/item/List.astro";
+import LogoList from "@/components/item/LogoList.astro";
+import Quote from "@/components/item/Quote.astro";
+import Icon from "@/components/media/Icon.astro";
+import Img from "@/components/media/Img.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+import greenboardGo from "@/assets/logo/greenboard-go.svg";
+import message from "@/assets/icons/message.svg";
+import users from "@/assets/icons/users.svg";
+import fileCheck from "@/assets/icons/file-check.svg";
+import shield from "@/assets/icons/shield-plain.svg";
+import search from "@/assets/icons/search.svg";
+import hero from "@/assets/images/about/hero.jpg";
+import microsoft from "@/assets/images/about/logo-microsoft.png";
+import firmscribe from "@/assets/images/about/logo-firmscribe.png";
+import celltrust from "@/assets/images/about/logo-celltrust.png";
+import dots from "@/assets/images/about/logo-dots.png";
+import kroll from "@/assets/images/about/logo-kroll.png";
+import morningstar from "@/assets/images/about/logo-morningstar.png";
+import aws from "@/assets/images/about/logo-aws.png";
+import founders from "@/assets/images/about/founders.jpg";
+import team from "@/assets/images/about/team.jpg";
+import teamOffice from "@/assets/images/about/team-office.jpg";
+import daveFeldman from "@/assets/images/about/dave-feldman.jpg";
+import daveFrisone from "@/assets/images/about/dave-frisone.jpg";
+import edSchembor from "@/assets/images/about/ed-schembor.jpg";
+import markMichaelAstarita from "@/assets/images/about/mark-michael-astarita.jpg";
+import mattJacobs from "@/assets/images/about/matt-jacobs.jpg";
+---
+
+<Layout
+  title="About Greenboard | Our Mission to Modernize Compliance"
+  description="Greenboard was founded in 2023 to modernize compliance for financial institutions. Learn about our mission to make compliance radically human."
+  overlap
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow="About Greenboard"
+    heading="AI to increase <strong>human agency</strong> in support of a <em>culture of compliance</em>"
+    image={hero}
+  >
+    <Paragraph variant="large">
+      We’re reimagining how compliance teams operate, not to lead an existing
+      category, but to become the standard that replaces it.
+    </Paragraph>
+    <Paragraph variant="large" class="heading-accent">
+      <strong>Materially better compliance software, built to serve compliance people.</strong>
+    </Paragraph>
+    <Facts>
+      <div>
+        <dt>Founded by</dt>
+        <dd>
+          <a href="#" aria-label="Dave Feldman on LinkedIn">Dave Feldman</a>{" and "}
+          <a href="#" aria-label="Ed Schembor on LinkedIn">Ed Schembor</a>
+        </dd>
+      </div>
+      <div>
+        <dt>Headquartered in</dt>
+        <dd>New York, NY</dd>
+      </div>
+      <div>
+        <dt>Founded in</dt>
+        <dd>2023</dd>
+      </div>
+    </Facts>
+  </HeroPage>
+
+  {/* Investors */}
+  <Section theme="light" aria-labelledby="investors-title">
+    <Heading tag="h2" maxWidth={30} id="investors-title">Backed by top investors</Heading>
+    <LogoList label="Investors">
+      <Img src={microsoft} alt="Microsoft" />
+      <Img src={firmscribe} alt="FirmScribe" />
+      <Img src={celltrust} alt="CellTrust" />
+      <Img src={dots} />
+      <Img src={kroll} alt="Kroll" />
+      <Img src={morningstar} alt="Morningstar" />
+      <Img src={aws} alt="AWS" />
+    </LogoList>
+  </Section>
+
+  {/* What we do */}
+  <Section theme="dark" aria-labelledby="what-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Eyebrow>What we do</Eyebrow>
+      <Heading tag="h2" maxWidth={18} id="what-title">
+        One platform for regulated financial firms.
+      </Heading>
+      <Paragraph maxWidth={40} class="color-faded">
+        Greenboard is an AI-native compliance platform. We built a single
+        platform for the work compliance teams actually run.
+      </Paragraph>
+      <List slot="column2" variant="rows">
+        <li><Icon src={message} />Communications archiving and supervision</li>
+        <li><Icon src={users} />Employee compliance</li>
+        <li><Icon src={fileCheck} />Marketing review</li>
+        <li><Icon src={shield} />Firm-level program management</li>
+        <li><Icon src={search} />Third-party due diligence</li>
+      </List>
+    </ContentWrapper>
+  </Section>
+
+  {/* GreenboardGo */}
+  <Section theme="soft" aria-labelledby="go-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Heading tag="h2" maxWidth={20} id="go-title" aria-label="GreenboardGo">
+        <Icon src={greenboardGo} variant="full-width" />
+      </Heading>
+      <Paragraph slot="column2" variant="h3" maxWidth={22}>
+        Our multiplayer AI to get all things compliance done better, faster.
+      </Paragraph>
+      <Paragraph slot="column2" maxWidth={52}>
+        <strong>It never approves anything on its own.</strong>
+        <span class="color-faded">The point isn’t to take compliance professionals
+        out of the process — it’s to make sure the work that reaches them is the
+        work that actually requires their judgment.</span>
+      </Paragraph>
+    </ContentWrapper>
+    <Grid medium={3}>
+      <Card meta="01" heading="Answers employee questions from your firm’s own policies" />
+      <Card meta="02" heading="Routes decisions to the right owner" />
+      <Card meta="03" heading="Prepares work for review" />
+    </Grid>
+  </Section>
+
+  {/* Who we serve */}
+  <Section theme="light" aria-labelledby="serve-title">
+    <ContentWrapper>
+      <Eyebrow>Who we serve</Eyebrow>
+      <Heading tag="h2" variant="h3" maxWidth={44} id="serve-title">
+        Greenboard supports more than 600 financial institutions: registered
+        investment advisers, broker-dealers, private funds, hedge funds, and the
+        compliance consultants and service providers who support them.
+      </Heading>
+    </ContentWrapper>
+    <LogoList label="Companies">
+      <Img src={microsoft} alt="Microsoft" />
+      <Img src={firmscribe} alt="FirmScribe" />
+      <Img src={celltrust} alt="CellTrust" />
+      <Img src={dots} />
+      <Img src={kroll} alt="Kroll" />
+      <Img src={morningstar} alt="Morningstar" />
+      <Img src={aws} alt="AWS" />
+    </LogoList>
+  </Section>
+
+  {/* Customer Advisory Board */}
+  <Section theme="soft" aria-labelledby="board-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Eyebrow>Customer Advisory Board</Eyebrow>
+      <Heading tag="h2" maxWidth={18} id="board-title">
+        We build with our customers, not just for them.
+      </Heading>
+      <Paragraph slot="column2" variant="h5" maxWidth={40}>
+        Our Customer Advisory Board brings together compliance leaders from
+        across the firms we serve. They meet with our product and leadership
+        teams quarterly to pressure-test what we’re building, share pain points,
+        and help inform our roadmap.
+      </Paragraph>
+      <ButtonWrapper slot="column2">
+        <Button element="link" href="#" emphasis="secondary" icon="none">
+          Read more
+        </Button>
+      </ButtonWrapper>
+    </ContentWrapper>
+  </Section>
+
+  {/* Our story */}
+  <Section theme="dark" aria-labelledby="story-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Eyebrow>Our story</Eyebrow>
+      <Heading tag="h2" maxWidth={16} id="story-title">
+        More than 600 financial institutions.
+      </Heading>
+      <Paragraph slot="column2" maxWidth={60} class="color-faded">
+        We founded Greenboard in 2023 after noticing first-hand how challenging
+        it had become for financial institutions to keep up with ever-changing
+        SEC regulation.
+      </Paragraph>
+      <Paragraph slot="column2" maxWidth={60} class="color-faded">
+        We went back to the drawing board on compliance software, hence the name
+        Greenboard, and formulated our thesis. Financial firms needed an entirely
+        new category of financial compliance software—a single financial
+        compliance operating system to replace fragmented legacy systems. We set
+        out to build software that solves for the two problems that plague
+        compliance programs most: engaging personnel to build a culture of
+        compliance and maintaining reliable and actionable data to make quality
+        compliance assessments.
+      </Paragraph>
+      <Paragraph slot="column2" maxWidth={60} class="color-faded">
+        In a world where more and more can be automated, we firmly believe that
+        not everything should be. Our fundamental belief is that in areas that
+        require a high degree of nuance and subjectivity—such as regulatory
+        compliance—no matter how good computational systems become, human input
+        will continue to drive tremendous value. We’re building AI technology to
+        expand each compliance person’s efficiency and agency.
+      </Paragraph>
+    </ContentWrapper>
+    <hr />
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Quote name="Dave Feldman and Ed Schembor" position="Co-founders">
+        Compliance will always be a human discipline. We’re building to ensure
+        the people doing the work have the best system.
+      </Quote>
+      <Img
+        slot="column2"
+        src={founders}
+        alt="Dave Feldman and Ed Schembor, Greenboard’s co-founders"
+      />
+    </ContentWrapper>
+  </Section>
+
+  {/* Team */}
+  <Section theme="soft" aria-labelledby="team-title">
+    <ContentWrapper>
+      <Eyebrow>Customer Advisory Board</Eyebrow>
+      <Heading tag="h2" maxWidth={24} id="team-title">
+        World-class individuals.<br />An even better team.
+      </Heading>
+    </ContentWrapper>
+    <Grid medium={2}>
+      <Img
+        src={team}
+        alt="Four Greenboard team members at a conference booth"
+        class="ratio-3-2 radius-main"
+      />
+      <Img
+        src={teamOffice}
+        alt="The Greenboard team together in the office"
+        class="ratio-3-2 radius-main"
+      />
+    </Grid>
+  </Section>
+
+  {/* Leadership */}
+  <Section theme="light" aria-labelledby="leaders-title">
+    <ContentWrapper>
+      <Eyebrow>Greenboard leadership</Eyebrow>
+      <Heading tag="h2" maxWidth={16} id="leaders-title">
+        The people building the system.
+      </Heading>
+    </ContentWrapper>
+    <Grid xsmall={2} medium={3} large={5} class="gap-row-6">
+      <Card variant="person" heading="Dave Feldman" text="Co-founder and CEO" image={daveFeldman} imageAlt="Dave Feldman" />
+      <Card variant="person" heading="Dave Frisone" text="Head of Revenue" image={daveFrisone} imageAlt="Dave Frisone" />
+      <Card variant="person" heading="Ed Schembor" text="Co-founder & CTO" image={edSchembor} imageAlt="Ed Schembor" />
+      <Card variant="person" heading="Mark Michael Astarita" text="Head of Operations & Strategy" image={markMichaelAstarita} imageAlt="Mark Michael Astarita" />
+      <Card variant="person" heading="Matt Jacobs" text="Head of Engineering" image={mattJacobs} imageAlt="Matt Jacobs" />
+    </Grid>
+  </Section>
+
+  {/* Jobs */}
+  <Section theme="soft" aria-labelledby="jobs-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Eyebrow>Job opportunities</Eyebrow>
+      <Heading tag="h2" maxWidth={14} id="jobs-title">We’re hiring!</Heading>
+      <Paragraph maxWidth={42} class="color-faded">
+        We’re building a generational company in our field and are always
+        looking for talent to propel our mission.
+      </Paragraph>
+      <ButtonWrapper>
+        <Button element="link" href="#" emphasis="secondary" icon="none">
+          See all roles
+        </Button>
+      </ButtonWrapper>
+      <Grid slot="column2" class="gap-2">
+        <Card variant="row" heading="AI Automation Engineer" buttonLabel="Read more" buttonHref="#" />
+        <Card variant="row" heading="Software Engineer (2027 Grads)" buttonLabel="Read more" buttonHref="#" />
+        <Card variant="row" heading="General Interest/Future Considerations" buttonLabel="Read more" buttonHref="#" />
+        <Card variant="row" heading="Senior Full Stack Software Engineer" buttonLabel="Read more" buttonHref="#" />
+        <Card variant="row" heading="Senior DevSecOps Engineer" buttonLabel="Read more" buttonHref="#" />
+      </Grid>
+    </ContentWrapper>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section theme="dark" paddingTop="large" paddingBottom="large" id="demo" aria-labelledby="cta-title">
+    <CtaDemo />
+  </Section>
+</Layout>
