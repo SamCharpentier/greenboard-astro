@@ -30,6 +30,8 @@ type Props = HTMLAttributes<"div"> & {
    * @min 1
    * @max 12 */
   large?: number;
+  /** Carry on from the last slide to the first, in both directions. */
+  loop?: boolean;
 };
 
 const {
@@ -40,6 +42,7 @@ const {
   small,
   medium,
   large,
+  loop = false,
   class: className,
   ...rest
 } = Astro.props;
@@ -77,6 +80,7 @@ const slides = await slotContent(Astro.slots);
     <div
       class:list={["slider_wrap", variant !== "bleed" && variant, className]}
       style={visible}
+      data-loop={loop ? "" : undefined}
       {...rest}
     >
       <div class="slider_list" role="group" aria-label={label} tabindex="0">
@@ -125,6 +129,28 @@ const slides = await slotContent(Astro.slots);
       slide.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
     });
 
+    /* A looping slider keeps a copy of the set on each side and, once a move
+       settles in a copy, jumps back to the same slide in the real set. The
+       builder canvas shows the real slides only. */
+    const count = slides.length;
+    const loop =
+      slider.hasAttribute("data-loop") &&
+      count > 1 &&
+      !document.documentElement.classList.contains("stacki-designer");
+    if (loop) {
+      const copy = () =>
+        slides.map((slide) => {
+          const clone = slide.cloneNode(true) as HTMLElement;
+          clone.setAttribute("aria-hidden", "true");
+          clone.inert = true;
+          clone.removeAttribute("aria-label");
+          clone.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
+          return clone;
+        });
+      list.prepend(...copy());
+      list.append(...copy());
+    }
+
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const behavior = () => (reduced.matches ? "auto" : "smooth");
 
@@ -144,6 +170,7 @@ const slides = await slotContent(Astro.slots);
     };
 
     const pages = () => {
+      if (loop) return count;
       const step = stride();
       if (step <= 0) return 1;
       return Math.max(1, slides.length - Math.round(view() / step) + 1);
@@ -151,7 +178,18 @@ const slides = await slotContent(Astro.slots);
 
     const current = () => {
       const step = stride();
-      return step > 0 ? Math.round(list.scrollLeft / step) : 0;
+      const index = step > 0 ? Math.round(list.scrollLeft / step) : 0;
+      return loop ? (((index - count) % count) + count) % count : index;
+    };
+
+    /* Back to the real set, to the same slide, without a visible move */
+    const recenter = () => {
+      if (!loop || pressed) return;
+      const step = stride();
+      if (step <= 0) return;
+      const index = Math.round(list.scrollLeft / step);
+      if (index >= count && index < count * 2) return;
+      list.scrollTo({ left: (count + current()) * step, behavior: "instant" });
     };
 
     let drawn = 0;
@@ -166,7 +204,10 @@ const slides = await slotContent(Astro.slots);
           marker.className = "slider_marker";
           marker.setAttribute("aria-label", `Go to slide ${i + 1}`);
           marker.addEventListener("click", () =>
-            list.scrollTo({ left: i * stride(), behavior: behavior() }),
+            list.scrollTo({
+              left: (loop ? count + i : i) * stride(),
+              behavior: behavior(),
+            }),
           );
           return marker;
         }),
@@ -182,7 +223,11 @@ const slides = await slotContent(Astro.slots);
       const atEnd = list.scrollLeft >= end - 1;
 
       for (const step of steps) {
-        step.disabled = Number(step.dataset.step) < 0 ? atStart : atEnd;
+        step.disabled = loop
+          ? false
+          : Number(step.dataset.step) < 0
+            ? atStart
+            : atEnd;
       }
 
       const index = current();
@@ -271,6 +316,20 @@ const slides = await slotContent(Astro.slots);
       },
       { passive: true },
     );
+
+    let settle = 0;
+    if (loop) {
+      list.addEventListener(
+        "scroll",
+        () => {
+          clearTimeout(settle);
+          settle = window.setTimeout(recenter, 140);
+        },
+        { passive: true },
+      );
+      list.scrollTo({ left: count * stride(), behavior: "instant" });
+      new ResizeObserver(() => recenter()).observe(list);
+    }
 
     slider.classList.add("is-ready");
 
