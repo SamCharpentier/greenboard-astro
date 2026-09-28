@@ -13,15 +13,16 @@ export default defineConfig({
   ],
   fonts: [
     {
-      name: "Inter",
-      cssVariable: "--font-inter",
+      name: "Outfit",
+      cssVariable: "--font-outfit",
       provider: fontProviders.local(),
+      fallbacks: ["Helvetica Neue", "Arial", "sans-serif"],
       options: {
         variants: [
           {
-            weight: 400,
+            weight: "100 900",
             style: "normal",
-            src: ["./src/assets/fonts/inter-regular.woff2"],
+            src: ["./src/assets/fonts/outfit-variable.woff2"],
           },
         ],
       },

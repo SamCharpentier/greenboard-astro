@@ -12,6 +12,10 @@
   margin-top: 0;
 }
 
+.eyebrow_wrap + .heading {
+  margin-top: var(--eyebrow-gap);
+}
+
 .section {
   padding-top: var(--section-space-medium);
   padding-bottom: var(--section-space-medium);
