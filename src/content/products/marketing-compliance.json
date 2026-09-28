@@ -1,0 +1,31 @@
+{
+  "name": "Marketing Compliance",
+  "title": "Marketing Compliance",
+  "lead": "Transform marketing reviews from a bottleneck into a streamlined process with AI assistance.",
+  "summary": "Transform marketing reviews from a bottleneck into a streamlined process with AI assistance.",
+  "order": 4,
+  "features": [
+    {
+      "heading": "Marketing Compliance",
+      "text": [
+        "Speed up review cycles: Use AI to pre-check content against SEC marketing rules and custom requirements.",
+        "Never miss a disclosure: Automated verification ensures all required disclosures are present and accurate."
+      ],
+      "image": "../../assets/images/products/marketing-compliance-1.jpg",
+      "video": "/video/products/marketing-compliance-1.mp4"
+    },
+    {
+      "heading": "Configurability & Auditability",
+      "text": [
+        "Map your teams' workflow and information collection into Greenboard.",
+        "Greenboard is 17a-4 and WORM compliant and keeps detailed logs of all activity and produces marketing approval reports as collateral for regulatory exams."
+      ],
+      "image": "../../assets/images/products/marketing-compliance-2.webp",
+      "video": "/video/products/marketing-compliance-2.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Marketing Compliance Software | 7-Second Reviews",
+    "description": "Streamline marketing compliance review and approval workflows. Ensure SEC and FINRA advertising compliance with automated review and audit trails."
+  }
+}

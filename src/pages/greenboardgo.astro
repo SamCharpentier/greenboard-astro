@@ -1,0 +1,225 @@
+---
+import { getImage } from "astro:assets";
+import Layout from "@/layouts/BaseLayout.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Accordion from "@/components/interactive/Accordion.astro";
+import AccordionItem from "@/components/interactive/AccordionItem.astro";
+import Video from "@/components/media/Video.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+import posterSource from "@/assets/images/greenboardgo-poster.jpg";
+
+const poster = await getImage({ src: posterSource, width: 960, format: "webp" });
+---
+
+<Layout
+  title="GreenboardGo | Compliance AI"
+  description="Greenboard Go is the most powerful compliance AI that delivers policy-grounded answers and automation across your compliance program."
+>
+  {/* Hero */}
+  <Section theme="dark" aria-labelledby="go-title">
+    <ContentWrapper variant="columns" column2Class="ratio-5-4">
+      <Eyebrow variant="tag">GreenboardGo</Eyebrow>
+      <Heading tag="h1" class="heading-accent" maxWidth={12} id="go-title">
+        Meet <strong>GreenboardGo</strong>
+      </Heading>
+      <Paragraph variant="large" maxWidth={34}>
+        Multiplayer AI to get all things compliance done better, faster.
+      </Paragraph>
+      <Form name="demo-request" variant="inline" class="margin-top-7">
+        <Input
+          variant="email"
+          label="Work email"
+          placeholder="Enter your work email address"
+          labelHidden
+          required
+        />
+        <Button type="submit">Get started</Button>
+      </Form>
+      <Video
+        slot="column2"
+        src="/video/greenboardgo.mp4"
+        poster={poster.src}
+        variant="5-4"
+        aria-hidden="true"
+      />
+    </ContentWrapper>
+  </Section>
+
+  {/* Ask, decide, prove */}
+  <Section theme="light" aria-label="How GreenboardGo works">
+    <Grid medium={3} class="gap-row-7">
+      <Card
+        variant="feature"
+        eyebrow="Ask"
+        heading="Ask it like you'd ask a colleague."
+        text="GreenboardGo works the way people actually think — type a question in plain language and get an answer in seconds. No prompts to learn, no workflows to navigate."
+      />
+      <Card
+        variant="feature"
+        eyebrow="Decide"
+        heading="From question to documented decision in seconds."
+        text="GreenboardGo works the way people actually think — type a question in plain language and get an answer in seconds. No prompts to learn, no workflows to navigate."
+      />
+      <Card
+        variant="feature"
+        eyebrow="Prove"
+        heading="Answers grounded in your actual program."
+        text="GreenboardGo is trained on your firm's policies, procedures, and books and records — so every answer is grounded in what your regulators expect to see."
+      />
+    </Grid>
+  </Section>
+
+  {/* Use cases */}
+  <Section theme="soft" id="use-cases" aria-labelledby="cases-title">
+    <ContentWrapper variant="sticky-content">
+      <Heading tag="h2" maxWidth={12} id="cases-title">Use Cases</Heading>
+      <ButtonWrapper>
+        <Button element="link" href="#demo">Book a demo</Button>
+      </ButtonWrapper>
+      <Accordion slot="column2" openFirst>
+        <AccordionItem heading="Policy guidance" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Ask plain-language questions about firm policies — gifts and
+            entertainment, outside business activity, personal trading,
+            political contributions, and more — and get a specific answer
+            grounded in your firm's actual documentation. Every response cites
+            the policy excerpt behind it, with clickable source references so
+            you can verify it directly.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Purpose-built forms and workflows" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Initiate and complete any compliance form configured on your firm's
+            instance — Gifts & Entertainment, Political Contributions, Outside
+            Business Affiliations, Private Investments, Public Securities, IPOs,
+            and any form or workflow your team builds. Describe an entry in plain
+            language or upload a document, and GreenboardGo drafts the submission
+            with fields pre-filled. You review, refine, and click submit.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Trade approval automation" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Pre-clear personal trades inside the conversation. GreenboardGo reads
+            your firm's trading policy, checks the request against your existing
+            positions and recent activity, and drafts a pre-clearance request with
+            the right form pre-filled. If applicable, get auto-approval in
+            seconds. Ambiguous cases route automatically; clear ones move forward
+            without leaving chat.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Bulk data processing" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Upload a spreadsheet (XLSX, XLS, CSV) or a PDF with tabular data, and
+            GreenboardGo maps columns to form fields and drafts a series of
+            individual submissions that flow through your firm's existing
+            compliance workflows. Edit drafts after creation, switch forms if the
+            wrong one was auto-detected, and skip the one-by-one entry.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Marketing review" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Upload an ad, social post, deck, or any piece of marketing content and
+            run a compliance review against your firm's configured content rules —
+            including FINRA 2210 and SEC marketing rules. Walk through findings
+            conversationally, get reword suggestions for flagged passages, and
+            move directly into your standard review flow with the submission
+            already pre-filled.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="ADV & U4 repository" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Read and maintain the disclosures behind your Form ADV and Form U4
+            inside the same conversation. Update job titles, registrations,
+            licenses, designations, employment history, education, and outside
+            affiliations — and manage nested entries like prior employment
+            without leaving chat. Your repository stays current; your filings
+            stay accurate.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Brokerage connections" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Ask which brokerage and financial accounts are connected, and initiate
+            new connections directly from chat. GreenboardGo opens the connection
+            dialog for you — Open Banking or AI-powered Statement Extraction — so
+            adding a new account is a single in-conversation step instead of a
+            hunt through settings.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="eComms connections" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Connect the channels your firm needs supervised — LinkedIn, WhatsApp,
+            Telegram, YouTube, Instagram, Facebook — through native flows
+            initiated right from chat. List what's already connected, see what's
+            missing, and add the rest without leaving the conversation.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Compliance data queries" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Ask specific questions about your own compliance data — "Do I hold
+            AAPL?", "What gifts over $100 have I reported?", "Show me my open
+            action items" — across public and private holdings, IPO allocations,
+            outside affiliations, gifts, political contributions, action items,
+            and more. Results display as a table or a summary, whichever is most
+            useful.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Compliance person escalation" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            When a question is ambiguous, novel, or simply better answered by a
+            person, GreenboardGo routes it to your firm's internal compliance team
+            — with the original question, the relevant policies, and the
+            conversation context attached. Sentiment-aware triggers route
+            conversations to a human when they should be, by default.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Outsourced compliance expert help" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            If your program runs through a compliance consultant or an OCCO
+            provider, GreenboardGo escalates to them on the same basis as it would
+            to an internal team — inside the same thread, with context preserved.
+            Multi-tenant separation keeps each client's program walled off from
+            the next.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Greenboard support built in" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            Product or technical questions don't need a separate channel.
+            GreenboardGo can escalate directly to Greenboard support from inside
+            the conversation, with a clear summary of the issue. One interface for
+            compliance questions, configuration help, and platform support.
+          </Paragraph>
+        </AccordionItem>
+        <AccordionItem heading="Multimodal processing" headingTag="h3" headingVariant="h4">
+          <Paragraph>
+            GreenboardGo works with whatever you bring it — text, spreadsheets,
+            PDFs, images, marketing decks, screenshots of email threads. Drop a
+            document into the conversation and the system parses it, extracts the
+            relevant data, and routes it to the right workflow. The interface is
+            text; the inputs don't have to be.
+          </Paragraph>
+        </AccordionItem>
+      </Accordion>
+    </ContentWrapper>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

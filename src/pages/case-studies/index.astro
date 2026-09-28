@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Card from "@/components/item/Card.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+
+const stories = (
+  await getCollection("caseStudies", ({ data }) => data.status === "published")
+).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const firmTypes = new Map(
+  (await getCollection("solutions")).map((entry) => [entry.id, entry.data.name]),
+);
+---
+
+<Layout
+  title="Case Studies"
+  description="Connecting the industry’s best, together."
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow="Case Studies"
+    heading="Practical case studies focused on simplifying financial operations with Greenboard."
+    maxWidth={24}
+  />
+
+  {/* Stories */}
+  <Section theme="light" aria-labelledby="stories-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={18} id="stories-title">
+        Case studies across the ecosystem
+      </Heading>
+      <Paragraph slot="column2" maxWidth={48} class="color-faded">
+        A complete view of how Greenboard partnerships come to life across
+        industries, client types, and collaboration models, revealing the many
+        ways the platform creates impact.
+      </Paragraph>
+    </ContentWrapper>
+    <Grid medium={2} large={3}>
+      {
+        stories.map((story) => (
+          <Card
+            eyebrow={firmTypes.get(story.data.firmType.id)}
+            meta={story.data.customer}
+            heading={story.data.title}
+            text={story.data.excerpt}
+            buttonLabel="Read the story"
+            buttonHref={`/case-studies/${story.id}`}
+          />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

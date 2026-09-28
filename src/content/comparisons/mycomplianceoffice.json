@@ -1,0 +1,74 @@
+{
+  "competitor": "MyComplianceOffice",
+  "heading": "See why experts choose Greenboard over MyComplianceOffice",
+  "logo": "../../assets/images/compare/mycomplianceoffice.png",
+  "summary": "Both platforms offer a variety of compliance tools that enable firms to manage their ongoing securities compliance requirements. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Best-in-Class Brokerage Feeds",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Highest Quality Compliance Calendar",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Most Customizable Policy Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Industry-Leading Lexicon, Random-Sampling, & AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automatically Generated Trade Blotter",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Marketing Reviews",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "E-communications archive",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "published",
+  "seo": {
+    "title": "Greenboard vs MyComplianceOffice",
+    "description": "See why experts choose Greenboard over MyComplianceOffice."
+  }
+}

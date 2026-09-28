@@ -1,0 +1,39 @@
+{
+  "name": "Service Partners",
+  "title": "Service Partners",
+  "tagline": "Greenboard 💚 Compliance Consultants",
+  "summary": "White-label portals let compliance consultants orchestrate tasks, alerts, and reporting across all clients from one command center.",
+  "image": "../../assets/images/solutions/service-partners.jpg",
+  "imageAlt": "A compliance consultant working at her laptop",
+  "order": 6,
+  "benefits": [
+    {
+      "heading": "White-Label Portal",
+      "text": "Deliver a branded client workspace that aggregates tasks, alerts, and evidence across every engagement."
+    },
+    {
+      "heading": "Multi-Tenant Command Center",
+      "text": "Switch between firms, assign tasks, and push bulk updates without logging in and out."
+    },
+    {
+      "heading": "AI-Assisted Onboarding",
+      "text": "Eliminate implementation lift and dramatically compress implementation timelines with our AI onboarding tooling"
+    },
+    {
+      "heading": "Unified functionality",
+      "text": "Eliminate the need to recommend multiple outdated technology solutions to clients and instead provide them with a modern consolidated experience"
+    },
+    {
+      "heading": "Partnership, not Competition",
+      "text": "Greenboard has no interest in selling services and competing with you, unlike many other options."
+    },
+    {
+      "heading": "Usage-Based Pricing",
+      "text": "Align platform costs with billable work, keeping margins healthy as your book of business scales."
+    }
+  ],
+  "seo": {
+    "title": "Compliance Service Provider Platform",
+    "description": "88% of customers eliminated multiple tools. Manage multiple client compliance programs from one platform — scale your advisory practice with modern tools for oversight, reporting, and archiving."
+  }
+}

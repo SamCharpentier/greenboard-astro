@@ -1,0 +1,39 @@
+{
+  "name": "Hedge Funds",
+  "title": "Hedge Funds",
+  "tagline": "Greenboard 💚 Hedge Funds",
+  "summary": "Best in-class functionality catered to hedge fund compliance scenarios to drive compliance program efficiency.",
+  "image": "../../assets/images/solutions/hedge-funds.jpg",
+  "imageAlt": "A portfolio manager working on a laptop outdoors",
+  "order": 4,
+  "benefits": [
+    {
+      "heading": "All-in-One Compliance OS",
+      "text": "Retire point solutions and run archiving, marketing, trading, and employee oversight on one AI-powered platform built for advisors."
+    },
+    {
+      "heading": "Automated Vendor Diligence",
+      "text": "AI gathers SOC 2s, sanctions data, and breach history, then scores vendor risk in a single report."
+    },
+    {
+      "heading": "Comprehensive Archiving",
+      "text": "Every communication, action, comment, and approval is captured in a WORM-compliant archive you can export easily."
+    },
+    {
+      "heading": "Portfolio-Speed Surveillance",
+      "text": "Best-in-class trade ingestion surfaces front-running or restricted-list violations rapidly."
+    },
+    {
+      "heading": "Seamless Broker Feeds",
+      "text": "Connect brokerage accounts instantly via CFPB 1033 APIs and eliminate manual statement uploads."
+    },
+    {
+      "heading": "Future-proof architecture",
+      "text": "Continuous platform updates keep you ahead of new SEC rules—no disruptive migrations ever again."
+    }
+  ],
+  "seo": {
+    "title": "Hedge Fund Compliance Software | SEC Reporting",
+    "description": "Trusted by 500+ firms with 99% customer retention. Manage SEC reporting, communications supervision, and trading compliance for hedge funds from one unified system your team will love."
+  }
+}

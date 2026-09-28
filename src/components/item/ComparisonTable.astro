@@ -1,0 +1,129 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import check from "@/assets/icons/check.svg";
+import close from "@/assets/icons/close.svg";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Name heading the second column. */
+  competitor?: string;
+  /** One row per feature, marked for each product. */
+  rows?: { feature: string; greenboard: boolean; competitor: boolean }[];
+  /** Accessible label. Defaults to `Greenboard compared with` the competitor. */
+  label?: string;
+};
+
+const {
+  render = true,
+  competitor,
+  rows = [],
+  label = `Greenboard compared with ${competitor}`,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && competitor && rows.length > 0 && (
+    <div
+      class:list={["comparison-table_wrap", "text-style-main", className]}
+      role="region"
+      aria-label={label}
+      tabindex="0"
+      {...rest}
+    >
+      <table class="comparison-table_table">
+        <thead>
+          <tr>
+            <th scope="col" class="comparison-table_feature">
+              Feature
+            </th>
+            <th scope="col" class="comparison-table_ours">
+              Greenboard
+            </th>
+            <th scope="col">{competitor}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              <th scope="row" class="comparison-table_feature">
+                {row.feature}
+              </th>
+              {[row.greenboard, row.competitor].map((has, index) => (
+                <td class:list={[index === 0 && "comparison-table_ours"]}>
+                  <Icon
+                    src={has ? check : close}
+                    class:list={["comparison-table_mark", has ? "is-yes" : "is-no"]}
+                  />
+                  <span class="sr-only">{has ? "Yes" : "No"}</span>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .comparison-table_wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-main);
+      &::before,
+      &::after {
+        content: none;
+      }
+      @media (width >= 48rem) {
+        .comparison-table_table :is(th, td) {
+          padding: var(--space-4) var(--space-5);
+        }
+      }
+    }
+
+    .comparison-table_table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      & :is(th, td) {
+        padding: var(--space-3);
+        vertical-align: middle;
+      }
+      & thead th {
+        color: var(--text);
+        font-weight: var(--primary-medium);
+      }
+      & tbody tr {
+        border-top: var(--border-width) solid var(--border);
+      }
+      & tbody th {
+        font-weight: var(--primary-regular);
+      }
+    }
+
+    .comparison-table_feature {
+      width: 60%;
+      text-align: left;
+    }
+
+    .comparison-table_ours {
+      background-color: var(--background-2);
+    }
+
+    .comparison-table_mark {
+      margin-inline: auto;
+      &.is-yes {
+        color: var(--heading-accent);
+      }
+      &.is-no {
+        color: var(--text-2);
+      }
+    }
+  }
+</style>

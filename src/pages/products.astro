@@ -8,6 +8,12 @@ import Card from "@/components/item/Card.astro";
 import Form from "@/components/form/Form.astro";
 import Input from "@/components/form/Input.astro";
 import Button from "@/components/Button.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+import { getCollection } from "astro:content";
+
+const products = (await getCollection("products")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 ---
 
 <Layout
@@ -38,42 +44,27 @@ import Button from "@/components/Button.astro";
       Software built for a culture of compliance.
     </Heading>
     <Grid medium={2} large={3}>
-      <Card
-        heading="Platform"
-        text="Transform your compliance operations with the first true operating system for modern financial firms."
-        buttonLabel="Learn more"
-        buttonHref="/products/platform"
-      />
-      <Card
-        heading="Communications<br>Archiving & Supervision"
-        text="Transform your communications supervision with AI-powered oversight that’s more thorough and efficient than traditional methods."
-        buttonLabel="Learn more"
-        buttonHref="/products/communications-archiving-supervision"
-      />
-      <Card
-        heading="Employee Compliance"
-        text="Automate personal trading monitoring and attestations with a seamless employee experience."
-        buttonLabel="Learn more"
-        buttonHref="/products/employee-compliance"
-      />
-      <Card
-        heading="Marketing Compliance"
-        text="Transform marketing reviews from a bottleneck into a streamlined process with AI assistance."
-        buttonLabel="Learn more"
-        buttonHref="/products/marketing-compliance"
-      />
-      <Card
-        heading="Firm Compliance"
-        text="Turn your compliance program into a systematic operation with automated workflows and AI assistance."
-        buttonLabel="Learn more"
-        buttonHref="/products/firm-compliance"
-      />
-      <Card
-        heading="Third Party Compliance"
-        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique."
-        buttonLabel="Learn more"
-        buttonHref="/products/third-party-compliance"
-      />
+      {
+        products.map((product) => (
+          <Card
+            heading={product.data.name}
+            text={product.data.summary}
+            buttonLabel="Learn more"
+            buttonHref={`/products/${product.id}`}
+          />
+        ))
+      }
     </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
   </Section>
 </Layout>

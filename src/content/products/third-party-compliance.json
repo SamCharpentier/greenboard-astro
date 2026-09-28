@@ -1,0 +1,23 @@
+{
+  "name": "Third Party Compliance",
+  "title": "Third Party Compliance",
+  "lead": "Revolutionize 3rd party due diligence with AI-powered research and risk assessment.",
+  "summary": "Revolutionize due diligence with AI-powered research and risk assessment.",
+  "order": 6,
+  "features": [
+    {
+      "heading": "Tooling to make diligence easy",
+      "text": [
+        "End questionnaire chaos: Use AI to pre-fill questionnaires with verified information from public sources.",
+        "Automate vendor research: Let AI gather and verify vendor information while citing sources.",
+        "Standardize risk assessment: Transform scattered information into structured risk evaluations."
+      ],
+      "image": "../../assets/images/products/third-party-compliance-1.webp",
+      "video": "/video/products/third-party-compliance-1.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Third-Party Compliance & Vendor Oversight",
+    "description": "Monitor and manage third-party vendor compliance with due diligence tracking, risk scoring, and automated oversight tools for financial institutions."
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "competitor": "Smartria",
+  "heading": "See why experts choose Greenboard over Smartria",
+  "logo": "../../assets/images/compare/smartria.png",
+  "summary": "Both platforms offer a variety of compliance tools that enable firms to manage their ongoing securities compliance requirements. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Best-in-Class Brokerage Feeds",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Compliance Calendar",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Most Sophisticated Policy Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Code of Ethics Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Leading Communications Archiving & Supervision",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Marketing Reviews",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automatically Generated Trade Blotter",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "published",
+  "seo": {
+    "title": "Greenboard vs Smartria",
+    "description": "See why experts choose Greenboard over Smartria"
+  }
+}

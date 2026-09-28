@@ -1,0 +1,69 @@
+{
+  "competitor": "RIA in a Box",
+  "heading": "See why experts choose Greenboard over RIA in a Box by Comply",
+  "logo": "../../assets/images/compare/ria-in-a-box.png",
+  "summary": "Both platforms offer an all-in-one solution for managing your compliance program. Greenboard stands alone in feature breadth, usability, and efficiency",
+  "rows": [
+    {
+      "feature": "Best-in-Class Brokerage Feeds",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Compliance Calendar",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Code of Ethics Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Lexicon, Random-Sampling, & AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automatically Generated Trade Blotter",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Marketing Reviews",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Registration & Licensing Support",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "published",
+  "seo": {
+    "title": "Greenboard vs RIA in a Box",
+    "description": "See why experts choose Greenboard over RIA in a Box by Comply."
+  }
+}

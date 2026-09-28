@@ -1,0 +1,69 @@
+{
+  "competitor": "Saifr",
+  "heading": "See why experts choose Greenboard over Saifr",
+  "logo": "../../assets/images/compare/saifr.png",
+  "summary": "Both platforms offer a variety of compliance tools that disrupt stand-alone incumbent tooling. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Comprehensive Compliance Orchestration",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Industry Leading Satisfaction (per T3 Survey, 2025)",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated End-to-End Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Best in Class AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Most Intuititve User Interface",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-Enabled Marketing Reviews",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Integrations",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Supervise, Report, and Monitor Electronic Communications",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2026-02-13",
+  "status": "draft",
+  "seo": {
+    "title": "Greenboard vs Saifr",
+    "description": "See why experts choose Greenboard over Saifr."
+  }
+}

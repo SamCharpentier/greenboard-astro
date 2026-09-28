@@ -6,6 +6,8 @@
 .text {
   margin-top: var(--_margin-top);
   max-width: var(--_mw, none);
+  /* A word longer than the line, like a product name on a phone, breaks instead of overflowing */
+  overflow-wrap: anywhere;
 }
 
 .heading + .text {

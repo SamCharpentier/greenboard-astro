@@ -1,0 +1,39 @@
+{
+  "name": "Registration",
+  "title": "RIA & BD Registration",
+  "tagline": "Greenboard 💚 Startups",
+  "summary": "Expert help paired with modern software and customizable defaults make brand-new firms exam-ready in weeks, not months.",
+  "image": "../../assets/images/solutions/registration.jpg",
+  "imageAlt": "A team talking through a plan around a table",
+  "order": 2,
+  "benefits": [
+    {
+      "heading": "Launch-Ready in Weeks",
+      "text": "Pre-configured calendars, policies, and workflows put a brand-new firm in full compliance faster than previously possible."
+    },
+    {
+      "heading": "Expertise in Hand",
+      "text": "Greenboard partners with the best expert service providers for guidance and filings, so you're not left holding the bag for the things technology isn't best suited for."
+    },
+    {
+      "heading": "Automated Policy Updates",
+      "text": "AI suggests edits language as regulations evolve, so your manuals are never stale."
+    },
+    {
+      "heading": "Support & Guidance",
+      "text": "Greenboard has a world class support team with thousands of registrations under our belt to help you navigate compliance."
+    },
+    {
+      "heading": "Easy to use",
+      "text": "Greenboard is rated the highest among our peer group in industry surveys for a reason - we have the best user experience for compliance software in the category."
+    },
+    {
+      "heading": "Scalable Pricing",
+      "text": "Add users and modules à-la-carte as you grow, avoiding the “all-or-nothing” lock-ins common with legacy suites."
+    }
+  ],
+  "seo": {
+    "title": "RIA Compliance Software | SEC Oversight for RIAs",
+    "description": "Trusted by 500+ financial firms. Simplify RIA registration and ongoing SEC compliance on one unified platform — automate Form ADV, books and records, and marketing review with 99% customer retention."
+  }
+}

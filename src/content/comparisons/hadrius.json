@@ -1,0 +1,64 @@
+{
+  "competitor": "Hadrius",
+  "heading": "See why experts choose Greenboard over Hadrius",
+  "logo": "../../assets/images/compare/hadrius.svg",
+  "summary": "Both platforms offer a variety of compliance tools that disrupt stand-alone incumbent tooling. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Broadest compliance program coverage",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Most Efficient 17a-4 Archiving & Supervision",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Customizable Interactive Employee Workflows",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Backed by top growth investors",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Marketing Reviews",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Modern compliance software",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "published",
+  "seo": {
+    "title": "Greenboard vs Hadrius",
+    "description": "See why experts choose Greenboard over Hadrius."
+  }
+}

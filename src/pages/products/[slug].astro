@@ -1,0 +1,124 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { getImage } from "astro:assets";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Video from "@/components/media/Video.astro";
+import Img from "@/components/media/Img.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+
+export const getStaticPaths = (async () => {
+  const products = (await getCollection("products")).sort(
+    (a, b) => a.data.order - b.data.order,
+  );
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product, others: products.filter((other) => other.id !== product.id) },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = {
+  product: CollectionEntry<"products">;
+  others: CollectionEntry<"products">[];
+};
+
+const { product, others } = Astro.props;
+const { data } = product;
+const posters = await Promise.all(
+  data.features.map((feature) =>
+    getImage({ src: feature.image, width: 960, format: "webp" }),
+  ),
+);
+---
+
+<Layout
+  title={data.seo.title}
+  description={data.seo.description}
+  noindex={data.seo.noindex || undefined}
+>
+  {/* Hero */}
+  <HeroPage eyebrow="Product" heading={data.title} maxWidth={18}>
+    <Paragraph variant="large">{data.lead}</Paragraph>
+    <ButtonWrapper>
+      <Button element="link" href="#demo">Book a demo</Button>
+    </ButtonWrapper>
+  </HeroPage>
+
+  {/* Features */}
+  <Section theme="light" gap="medium" aria-label={`${data.name} features`}>
+    {
+      data.features.map((feature, index) => (
+        <ContentWrapper
+          variant="columns"
+          reverse={index % 2 === 1}
+          column2Class="ratio-1-1"
+        >
+          <Heading tag="h2" maxWidth={20}>
+            {feature.heading}
+          </Heading>
+          {feature.text.map((paragraph) => (
+            <Paragraph variant="large" maxWidth={48} class="color-faded">
+              {paragraph}
+            </Paragraph>
+          ))}
+          {feature.video ? (
+            <Video
+              slot="column2"
+              src={feature.video}
+              poster={posters[index].src}
+              variant="1-1"
+              preload="none"
+              aria-hidden="true"
+            />
+          ) : (
+            <Img slot="column2" src={feature.image} />
+          )}
+        </ContentWrapper>
+      ))
+    }
+  </Section>
+
+  {/* Other products */}
+  <Section theme="soft" aria-labelledby="more-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={24} id="more-title">
+        Software built for a culture of compliance.
+      </Heading>
+      <Button slot="column2" element="link" href="/products" variant="link">
+        Back to all products
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3}>
+      {
+        others.map((other) => (
+          <Card
+            heading={other.data.name}
+            text={other.data.summary}
+            buttonLabel="Learn more"
+            buttonHref={`/products/${other.id}`}
+          />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

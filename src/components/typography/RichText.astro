@@ -60,6 +60,9 @@ const content = await slotContent(Astro.slots);
 <style is:global>
   @layer components {
     .rich-text {
+      /* Fills its column, so a wide table or embed scrolls inside it */
+      width: 100%;
+
       & :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, figure, pre, table) {
         margin-top: var(--_margin-top);
         margin-bottom: var(--_margin-bottom);
@@ -103,6 +106,61 @@ const content = await slotContent(Astro.slots);
       & blockquote {
         padding-left: var(--space-4);
         border-left: var(--border-width) solid var(--border);
+      }
+
+      /* Long form: pull quotes, media, tables */
+      & blockquote:has(cite) {
+        margin-block: var(--space-7);
+        padding-left: var(--space-5);
+        border-left: calc(var(--border-width) * 2) solid var(--heading-accent);
+        color: var(--text);
+        font-size: var(--text-large);
+        line-height: var(--text-large-line-height);
+        & > * {
+          --_margin-top: var(--space-4);
+          --_margin-bottom: var(--space-4);
+        }
+      }
+      & cite {
+        display: block;
+        color: var(--text-2);
+        font-size: var(--text-small);
+        font-style: normal;
+        line-height: var(--text-small-line-height);
+      }
+
+      & :is(img, video, iframe) {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: var(--radius-small);
+      }
+      & iframe {
+        aspect-ratio: 16 / 9;
+        border: 0;
+        background-color: var(--background-skeleton);
+      }
+
+      & table {
+        display: block;
+        overflow-x: auto;
+        border-collapse: collapse;
+        font-size: var(--text-small);
+        line-height: var(--text-small-line-height);
+      }
+      & :is(th, td) {
+        min-width: 10rem;
+        padding: var(--space-3) var(--space-4);
+        border-bottom: var(--border-width) solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+      & :is(th, td):first-child {
+        padding-left: 0;
+      }
+      & thead th {
+        color: var(--text);
+        font-weight: var(--primary-medium);
       }
     }
   }

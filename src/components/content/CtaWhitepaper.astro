@@ -1,0 +1,29 @@
+---
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Form from "@/components/form/Form.astro";
+import Fieldset from "@/components/form/Fieldset.astro";
+import Input from "@/components/form/Input.astro";
+import Button from "@/components/Button.astro";
+
+interface Props {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+}
+
+const { render = true } = Astro.props;
+---
+
+<ContentWrapper render={render} variant="columns">
+  <Heading tag="h2" maxWidth={16} id="whitepaper-title">
+    Get The System of Action Whitepaper
+  </Heading>
+  <Form slot="column2" name="system-of-action-whitepaper">
+    <Fieldset legend="Your details" legendStyle="hidden" variant="stack">
+      <Input variant="first-name" label="First name" required />
+      <Input variant="last-name" label="Last name" required />
+      <Input variant="email" label="Email" required />
+    </Fieldset>
+    <Button type="submit">Submit</Button>
+  </Form>
+</ContentWrapper>

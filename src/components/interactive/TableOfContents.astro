@@ -1,0 +1,122 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import { uid } from "@/utils/unique-id.ts";
+
+type Props = HTMLAttributes<"nav"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Sections to list, each linking to the heading whose id is its `slug`. */
+  headings?: { slug: string; text: string }[];
+  /** Title above the list. */
+  heading?: string;
+};
+
+const {
+  render = true,
+  headings = [],
+  heading = "On this page",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const titleId = uid("toc-title");
+---
+
+{
+  render && headings.length > 1 && (
+    <nav
+      class:list={["table-of-contents_wrap", className]}
+      aria-labelledby={titleId}
+      {...rest}
+    >
+      <Eyebrow id={titleId}>{heading}</Eyebrow>
+      <ol class="table-of-contents_list text-style-small" role="list">
+        {headings.map((item) => (
+          <li>
+            <a class="table-of-contents_link" href={`#${item.slug}`}>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .table-of-contents_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      width: 100%;
+    }
+
+    .table-of-contents_list {
+      display: flex;
+      flex-direction: column;
+      border-left: var(--border-width) solid var(--border);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .table-of-contents_link {
+      display: block;
+      padding: var(--space-2) 0 var(--space-2) var(--space-4);
+      color: var(--text-2);
+      transition:
+        color var(--hover-duration) var(--hover-ease),
+        box-shadow var(--hover-duration) var(--hover-ease);
+      &[aria-current="true"] {
+        color: var(--text);
+        box-shadow: inset calc(var(--border-width) * 2) 0 0 var(--heading-accent);
+      }
+      @media (hover: hover) {
+        &:hover {
+          color: var(--link-text-hover);
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  for (const nav of document.querySelectorAll<HTMLElement>(
+    ".table-of-contents_wrap",
+  )) {
+    const links = [
+      ...nav.querySelectorAll<HTMLAnchorElement>(".table-of-contents_link"),
+    ];
+    const pairs = links.flatMap((link) => {
+      const target = document.getElementById(
+        decodeURIComponent(link.hash.slice(1)),
+      );
+      return target ? [{ link, target }] : [];
+    });
+    if (pairs.length === 0) continue;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.3;
+      let current = pairs[0];
+      for (const pair of pairs) {
+        if (pair.target.getBoundingClientRect().top <= line) current = pair;
+      }
+      for (const { link } of pairs) {
+        if (link === current.link) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      }
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+  }
+</script>

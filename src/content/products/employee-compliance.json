@@ -1,0 +1,37 @@
+{
+  "name": "Employee Compliance",
+  "title": "Employee Compliance",
+  "lead": "Seamless employee experience and thoughtful automation to drive a culture of compliance.",
+  "summary": "Automate personal trading monitoring and attestations with a seamless employee experience.",
+  "order": 3,
+  "features": [
+    {
+      "heading": "Personal Trading",
+      "text": [
+        "Automate personal trade monitoring and attestations with a seamless employee experience."
+      ],
+      "image": "../../assets/images/products/employee-compliance-1.webp",
+      "video": "/video/products/employee-compliance-1.mp4"
+    },
+    {
+      "heading": "Best in Class Broker Feeds",
+      "text": [
+        "Best in class brokerage feeds powered by direct integrations, CFPB 1033 API, and AI-powered document processing for the fastest brokerage feed setup AND the best data on the market."
+      ],
+      "image": "../../assets/images/products/employee-compliance-2.webp",
+      "video": "/video/products/employee-compliance-2.mp4"
+    },
+    {
+      "heading": "Attestation Workflows",
+      "text": [
+        "Streamline employee attestations: replace clunky interfaces with intuitive workflows for code of ethics, OBAs, and more."
+      ],
+      "image": "../../assets/images/products/employee-compliance-3.webp",
+      "video": "/video/products/employee-compliance-3.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Employee Compliance Software",
+    "description": "Automate employee compliance workflows including personal trading pre-clearance, code of ethics attestations, and outside business activity tracking with best-in class brokerage feeds."
+  }
+}

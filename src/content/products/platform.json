@@ -1,0 +1,30 @@
+{
+  "name": "Platform",
+  "title": "Platform",
+  "lead": "Transform your compliance operations with the first true operating system for modern compliance teams",
+  "summary": "Transform your compliance operations with the first true operating system for modern financial firms.",
+  "order": 1,
+  "features": [
+    {
+      "heading": "Unified dashboard + detailed permissions",
+      "text": [
+        "End compliance tool fragmentation: Replace multiple point solutions with a single platform that handles all your compliance needs.",
+        "Greenboard works how your team works. Our operating system can be tailored during implementation to match your teams' role and group-based needs and can be configured to the exact standards of your compliance program."
+      ],
+      "image": "../../assets/images/products/platform-1.webp",
+      "video": "/video/products/platform-1.mp4"
+    },
+    {
+      "heading": "Actionable Books and Records",
+      "text": [
+        "By unifying your books and records on modern data infrastructure and making them accessible to Greenboard Go, we help you tap into the value of your data for a more robust, informed, and efficient compliance program."
+      ],
+      "image": "../../assets/images/products/platform-2.webp",
+      "video": "/video/products/platform-2.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Compliance Platform | All-in-One SEC & FINRA Software",
+    "description": "One unified compliance platform for archiving, supervision, employee compliance, and firm oversight. Purpose-built for SEC and FINRA-registered financial institutions."
+  }
+}

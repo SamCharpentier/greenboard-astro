@@ -1,0 +1,74 @@
+{
+  "competitor": "COMPLY",
+  "heading": "See why experts choose Greenboard over COMPLY (formerly ComplySci)",
+  "logo": "../../assets/images/compare/comply.png",
+  "summary": "Both platforms offer a variety of compliance tools that enable firms to manage their ongoing securities compliance requirements. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Best-in-Class Brokerage Feeds",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Compliance Calendar",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Code of Ethics Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Industry-Leading Lexicon, Random-Sampling, & AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "AI-powered Marketing Reviews",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automatically Generated Trade Blotter",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Faster Go-live Timeline",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "published",
+  "seo": {
+    "title": "Greenboard vs COMPLY",
+    "description": "See why experts choose Greenboard over COMPLY."
+  }
+}

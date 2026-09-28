@@ -1,0 +1,39 @@
+{
+  "name": "Broker Dealers",
+  "title": "Broker Dealers",
+  "tagline": "Greenboard 💚 Broker Dealers",
+  "summary": "End-to-end compliance tooling and automation and 17a-4 recordkeeping to replace fragmented tools and reduce exam risk.",
+  "image": "../../assets/images/solutions/broker-dealers.jpg",
+  "imageAlt": "A hand pointing at a trading chart on a screen",
+  "order": 5,
+  "benefits": [
+    {
+      "heading": "Omnichannel WORM Archiving",
+      "text": "Capture email, SMS, WhatsApp, LinkedIn, Teams, and more in immutable storage that satisfies SEC 17a-4."
+    },
+    {
+      "heading": "Advertising Rule Engine",
+      "text": "Pre-review videos, social posts, and PDFs against Rules 2210–2215 with automated disclosure prompts."
+    },
+    {
+      "heading": "All-in-One Compliance OS",
+      "text": "Retire point solutions and run archiving, marketing, trading, and employee oversight on one AI-powered platform built for broker dealers."
+    },
+    {
+      "heading": "Automated Vendor Diligence",
+      "text": "AI extracts info from SOC 2s and breach history, and public domain sources then scores vendor risk in a single report."
+    },
+    {
+      "heading": "Seamless Broker Feeds",
+      "text": "Connect brokerage accounts instantly via CFPB 1033 APIs and eliminate manual statement uploads."
+    },
+    {
+      "heading": "Future-proof architecture",
+      "text": "Continuous platform updates keep you ahead of FINRA rules—no disruptive migrations ever again."
+    }
+  ],
+  "seo": {
+    "title": "Broker-Dealer Compliance Software | FINRA & SEC",
+    "description": "99.14% reduction in eCommunications false positives. Automate FINRA reporting, communications archiving, and supervisory procedures for broker-dealers on one modern platform."
+  }
+}

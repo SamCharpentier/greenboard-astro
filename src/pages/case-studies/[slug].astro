@@ -1,0 +1,159 @@
+---
+import type { GetStaticPaths } from "astro";
+import {
+  getCollection,
+  getEntry,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import RichText from "@/components/typography/RichText.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Facts from "@/components/item/Facts.astro";
+import Stat from "@/components/item/Stat.astro";
+import Img from "@/components/media/Img.astro";
+import TableOfContents from "@/components/interactive/TableOfContents.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+
+export const getStaticPaths = (async () => {
+  const stories = (
+    await getCollection("caseStudies", ({ data }) => data.status === "published")
+  ).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return stories.map((story) => ({
+    params: { slug: story.id },
+    props: { story, others: stories.filter((other) => other.id !== story.id) },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = {
+  story: CollectionEntry<"caseStudies">;
+  others: CollectionEntry<"caseStudies">[];
+};
+
+const { story, others } = Astro.props;
+const { data } = story;
+const { Content, headings } = await render(story);
+const firmType = await getEntry(data.firmType);
+const firmTypes = new Map(
+  (await getCollection("solutions")).map((entry) => [entry.id, entry.data.name]),
+);
+
+/* Logos of any shape read at the same visual weight when they cover the same area */
+const LOGO_AREA = 10000;
+const logoHeight = Math.round(
+  Math.sqrt(LOGO_AREA / (data.logo.width / data.logo.height)),
+);
+---
+
+<Layout
+  title={data.seo.title}
+  description={data.seo.description}
+  noindex={data.seo.noindex || undefined}
+>
+  {/* Hero */}
+  <HeroPage eyebrow={firmType?.data.name} heading={data.title} maxWidth={24}>
+    <Paragraph variant="large">{data.summary}</Paragraph>
+    <Facts>
+      {
+        data.facts.map((fact) => (
+          <div>
+            <dt>{fact.label}</dt>
+            <dd>
+              {fact.value.split("\n").map((line, index) => (
+                <>
+                  {index > 0 && <br />}
+                  {line}
+                </>
+              ))}
+            </dd>
+          </div>
+        ))
+      }
+    </Facts>
+  </HeroPage>
+
+  {/* Results */}
+  <Section theme="soft" gap="7" aria-label={`${data.customer} results`}>
+    <Img
+      src={data.logo}
+      alt={data.customer}
+      variant="densities"
+      height={logoHeight}
+      transparent
+    />
+    <Grid xsmall={2} large={4} class="gap-row-7">
+      {
+        data.stats.map((stat) => (
+          <Stat number={stat.number} unit={stat.unit} label={stat.label} />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Story */}
+  <Section theme="light" aria-label={`The ${data.customer} story`}>
+    <ContentWrapper variant="sticky-content">
+      <TableOfContents
+        heading="In this story"
+        headings={headings.filter((item) => item.depth === 2)}
+      />
+      <ButtonWrapper>
+        <Button element="link" href="#demo" emphasis="secondary">
+          Book a demo
+        </Button>
+      </ButtonWrapper>
+      <RichText slot="column2" maxWidth={68}>
+        <Content />
+      </RichText>
+    </ContentWrapper>
+  </Section>
+
+  {/* More stories */}
+  <Section
+    theme="soft"
+    render={others.length > 0}
+    aria-labelledby="more-title"
+  >
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={20} id="more-title">
+        Case studies across the ecosystem
+      </Heading>
+      <Button slot="column2" element="link" href="/case-studies" variant="link">
+        All case studies
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3}>
+      {
+        others.map((other) => (
+          <Card
+            eyebrow={firmTypes.get(other.data.firmType.id)}
+            meta={other.data.customer}
+            heading={other.data.title}
+            text={other.data.excerpt}
+            buttonLabel="Read the story"
+            buttonHref={`/case-studies/${other.id}`}
+          />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

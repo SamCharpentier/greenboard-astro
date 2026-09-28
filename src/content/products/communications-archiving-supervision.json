@@ -1,0 +1,38 @@
+{
+  "name": "Communications Archiving & Supervision",
+  "title": "Communications Archive",
+  "lead": "Transform your communications supervision with AI-powered oversight that's more thorough and efficient than traditional methods.",
+  "summary": "Transform your communications supervision with AI-powered oversight that's more thorough and efficient than traditional methods.",
+  "order": 2,
+  "features": [
+    {
+      "heading": "Capture",
+      "text": [
+        "Greenboard offers a wide range of e-communications integrations from Email, to Slack & Teams, to SMS and iMessage, to domain-specific channels such as marketing platforms and Instant Bloomberg."
+      ],
+      "image": "../../assets/images/products/communications-archiving-supervision-1.webp",
+      "video": "/video/products/communications-archiving-supervision-1.mp4"
+    },
+    {
+      "heading": "Supervise",
+      "text": [
+        "Eliminate manual review bottlenecks: Replace random sampling with intelligent AI supervision that catches more issues with fewer false positives."
+      ],
+      "image": "../../assets/images/products/communications-archiving-supervision-2.webp",
+      "video": "/video/products/communications-archiving-supervision-2.mp4"
+    },
+    {
+      "heading": "Retain & Search",
+      "text": [
+        "Greenboard's archival system is 17a-4 and WORM compliant and enables detailed search and retrieval for forensic use cases.",
+        "E-communications data on the Greenboard platform can be leveraged for advanced use cases in other areas of your compliance program to enable greater efficiency and next-generation supervision."
+      ],
+      "image": "../../assets/images/products/communications-archiving-supervision-3.jpg",
+      "video": "/video/products/communications-archiving-supervision-3.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Communications Archiving & Supervision",
+    "description": "Archive and supervise communications across email, messaging, and social media. Meet SEC and FINRA books and records requirements with AI-powered supervision."
+  }
+}

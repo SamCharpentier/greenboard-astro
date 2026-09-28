@@ -1,0 +1,79 @@
+{
+  "competitor": "Smarsh",
+  "heading": "See why experts choose Greenboard over Smarsh",
+  "logo": "../../assets/images/compare/smarsh.png",
+  "summary": "Both platforms provide supervision, reporting, monitoring, and archiving of email, social media, mobile/text messaging, and instant messaging. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "User-friendly and Modern User Interface",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Flat Per User Cost",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "No Hidden Fees or Upcharges (e.g., storage, integrations)",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Lexicon and AI-powered Communications Flagging",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Archiving Natively Built into Compliance Platform",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Permissions-based File Access",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Supports BYOD (Bring Your Own Device)",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Website Archiving",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Random-sampling Communications",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Supervise, Report, and Monitor Electronic Communications",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Archiving Email, Social Media, Mobile/Text Messaging, and Instant Messaging",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "draft",
+  "seo": {
+    "title": "Greenboard vs Smarsh",
+    "description": "See why experts choose Greenboard over Smarsh."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Private Funds",
+  "title": "Private Funds",
+  "tagline": "Greenboard 💚 Private Funds",
+  "summary": "Unified audit trails, automated vendor diligence, and AI-driven risk assessments deliver institutional-grade oversight for every fund structure.",
+  "image": "../../assets/images/solutions/private-funds.jpg",
+  "imageAlt": "A fund professional working at his desk",
+  "order": 3,
+  "benefits": [
+    {
+      "heading": "All-in-One Compliance OS",
+      "text": "Retire point solutions and run archiving, marketing, trading, and employee oversight on one AI-powered platform built for advisors."
+    },
+    {
+      "heading": "AI-Assisted Onboarding",
+      "text": "Eliminate implementation lift and dramatically compress implementation timelines with our AI onboarding tooling"
+    },
+    {
+      "heading": "Comprehensive Archiving",
+      "text": "Every communication, action, comment, and approval is captured in a WORM-compliant archive you can export easily."
+    },
+    {
+      "heading": "Investor Grade Oversight",
+      "text": "Demonstrate institutional controls with unified audit trails that satisfy LP side-letters and ODD questionnaires."
+    },
+    {
+      "heading": "Seamless Broker Feeds",
+      "text": "Connect brokerage accounts instantly via CFPB 1033 APIs and eliminate manual statement uploads."
+    },
+    {
+      "heading": "Future-proof architecture",
+      "text": "Continuous platform updates keep you ahead of new SEC rules—no disruptive migrations ever again."
+    }
+  ],
+  "seo": {
+    "title": "Private Fund Compliance Software",
+    "description": "Trusted by 500+ firms. 88% of customers eliminated the need for multiple tools. Manage private fund regulatory filings, communications archiving, and oversight from one modern compliance platform."
+  }
+}

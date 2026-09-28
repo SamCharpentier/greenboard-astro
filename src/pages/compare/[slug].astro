@@ -1,0 +1,163 @@
+---
+import type { GetStaticPaths } from "astro";
+import {
+  getCollection,
+  getEntry,
+  type CollectionEntry,
+} from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Quote from "@/components/item/Quote.astro";
+import ComparisonTable from "@/components/item/ComparisonTable.astro";
+import Slider from "@/components/interactive/Slider.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+
+export const getStaticPaths = (async () => {
+  const comparisons = await getCollection(
+    "comparisons",
+    ({ data }) => data.status === "published",
+  );
+  return comparisons.map((comparison) => ({
+    params: { slug: comparison.id },
+    props: { comparison },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = { comparison: CollectionEntry<"comparisons"> };
+
+const { comparison } = Astro.props;
+const { data } = comparison;
+
+const asOf = data.asOf.toLocaleDateString("en-US", {
+  month: "2-digit",
+  day: "2-digit",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+const testimonials = await Promise.all(
+  (await getCollection("customers", ({ data }) => !!data.testimonial)).map(
+    async ({ data }) => {
+      const person = await getEntry(data.testimonial!.person);
+      return {
+        quote: data.testimonial!.quote,
+        name: person.data.name,
+        position: [person.data.role, person.data.company].filter(Boolean).join(", "),
+        initials: person.data.name
+          .split(" ")
+          .map((part) => part[0])
+          .join(""),
+      };
+    },
+  ),
+);
+---
+
+<Layout
+  title={data.seo.title}
+  description={data.seo.description}
+  noindex={data.seo.noindex || undefined}
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow={`Greenboard vs ${data.competitor}`}
+    heading={data.heading}
+    maxWidth={20}
+  >
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
+      />
+      <Button type="submit">Get started</Button>
+    </Form>
+  </HeroPage>
+
+  {/* Why Greenboard */}
+  <Section theme="light" aria-labelledby="better-title">
+    <Heading tag="h2" maxWidth={18} id="better-title">
+      Materially better compliance software
+    </Heading>
+    <Grid medium={3} class="gap-row-7">
+      <Card
+        variant="feature"
+        heading="Complete SEC & FINRA Compliance"
+        text="Centralize all key compliance functions including archiving, marketing reviews, trade testing, and more. Now you can run your entire compliance program in one place instead of across multiple legacy software solutions."
+      />
+      <Card
+        variant="feature"
+        heading="Broader Functionality, Better User Experience"
+        text="Human-first design coupled with broad feature functionality and AI assistance. The result is modern software that allows our clients to stay a step ahead of regulators."
+      />
+      <Card
+        variant="feature"
+        heading="Open AI Architecture"
+        text="Our open AI architecture stands out as the most thoughtful and defensible when regulators come knocking. It also allows you to address compliance risks specific to your business, which is a key regulatory requirement."
+      />
+    </Grid>
+  </Section>
+
+  {/* Summary */}
+  <Section theme="soft" gap="6" aria-labelledby="summary-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={14} id="summary-title">A Quick Summary</Heading>
+      <Paragraph slot="column2" maxWidth={52} class="color-faded">
+        {data.summary}
+      </Paragraph>
+    </ContentWrapper>
+    <ComparisonTable competitor={data.competitor} rows={data.rows} />
+    <Paragraph variant="small" class="color-faded">
+      Table above accurate as of {asOf}
+    </Paragraph>
+  </Section>
+
+  {/* Proof */}
+  <Section theme="light" gap="6" aria-labelledby="trust-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={22} id="trust-title">
+        Trusted by hundreds of leading financial institutions of all sizes
+      </Heading>
+      <Paragraph slot="column2" maxWidth={40} class="color-faded">
+        Backed by top silicon valley venture funds and capitalized for
+        continuous innovation
+      </Paragraph>
+    </ContentWrapper>
+    <Slider label="Customer quotes" variant="contained" xsmall={1} loop>
+      {
+        testimonials.map((testimonial) => (
+          <Quote
+            variant="large"
+            name={testimonial.name}
+            position={testimonial.position}
+            initials={testimonial.initials}
+          >
+            {testimonial.quote}
+          </Quote>
+        ))
+      }
+    </Slider>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

@@ -1,0 +1,190 @@
+---
+import type { GetStaticPaths } from "astro";
+import {
+  getCollection,
+  getEntry,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import RichText from "@/components/typography/RichText.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Facts from "@/components/item/Facts.astro";
+import Img from "@/components/media/Img.astro";
+import FormattedDate from "@/components/utility/FormattedDate.astro";
+import TableOfContents from "@/components/interactive/TableOfContents.astro";
+import CtaWhitepaper from "@/components/content/CtaWhitepaper.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+import { SITE_NAME, SITE_URL } from "@/consts.ts";
+import { formatDate } from "@/utils/date.ts";
+
+export const getStaticPaths = (async () => {
+  const posts = (
+    await getCollection("posts", ({ data }) => data.status === "published")
+  ).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      related: posts.filter((other) => other.id !== post.id).slice(0, 3),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = {
+  post: CollectionEntry<"posts">;
+  related: CollectionEntry<"posts">[];
+};
+
+const { post, related } = Astro.props;
+const { data } = post;
+const { Content, headings } = await render(post);
+const author = data.author ? await getEntry(data.author) : undefined;
+const authors = new Map(
+  (await getCollection("people")).map((entry) => [entry.id, entry.data.name]),
+);
+
+/* Sections are whichever heading level the author wrote them at */
+const topLevel = Math.min(...headings.map((item) => item.depth));
+const sections = headings.filter((item) => item.depth === topLevel);
+
+const words = (post.body ?? "")
+  .replace(/<[^>]+>|\]\([^)]*\)|[#>*_|`-]/g, " ")
+  .split(/\s+/)
+  .filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 230));
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: data.title,
+  description: data.seo.description,
+  datePublished: data.date.toISOString(),
+  author: author
+    ? {
+        "@type": author.data.company ? "Person" : "Organization",
+        name: author.data.name,
+      }
+    : { "@type": "Organization", name: SITE_NAME },
+  publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+};
+---
+
+<Layout
+  title={data.seo.title}
+  description={data.seo.description}
+  type="article"
+  noindex={data.seo.noindex || undefined}
+>
+  <script
+    is:inline
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData)}
+  />
+
+  {/* Hero */}
+  <HeroPage eyebrow="Blog" heading={data.title} maxWidth={24}>
+    <Facts>
+      {
+        author && (
+          <div>
+            <dt>Written by</dt>
+            <dd>{author.data.name}</dd>
+          </div>
+        )
+      }
+      <div>
+        <dt>Published</dt>
+        <dd><FormattedDate date={data.date} /></dd>
+      </div>
+      <div>
+        <dt>Reading time</dt>
+        <dd>{minutes} min</dd>
+      </div>
+    </Facts>
+  </HeroPage>
+
+  {/* Article */}
+  <Section theme="light" aria-label="Article">
+    <ContentWrapper variant="sticky-content">
+      {sections.length > 1 && <TableOfContents headings={sections} />}
+      <ButtonWrapper>
+        <Button element="link" href="#demo" emphasis="secondary">
+          Book a demo
+        </Button>
+      </ButtonWrapper>
+      {
+        data.cover && (
+          <Img
+            slot="column2"
+            src={data.cover}
+            alt={data.coverAlt}
+            loading="eager"
+            class="radius-small margin-bottom-4"
+          />
+        )
+      }
+      <RichText slot="column2" maxWidth={68}>
+        <Content />
+      </RichText>
+    </ContentWrapper>
+  </Section>
+
+  {/* Whitepaper */}
+  <Section
+    theme="deep"
+    render={data.whitepaperForm}
+    aria-labelledby="whitepaper-title"
+  >
+    <CtaWhitepaper />
+  </Section>
+
+  {/* Related articles */}
+  <Section
+    theme="soft"
+    render={related.length > 0}
+    aria-labelledby="related-title"
+  >
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={20} id="related-title">
+        Related articles
+      </Heading>
+      <Button slot="column2" element="link" href="/blog" variant="link">
+        All articles
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3}>
+      {
+        related.map((other) => (
+          <Card
+            eyebrow={formatDate(other.data.date)}
+            meta={other.data.author && authors.get(other.data.author.id)}
+            heading={other.data.title}
+            buttonLabel="Read the article"
+            buttonHref={`/blog/${other.id}`}
+          />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>

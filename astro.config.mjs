@@ -1,14 +1,26 @@
 // @ts-check
+import { existsSync, readFileSync } from "node:fs";
 import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { SITE_URL } from "./src/consts.ts";
 import { isNoindexRoute } from "./src/utils/seo.ts";
 
+/* A page that asks search engines not to index it stays out of the sitemap too,
+   whether that comes from NOINDEX_ROUTES or from its own content */
+/** @param {string} pathname */
+const builtPageIsNoindex = (pathname) => {
+  const file = new URL(`./dist${pathname.replace(/\/?$/, "/")}index.html`, import.meta.url);
+  return existsSync(file) && /<meta name="robots" content="noindex/.test(readFileSync(file, "utf8"));
+};
+
 export default defineConfig({
   site: SITE_URL,
   integrations: [
     sitemap({
-      filter: (page) => !isNoindexRoute(new URL(page).pathname),
+      filter: (page) => {
+        const { pathname } = new URL(page);
+        return !isNoindexRoute(pathname) && !builtPageIsNoindex(pathname);
+      },
     }),
   ],
   fonts: [

@@ -1,0 +1,79 @@
+{
+  "competitor": "Skematic",
+  "heading": "See why experts choose Greenboard over Skematic",
+  "logo": "../../assets/images/compare/skematic.png",
+  "summary": "Both platforms offer a variety of compliance tools that enable firms to manage their ongoing securities compliance requirements. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Unified compliance operating system",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Program management connected to most actionable data",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Fully Integrated Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Code of Ethics & Employee Functionality",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automatically Generated Trade Blotter",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Lexicon, Random-Sampling, & AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Code of Ethics & Employee Functionality",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Firm Compliance Modules",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Marketing Review Workflows",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Audit and Document Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "draft",
+  "seo": {
+    "title": "Greenboard vs Skematic",
+    "description": "See why experts choose Greenboard over Skematic."
+  }
+}

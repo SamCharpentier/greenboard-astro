@@ -1,0 +1,23 @@
+{
+  "name": "Firm Compliance",
+  "title": "Firm Compliance",
+  "lead": "Turn your compliance program into a systematic operation with automated workflows and AI assistance.",
+  "summary": "Turn your compliance program into a systematic operation with automated workflows and AI assistance.",
+  "order": 5,
+  "features": [
+    {
+      "heading": "End-to-end compliance in Greenboard",
+      "text": [
+        "Automate compliance calendars: Replace manual tracking with automated task generation and documentation.",
+        "Enhance policy management: Keep policies current with AI-assisted regulatory change management.",
+        "Streamline risk assessments: Transform risk evaluation from annual headache to continuous process."
+      ],
+      "image": "../../assets/images/products/firm-compliance-1.webp",
+      "video": "/video/products/firm-compliance-1.mp4"
+    }
+  ],
+  "seo": {
+    "title": "Firm Compliance Management Software",
+    "description": "Manage your firm's compliance program with automated regulatory calendars, risk assessments, and compliance testing on one centralized platform."
+  }
+}

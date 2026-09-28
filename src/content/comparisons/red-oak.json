@@ -1,0 +1,84 @@
+{
+  "competitor": "Red Oak",
+  "heading": "See why experts choose Greenboard over Red Oak Compliance",
+  "logo": "../../assets/images/compare/red-oak.png",
+  "summary": "Both platforms offer a variety of compliance tools that enable firms to manage their ongoing securities compliance requirements. Greenboard stands alone in feature breadth, usability, and defensibility.",
+  "rows": [
+    {
+      "feature": "Best-in-Class Brokerage Feeds",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Robust Compliance Calendar",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Automated Vendor Due Diligence",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Customizable Policy Automation",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Observable AI Architecture",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Lexicon, Random-Sampling, & AI-powered Communications Archiving",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Conflict of Interest Reporting",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "KYE/Code of Ethics",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Most Sophisticated User Permission Controls",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Faster Go-live Timeline",
+      "greenboard": true,
+      "competitor": false
+    },
+    {
+      "feature": "Audit Logs",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Marketing Reviews",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "Website Archiving",
+      "greenboard": true,
+      "competitor": true
+    },
+    {
+      "feature": "E-communications Archiving and Supervision",
+      "greenboard": true,
+      "competitor": true
+    }
+  ],
+  "asOf": "2025-06-05",
+  "status": "draft",
+  "seo": {
+    "title": "Greenboard vs Red Oak",
+    "description": "See why experts choose Greenboard over Red Oak."
+  }
+}

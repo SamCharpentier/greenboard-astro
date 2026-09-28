@@ -1,0 +1,39 @@
+{
+  "name": "Financial Advisors",
+  "title": "Financial Advisors",
+  "tagline": "Greenboard 💚 Financial Advisors",
+  "summary": "A single, AI-powered operating system automates archiving, marketing, trading, and employee compliance so RIAs can stay focused on clients.",
+  "image": "../../assets/images/solutions/financial-advisors.jpg",
+  "imageAlt": "Two advisors reviewing a report together at a laptop",
+  "order": 1,
+  "benefits": [
+    {
+      "heading": "All-in-One Compliance OS",
+      "text": "Retire point solutions and run archiving, marketing, trading, and employee oversight on one AI-powered platform built for advisors."
+    },
+    {
+      "heading": "Marketing Review in Minutes",
+      "text": "AI pre-checks content against SEC rules, so disclosures are right the first time and approvals fly through."
+    },
+    {
+      "heading": "Comprehensive Archiving",
+      "text": "Every communication, action, comment, and approval is captured in a WORM-compliant archive you can export easily."
+    },
+    {
+      "heading": "Zero-Click Trade Monitoring",
+      "text": "Continuous blotter surveillance flags front-running and best-execution gaps without adding back-office headcount."
+    },
+    {
+      "heading": "Seamless Broker Feeds",
+      "text": "Connect brokerage accounts instantly via CFPB 1033 APIs and eliminate manual statement uploads."
+    },
+    {
+      "heading": "Future-Proof Architecture",
+      "text": "Continuous platform updates keep you ahead of new SEC rules—no disruptive migrations ever again."
+    }
+  ],
+  "seo": {
+    "title": "Compliance Software for Financial Advisors",
+    "description": "Purpose-built compliance software for registered investment advisors. Replace point solutions with one platform for archiving, marketing review, and oversight."
+  }
+}

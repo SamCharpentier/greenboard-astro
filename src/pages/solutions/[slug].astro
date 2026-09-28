@@ -1,0 +1,122 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import CtaDemo from "@/components/content/CtaDemo.astro";
+
+export const getStaticPaths = (async () => {
+  const solutions = await getCollection("solutions");
+  return solutions.map((solution) => ({
+    params: { slug: solution.id },
+    props: { solution },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = { solution: CollectionEntry<"solutions"> };
+
+const { solution } = Astro.props;
+const { data } = solution;
+
+const stories = (
+  await getCollection("caseStudies", ({ data }) => data.status === "published")
+).sort(
+  (a, b) =>
+    Number(b.data.firmType.id === solution.id) -
+      Number(a.data.firmType.id === solution.id) ||
+    b.data.date.getTime() - a.data.date.getTime(),
+);
+const firmTypes = new Map(
+  (await getCollection("solutions")).map((entry) => [entry.id, entry.data.name]),
+);
+---
+
+<Layout
+  title={data.seo.title}
+  description={data.seo.description}
+  noindex={data.seo.noindex || undefined}
+  overlap
+>
+  {/* Hero */}
+  <HeroPage
+    eyebrow={data.tagline}
+    heading={data.title}
+    image={data.image}
+    imageAlt={data.imageAlt}
+    maxWidth={18}
+  >
+    <Paragraph variant="large">{data.summary}</Paragraph>
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
+      />
+      <Button type="submit">Get started</Button>
+    </Form>
+  </HeroPage>
+
+  {/* Overview */}
+  <Section theme="light" aria-labelledby="overview-title">
+    <Eyebrow tag="h2" id="overview-title">Overview</Eyebrow>
+    <Grid medium={2} large={3} class="gap-row-7">
+      {
+        data.benefits.map((benefit) => (
+          <Card variant="feature" heading={benefit.heading} text={benefit.text} />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Case studies */}
+  <Section
+    theme="soft"
+    render={stories.length > 0}
+    aria-labelledby="stories-title"
+  >
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={20} id="stories-title">
+        Real results from teams running on Greenboard
+      </Heading>
+      <Button slot="column2" element="link" href="/case-studies" variant="link">
+        All case studies
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3}>
+      {
+        stories.map((story) => (
+          <Card
+            eyebrow={firmTypes.get(story.data.firmType.id)}
+            heading={story.data.title}
+            text={story.data.excerpt}
+            buttonLabel="Read the story"
+            buttonHref={`/case-studies/${story.id}`}
+          />
+        ))
+      }
+    </Grid>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section
+    theme="dark"
+    paddingTop="large"
+    paddingBottom="large"
+    id="demo"
+    aria-labelledby="cta-title"
+  >
+    <CtaDemo />
+  </Section>
+</Layout>
