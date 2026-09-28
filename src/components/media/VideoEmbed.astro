@@ -1,0 +1,78 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Img from "@/components/media/Img.astro";
+import Button from "@/components/Button.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Player address, such as `https://player.vimeo.com/video/…`. */
+  src?: string;
+  /** What the video is. Names the player and the play button. */
+  title?: string;
+  /** Still shown until the video is played. */
+  poster?: ImageMetadata;
+};
+
+const { render = true, src, title, poster, class: className, ...rest } = Astro.props;
+---
+
+{
+  render && src && title && poster && (
+    <div
+      class:list={["video-embed_wrap", className]}
+      data-src={src}
+      data-title={title}
+      {...rest}
+    >
+      <Img src={poster} class="video-embed_poster" />
+      <Button variant="play" label={`Play ${title}`} class="video-embed_play" />
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    /* The player loads only when asked for, so the page stays light */
+    .video-embed_wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: clip;
+      border-radius: var(--radius-main);
+      background-color: var(--background-skeleton);
+      & > :is(.video-embed_poster, iframe) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    }
+
+    .video-embed_play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  for (const embed of document.querySelectorAll<HTMLElement>(".video-embed_wrap")) {
+    const button = embed.querySelector<HTMLButtonElement>(".video-embed_play");
+    const { src, title } = embed.dataset;
+    if (!button || !src) continue;
+    button.addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = `${src}${src.includes("?") ? "&" : "?"}autoplay=1`;
+      frame.title = title ?? "";
+      frame.allow = "autoplay; fullscreen; picture-in-picture";
+      frame.allowFullscreen = true;
+      embed.replaceChildren(frame);
+      frame.focus();
+    });
+  }
+</script>

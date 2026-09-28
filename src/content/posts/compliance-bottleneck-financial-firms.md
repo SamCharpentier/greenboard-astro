@@ -5,6 +5,7 @@ date: "2026-04-13"
 author: "katie-tumurbat"
 featured: true
 whitepaperForm: false
+cover: "../../assets/images/blog/compliance-bottleneck-financial-firms.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69dcf4e4bfdb6cde993ab571_Why%20Systems%20Break%20Down%20-%203.png"
 status: "published"
 seo:

@@ -1,11 +1,11 @@
 ---
 import { getImage } from "astro:assets";
 import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
 import Section from "@/components/wrapper/Section.astro";
 import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
 import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
 import Grid from "@/components/wrapper/Grid.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Paragraph from "@/components/typography/Paragraph.astro";
 import Button from "@/components/Button.astro";
@@ -26,34 +26,33 @@ const poster = await getImage({ src: posterSource, width: 960, format: "webp" })
   description="Greenboard Go is the most powerful compliance AI that delivers policy-grounded answers and automation across your compliance program."
 >
   {/* Hero */}
-  <Section theme="dark" aria-labelledby="go-title">
-    <ContentWrapper variant="columns" column2Class="ratio-5-4">
-      <Eyebrow variant="tag">GreenboardGo</Eyebrow>
-      <Heading tag="h1" class="heading-accent" maxWidth={12} id="go-title">
-        Meet <strong>GreenboardGo</strong>
-      </Heading>
-      <Paragraph variant="large" maxWidth={34}>
-        Multiplayer AI to get all things compliance done better, faster.
-      </Paragraph>
-      <Form name="demo-request" variant="inline" class="margin-top-7">
-        <Input
-          variant="email"
-          label="Work email"
-          placeholder="Enter your work email address"
-          labelHidden
-          required
-        />
-        <Button type="submit">Get started</Button>
-      </Form>
-      <Video
-        slot="column2"
-        src="/video/greenboardgo.mp4"
-        poster={poster.src}
-        variant="5-4"
-        aria-hidden="true"
+  <HeroPage
+    eyebrow="GreenboardGo"
+    heading="Meet <strong>GreenboardGo</strong>"
+    maxWidth={12}
+  >
+    <Paragraph variant="large">
+      Multiplayer AI to get all things compliance done better, faster.
+    </Paragraph>
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
       />
-    </ContentWrapper>
-  </Section>
+      <Button type="submit">Get started</Button>
+    </Form>
+    <Video
+      slot="column2"
+      src="/video/greenboardgo.mp4"
+      poster={poster.src}
+      variant="5-4"
+      class="radius-small"
+      aria-hidden="true"
+    />
+  </HeroPage>
 
   {/* Ask, decide, prove */}
   <Section theme="light" aria-label="How GreenboardGo works">

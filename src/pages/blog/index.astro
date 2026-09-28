@@ -4,20 +4,14 @@ import Layout from "@/layouts/BaseLayout.astro";
 import HeroPage from "@/components/section/HeroPage.astro";
 import Section from "@/components/wrapper/Section.astro";
 import Grid from "@/components/wrapper/Grid.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
-import Paragraph from "@/components/typography/Paragraph.astro";
 import Card from "@/components/item/Card.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
+import defaultCover from "@/assets/images/blog/default-cover.jpg";
 import { formatDate } from "@/utils/date.ts";
 
 const posts = (
   await getCollection("posts", ({ data }) => data.status === "published")
 ).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const featured = posts.filter((post) => post.data.featured);
-const more = posts.filter((post) => !post.data.featured);
-const authors = new Map(
-  (await getCollection("people")).map((entry) => [entry.id, entry.data.name]),
-);
 ---
 
 <Layout
@@ -25,48 +19,20 @@ const authors = new Map(
   description="Insights on SEC and FINRA compliance, regulatory technology, and best practices for financial institutions from the Greenboard team."
 >
   {/* Hero */}
-  <HeroPage eyebrow="Blog" heading="Greenboard Guidance">
-    <Paragraph variant="large">
-      Insights on SEC and FINRA compliance, regulatory technology, and best
-      practices for financial institutions from the Greenboard team.
-    </Paragraph>
-  </HeroPage>
+  <HeroPage theme="light" eyebrow="Our blog" heading="Greenboard Guidance" />
 
-  {/* Featured */}
-  <Section
-    theme="light"
-    render={featured.length > 0}
-    aria-labelledby="featured-title"
-  >
-    <Eyebrow tag="h2" id="featured-title">Featured</Eyebrow>
-    <Grid medium={2}>
+  {/* Articles */}
+  <Section theme="light" paddingTop="none" aria-label="Articles">
+    <Grid medium={2} large={3} class="gap-row-8">
       {
-        featured.map((post) => (
+        posts.map((post) => (
           <Card
-            eyebrow={formatDate(post.data.date)}
-            meta={post.data.author && authors.get(post.data.author.id)}
+            variant="stacked"
+            image={post.data.cover ?? defaultCover}
+            imageAlt={post.data.coverAlt}
+            meta={formatDate(post.data.date)}
             heading={post.data.title}
-            text={post.data.summary}
             buttonLabel="Read the article"
-            buttonHref={`/blog/${post.id}`}
-          />
-        ))
-      }
-    </Grid>
-  </Section>
-
-  {/* Everything else */}
-  <Section theme="soft" render={more.length > 0} aria-labelledby="more-title">
-    <Eyebrow tag="h2" id="more-title">
-      {featured.length > 0 ? "More articles" : "Articles"}
-    </Eyebrow>
-    <Grid medium={2} large={3} ruled>
-      {
-        more.map((post) => (
-          <Card
-            eyebrow={formatDate(post.data.date)}
-            meta={post.data.author && authors.get(post.data.author.id)}
-            heading={post.data.title}
             buttonHref={`/blog/${post.id}`}
           />
         ))

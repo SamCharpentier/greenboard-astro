@@ -5,6 +5,7 @@ date: "2026-02-19"
 author: "ed-schembor"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/cybersecurity-as-compliance-risk.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69960780bd8ec437b96880a4_nigel-hoare-sBtEfRkPFOI-unsplash.jpg"
 status: "published"
 seo:

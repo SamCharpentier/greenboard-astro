@@ -5,6 +5,7 @@ date: "2024-12-08"
 author: "dave-feldman"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/the-trust-podcast-episode-1-michael-kitces.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/67f01922f27e0e989a221f9f_hXG8GeTDs0F2L4oVwhpyYnt2g.avif"
 status: "published"
 seo:

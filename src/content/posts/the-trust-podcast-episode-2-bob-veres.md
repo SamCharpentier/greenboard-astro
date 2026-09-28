@@ -5,6 +5,7 @@ date: "2024-10-15"
 author: "dave-feldman"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/the-trust-podcast-episode-2-bob-veres.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/67f0189183767dff5fd60ee2_JU9Pc12qCTZcePG4G2p0PalYCpE.avif"
 status: "draft"
 seo:

@@ -60,6 +60,8 @@ type Props = Base &
         image?: ImageSource;
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
+        /** How the image fills its frame. `contain` sets a logo on the surface color, uncropped. */
+        imageFit?: "cover" | "contain";
       }
     | {
         variant: "feature";
@@ -74,6 +76,8 @@ type Props = Base &
         image?: ImageSource;
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
+        /** How the image fills its frame. `contain` sets a logo on the surface color, uncropped. */
+        imageFit?: "cover" | "contain";
       }
     | {
         variant: "person";
@@ -94,6 +98,7 @@ type Props = Base &
 type AllProps = Base & {
   image?: ImageSource;
   imageAlt?: string;
+  imageFit?: "cover" | "contain";
 };
 
 const {
@@ -110,6 +115,7 @@ const {
   theme = "inherit",
   image,
   imageAlt,
+  imageFit = "cover",
   class: className,
   ...rest
 } = Astro.props as AllProps;
@@ -170,8 +176,8 @@ if (import.meta.env.DEV && render) {
       {...rest}
     >
       {hasImage && (
-        <div class="card_visual">
-          <Img src={image!} alt={imageAlt} />
+        <div class:list={["card_visual", imageFit === "contain" && "contain"]}>
+          <Img src={image!} alt={imageAlt} transparent={imageFit === "contain"} />
           {variant === "cover" && <Overlay variant="gradient" />}
         </div>
       )}
@@ -258,6 +264,10 @@ if (import.meta.env.DEV && render) {
         background-color: transparent;
         overflow: visible;
       }
+      /* Wide enough for a cover designed at 1.9:1 to keep its edges */
+      &.stacked {
+        --_visual-ratio: 16 / 9;
+      }
       &.feature {
         border-top: var(--border-width) solid var(--border);
         border-radius: 0;
@@ -294,6 +304,7 @@ if (import.meta.env.DEV && render) {
     .card_visual {
       position: relative;
       width: 100%;
+      min-height: 0;
       flex: none;
       border-radius: inherit;
       overflow: clip;
@@ -303,6 +314,13 @@ if (import.meta.env.DEV && render) {
       }
 
       .person > & {
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
+      }
+
+      /* A logo sits small and centred on the surface, whatever its shape */
+      &.contain {
+        padding: 18% 28%;
         border-radius: var(--radius-main);
         background-color: var(--background-2);
       }
@@ -368,13 +386,28 @@ if (import.meta.env.DEV && render) {
         padding: var(--space-7) var(--space-6);
       }
 
+      /* Text on the left, the link on the right. On a phone the link drops
+         under the text. */
       .row > & {
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
         align-items: center;
-        gap: var(--space-3) var(--space-5);
+        gap: 0 var(--space-5);
         padding: var(--space-5) var(--space-6);
+        & > :is(.button-wrapper, .card_arrow):last-child {
+          padding-top: var(--space-5);
+        }
+        @media (width >= 48rem) {
+          grid-template-columns: minmax(0, 1fr) auto;
+          & > * {
+            grid-column: 1;
+          }
+          & > :is(.button-wrapper, .card_arrow):last-child {
+            grid-column: 2;
+            grid-row: 1 / span 4;
+            padding-top: 0;
+          }
+        }
       }
 
       .feature > & {
@@ -391,6 +424,12 @@ if (import.meta.env.DEV && render) {
       gap: var(--space-2) var(--space-4);
       width: 100%;
       margin-bottom: var(--space-6);
+      :is(.stacked, .row) > .card_content > & {
+        margin-bottom: var(--space-4);
+        & + .heading {
+          margin-top: 0;
+        }
+      }
     }
 
     .card_meta {

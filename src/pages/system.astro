@@ -28,6 +28,15 @@ import Icon from "@/components/media/Icon.astro";
 import Img from "@/components/media/Img.astro";
 import GoMark from "@/components/media/GoMark.astro";
 import CasePanel from "@/components/content/CasePanel.astro";
+import Byline from "@/components/item/Byline.astro";
+import Share from "@/components/interactive/Share.astro";
+import TableOfContents from "@/components/interactive/TableOfContents.astro";
+import VideoEmbed from "@/components/media/VideoEmbed.astro";
+import rootLogo from "@/assets/images/case-studies/root-financial.svg";
+import jmgLogo from "@/assets/images/case-studies/jmg-financial-group.webp";
+import alexStickelman from "@/assets/images/people/alex-stickelman.jpeg";
+import cabCover from "@/assets/images/blog/greenboards-customer-advisory-board.jpg";
+import podcastStill from "@/assets/images/blog/the-trust-podcast-episode-1-michael-kitces.jpg";
 import SystemLayout from "@/components/content/system/SystemLayout.astro";
 import SystemChapter from "@/components/content/system/SystemChapter.astro";
 import SystemBlock from "@/components/content/system/SystemBlock.astro";
@@ -108,6 +117,7 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
         { id: "data", label: "Data" },
         { id: "interactive", label: "Interactive" },
         { id: "headers", label: "Section heads" },
+        { id: "longform", label: "Stories and articles" },
         { id: "build", label: "Astro build" },
       ]}
     >
@@ -1154,8 +1164,33 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
           </Grid>
         </SystemBlock>
         <SystemBlock
+          heading="Stacked"
+          text='<code>variant="stacked"</code>. A 16:9 picture over the text, for blog posts. With <code>imageFit="contain"</code> a customer logo sits small on the surface instead, for case studies.'
+        >
+          <Grid medium={2} large={3} class="gap-row-8">
+            <Card
+              variant="stacked"
+              image={cabCover}
+              meta="September 10, 2026"
+              heading="Modern Compliance, Modern Input: Greenboard's Customer Advisory Board"
+              buttonLabel="Read the article"
+              buttonHref="#cards"
+            />
+            <Card
+              variant="stacked"
+              image={jmgLogo}
+              imageAlt="JMG Financial Group"
+              imageFit="contain"
+              eyebrow="Financial Advisors"
+              heading="How a $7.5B RIA Runs Firmwide Compliance"
+              buttonLabel="Read the story"
+              buttonHref="#cards"
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
           heading="Row"
-          text='<code>variant="row"</code>. One line and a link, the whole row clickable. For job openings and resource lists.'
+          text='<code>variant="row"</code>. One line and a link, the whole row clickable, with an optional tag above the line. For job openings, resource lists and the featured stories in a hero.'
         >
           <Grid class="gap-2">
             <Card
@@ -1430,8 +1465,73 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
       </SystemChapter>
 
       <SystemChapter
-        id="build"
+        id="longform"
         number="15"
+        heading="Stories and articles"
+        text="Case studies and blog posts share one reading layout: the text sits at a reading measure in the middle of the page, with the table of contents beside it when the page has one. Headings inside the text step down a size, so a narrow column keeps its rhythm."
+      >
+        <SystemBlock
+          heading="Table of contents"
+          text="Lists the page's sections, stays in view while reading and marks the one on screen. Used on case studies."
+        >
+          <Grid medium={2}>
+            <TableOfContents
+              headings={[
+                { slug: "longform", text: "About Root Financial" },
+                { slug: "build", text: "The Challenge" },
+                { slug: "build", text: "The Solution" },
+              ]}
+            />
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Lead quote"
+          text='<code>Quote variant="card"</code> with a portrait. Opens a case study.'
+        >
+          <Grid medium={2}>
+            <Quote
+              variant="card"
+              name="Alex Stickelman"
+              position="CCO & COO, Root Financial"
+              image={alexStickelman}
+            >
+              Whatever we came up with for marketing reviews, it had to move as
+              fast as the content creators moved.
+            </Quote>
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Byline and sharing"
+          text="<code>Byline</code> names the author with a portrait, or initials without one. <code>Share</code> copies the page address or opens LinkedIn and Facebook."
+          variant="panel"
+        >
+          <ContentWrapper variant="auto-width" class="align-items-center">
+            <Byline name="Dave Feldman" position="Co-founder and CEO" image={daveFeldman} />
+            <Share slot="column2" url="https://www.greenboard.com/blog/" />
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Video"
+          text="<code>VideoEmbed</code> shows a still and loads the Vimeo player only when someone presses play."
+        >
+          <VideoEmbed
+            src="https://player.vimeo.com/video/1011498413"
+            title="The Trust Podcast Episode 1: Michael Kitces"
+            poster={podcastStill}
+          />
+        </SystemBlock>
+        <SystemBlock
+          heading="Customer logo"
+          text="On a story page the logo is sized by area, so a wide wordmark and a square crest read at the same weight."
+          variant="panel"
+        >
+          <Img src={rootLogo} alt="Root Financial" variant="densities" height={60} transparent />
+        </SystemBlock>
+      </SystemChapter>
+
+      <SystemChapter
+        id="build"
+        number="16"
         heading="Astro build"
         text="Where things live in the repository, and every component with its variants and props, read from the source each time the site builds."
       >

@@ -1,5 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
+import Byline from "@/components/item/Byline.astro";
 import { slotContent } from "@/utils/slots.ts";
 
 type Props = HTMLAttributes<"figure"> & {
@@ -9,16 +10,19 @@ type Props = HTMLAttributes<"figure"> & {
   name?: string;
   /** Their role and company. */
   position?: string;
+  /** Portrait. Takes the place of `initials`. */
+  image?: ImageMetadata;
   /** Letters shown in place of a portrait. */
   initials?: string;
-  /** Quote size. */
-  variant?: "default" | "large";
+  /** Quote size. `card` sets it on a surface, as the lead quote of a story. */
+  variant?: "default" | "large" | "card";
 };
 
 const {
   render = true,
   name,
   position,
+  image,
   initials,
   variant = "default",
   class: className,
@@ -37,7 +41,7 @@ const text = await slotContent(Astro.slots);
       <blockquote
         class:list={[
           "quote_text",
-          variant === "large" ? "text-style-h2" : "text-style-h3",
+          ({ large: "text-style-h2", card: "text-style-h5", default: "text-style-h3" } as const)[variant],
         ]}
       >
         <p>
@@ -46,15 +50,12 @@ const text = await slotContent(Astro.slots);
       </blockquote>
       {name && (
         <figcaption class="quote_author">
-          {initials && (
-            <span class="quote_avatar" aria-hidden="true">
-              {initials}
-            </span>
-          )}
-          <span class="quote_author_content text-style-small">
-            <span class="quote_name">{name}</span>
-            {position && <span class="quote_position">{position}</span>}
-          </span>
+          <Byline
+            name={name}
+            position={position}
+            image={image}
+            initials={initials}
+          />
         </figcaption>
       )}
     </figure>
@@ -68,6 +69,11 @@ const text = await slotContent(Astro.slots);
       flex-direction: column;
       gap: var(--space-6);
       width: 100%;
+      &.card {
+        padding: var(--space-6);
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
+      }
     }
 
     .quote_text {
@@ -75,56 +81,8 @@ const text = await slotContent(Astro.slots);
       & p {
         text-wrap: inherit;
       }
-    }
-
-    .quote_author {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .quote_avatar {
-      display: flex;
-      flex-shrink: 0;
-      justify-content: center;
-      align-items: center;
-      width: 3rem;
-      aspect-ratio: 1 / 1;
-      border-radius: var(--radius-round);
-      background-color: var(--text);
-      color: var(--background);
-      font-size: var(--text-small);
-      font-weight: var(--primary-medium);
-    }
-
-    .quote_author_content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.375rem;
-      min-width: 0;
-      color: var(--text-2);
-      &::before,
-      &::after {
-        content: none;
-      }
-    }
-
-    .quote_name {
-      color: var(--text);
-      font-weight: var(--primary-medium);
-    }
-
-    /* Without a portrait, name and role run on one line */
-    .quote_author:not(:has(.quote_avatar)) .quote_author_content {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0 0.35em;
-      & .quote_name {
-        color: inherit;
-        font-weight: inherit;
-        &:has(+ .quote_position)::after {
-          content: ",";
-        }
+      .card > & {
+        max-width: none;
       }
     }
   }

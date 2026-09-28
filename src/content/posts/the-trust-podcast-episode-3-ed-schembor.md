@@ -5,6 +5,7 @@ date: "2025-07-21"
 author: "dave-feldman"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/the-trust-podcast-episode-3-ed-schembor.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/687ace7c2242ee9b4d60b58a_Screenshot%202025-07-18%20at%202.52.49%E2%80%AFPM-min.png"
 status: "published"
 seo:

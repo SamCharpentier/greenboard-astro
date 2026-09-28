@@ -190,6 +190,10 @@ for slug, (customer, logo) in CASES.items():
         "stats": stats,
         "facts": facts,
     }
+    # The headline figure on the story's card
+    point = clean(card["data-point-1"])
+    number, _, unit = point.partition(" ")
+    data["highlight"] = {"number": number, **({"unit": unit} if unit else {}), "label": clean(card["data-point-1-description"])}
     who = card["quote-person-name"]["markdown"].split("\n")[0].strip()
     data["quote"] = {"text": clean(card["quote"]).strip('"“” '), "person": PEOPLE[who]}
     data["date"] = card["date-sort-order"][:10]
@@ -225,6 +229,22 @@ for md in sorted((CMS / "blog").glob("*.md")):
             out.append(f"## {clean(line.strip()[2:-2])}")
         else:
             out.append(clean(line) if line.strip() else "")
+    # Webflow tables end in empty rows, and a stray divider row among them
+    tidy, header_seen = [], False
+    for line in out:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.startswith("|") else None
+        if cells is None:
+            header_seen = False
+            tidy.append(line)
+        elif not any(cells):
+            continue
+        elif set("".join(cells)) <= set("-: "):
+            if not header_seen:
+                tidy.append(line)
+                header_seen = True
+        else:
+            tidy.append(line)
+    out = tidy
     text = re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip() + "\n"
     # An attribution line under a quote joins it as a <cite>, as in the case studies
     text = re.sub(r"((?:^>.*\n)+)\n— (.+)$", lambda m: f"{m.group(1)}>\n> <cite>{m.group(2).strip()}</cite>", text, flags=re.M)
@@ -239,6 +259,9 @@ for md in sorted((CMS / "blog").glob("*.md")):
         "featured": bool(f.get("featured")),
         "whitepaperForm": bool(f.get("turn-on-for-whitepaper-form")),
     }
+    # Covers come from the design files, since the Webflow CDN is out of reach here
+    if (ASSETS / "blog" / f"{slug}.jpg").exists():
+        data["cover"] = f"../../assets/images/blog/{slug}.jpg"
     cover = (f.get("main-cover") or f.get("thumbnail-image") or {}).get("url")
     if cover:
         data["coverUrl"] = cover

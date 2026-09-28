@@ -5,6 +5,7 @@ date: "2024-12-08"
 author: "dave-feldman"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/the-nature-of-ai-use-cases-in-securities-compliance.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/67f016a583767dff5fd49752_coyBicsFCECnrBcAfZdkiHCOWlc.avif"
 status: "published"
 seo:

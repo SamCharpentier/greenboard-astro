@@ -23,6 +23,9 @@ facts:
     value: "Full Compliance Platform"
   - label: "Location"
     value: "Downers Grove, IL"
+highlight:
+  number: "$7.5B"
+  label: "Assets Under Management"
 quote:
   text: "I can’t say they like compliance, but I can tell you that advisors love Greenboard."
   person: "adam-boyer"

@@ -5,6 +5,7 @@ date: "2026-05-12"
 author: "dave-feldman"
 featured: true
 whitepaperForm: false
+cover: "../../assets/images/blog/greenboard-go-launch.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6a0332dc2de4a88cd82f4bc3_GG%20(1).png"
 status: "published"
 seo:

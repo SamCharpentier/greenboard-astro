@@ -1,0 +1,116 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Img from "@/components/media/Img.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Who it is. */
+  name?: string;
+  /** Their role and company. */
+  position?: string;
+  /** Portrait. Takes the place of `initials`. */
+  image?: ImageMetadata;
+  /** Letters shown in place of a portrait. */
+  initials?: string;
+};
+
+const {
+  render = true,
+  name,
+  position,
+  image,
+  initials,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && name && (
+    <div class:list={["byline_wrap", className]} {...rest}>
+      {image ? (
+        <Img
+          src={image}
+          variant="densities"
+          width={56}
+          height={56}
+          class="byline_portrait"
+        />
+      ) : (
+        initials && (
+          <span class="byline_avatar" aria-hidden="true">
+            {initials}
+          </span>
+        )
+      )}
+      <span class="byline_content text-style-small">
+        <span class="byline_name">{name}</span>
+        {position && <span class="byline_position">{position}</span>}
+      </span>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .byline_wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .byline_portrait {
+      flex-shrink: 0;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: var(--radius-small);
+      object-fit: cover;
+    }
+
+    .byline_avatar {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      align-items: center;
+      width: 3rem;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-round);
+      background-color: var(--text);
+      color: var(--background);
+      font-size: var(--text-small);
+      font-weight: var(--primary-medium);
+    }
+
+    .byline_content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      min-width: 0;
+      color: var(--text-2);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .byline_name {
+      color: var(--text);
+      font-weight: var(--primary-medium);
+    }
+
+    /* Without a portrait, name and role run on one line */
+    .byline_wrap:not(:has(.byline_avatar, .byline_portrait)) .byline_content {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0 0.35em;
+      & .byline_name {
+        color: inherit;
+        font-weight: inherit;
+        &:has(+ .byline_position)::after {
+          content: ",";
+        }
+      }
+    }
+  }
+</style>

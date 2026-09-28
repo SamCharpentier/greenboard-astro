@@ -116,6 +116,13 @@ const caseStudies = defineCollection({
           label: z.string(),
         }),
       ),
+      highlight: z
+        .object({
+          number: z.string(),
+          unit: z.string().optional(),
+          label: z.string(),
+        })
+        .optional(),
       facts: z.array(z.object({ label: z.string(), value: z.string() })),
       quote: z.object({ text: z.string(), person: reference("people") }),
       date: z.coerce.date(),

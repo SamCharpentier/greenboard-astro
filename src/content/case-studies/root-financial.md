@@ -24,6 +24,10 @@ facts:
     value: "Full Compliance Platform\nMarketing Review & eComms Archiving"
   - label: "Location"
     value: "Encinitas, CA"
+highlight:
+  number: "24"
+  unit: "hours"
+  label: "Est. weekly time saved on marketing review"
 quote:
   text: "Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved. Huge thanks to the Greenboard team!"
   person: "alex-stickelman"

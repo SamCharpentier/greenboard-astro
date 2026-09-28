@@ -5,6 +5,7 @@ date: "2026-05-11"
 author: "dave-feldman"
 featured: true
 whitepaperForm: true
+cover: "../../assets/images/blog/ai-securities-compliance-architecture.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6a01e6ff143274ac2e148fd4_resource-database-RxyDNEtgkV0-unsplash.jpg"
 status: "published"
 seo:
@@ -46,9 +47,6 @@ Greenboard’s thesis is that the value of AI scales with how connected the comp
 | Cross-domain agent actions without custom work | Native | Within product; not the architectural center |
 | Dual traditional + agentic UX | Explicit design goal; HCI rebuilt for the agentic era | Not supported in many cases |
 | Strategic posture | System of Action: the platform does the work | AI-native infrastructure with per-domain coverage |
-|  |  |  |
-| --- | --- | --- |
-|  |  |  |
 
 ## Bolt-on AI: Real Features, Module-Sized Vision
 

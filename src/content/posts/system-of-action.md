@@ -5,6 +5,7 @@ date: "2026-05-07"
 author: "dave-feldman"
 featured: true
 whitepaperForm: true
+cover: "../../assets/images/blog/system-of-action.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69fcce937505050fb0381a5e_point-normal-F-7VVMXh0m8-unsplash%20(1).jpg"
 status: "draft"
 seo:

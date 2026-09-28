@@ -5,6 +5,7 @@ date: "2026-03-25"
 author: "katie-tumurbat"
 featured: true
 whitepaperForm: false
+cover: "../../assets/images/blog/greenboard-kroll-partnership.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69c71039e9af4d9cb443b94e_Your%20paragraph%20text%20(4).png"
 status: "published"
 seo:

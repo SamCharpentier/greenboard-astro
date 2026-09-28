@@ -10,6 +10,7 @@ type ContentWrapperVariant =
   | "contain"
   | "sticky-content"
   | "sticky-visual"
+  | "article"
   | "card";
 
 type Base = HTMLAttributes<"div"> & {
@@ -49,7 +50,7 @@ type Props = Base &
         mediaOpacity?: never;
       }
     | {
-        variant: "sticky-content" | "sticky-visual";
+        variant: "sticky-content" | "sticky-visual" | "article";
         reverse?: never;
         centered?: never;
         mediaOpacity?: never;
@@ -250,6 +251,24 @@ const column2 = await slotContent(Astro.slots, "column2");
             max-height: calc(
               100svh - var(--nav-height) - var(--site-margin) * 2
             );
+          }
+        }
+      }
+      /* Long-form reading: a narrow column of contents that stays in view,
+         and the text set at a reading measure in the middle of the page.
+         Without the contents column the text keeps the same place. */
+      &.article {
+        display: grid;
+        @media (width >= 64rem) {
+          grid-template-columns: repeat(12, minmax(0, 1fr));
+          & > * {
+            grid-column: 4 / span 6;
+          }
+          & > :first-child:not(:only-child) {
+            grid-column: 1 / span 3;
+            align-self: start;
+            position: sticky;
+            top: calc(var(--site-margin) + var(--nav-height));
           }
         }
       }

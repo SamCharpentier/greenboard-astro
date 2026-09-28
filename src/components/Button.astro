@@ -3,6 +3,7 @@ import type { HTMLAttributes } from "astro/types";
 import Icon from "@/components/media/Icon.astro";
 import arrow from "@/assets/icons/arrow-full.svg";
 import diagonal from "@/assets/icons/arrow-up-right.svg";
+import back from "@/assets/icons/arrow-left.svg";
 import close from "@/assets/icons/close.svg";
 import play from "@/assets/icons/play.svg";
 import pause from "@/assets/icons/pause.svg";
@@ -10,7 +11,7 @@ import { slotContent } from "@/utils/slots.ts";
 
 type Emphasis = "primary" | "secondary";
 
-type Trailing = "arrow" | "diagonal" | "none";
+type Trailing = "arrow" | "diagonal" | "back" | "none";
 
 type Tag =
   | (HTMLAttributes<"button"> & {
@@ -36,7 +37,7 @@ type Kind =
       variant?: "main";
       /** Visual emphasis. */
       emphasis?: Emphasis;
-      /** Icon after the text. `diagonal` marks a link that leaves the page. */
+      /** Icon beside the text. `diagonal` marks a link that leaves the page, `back` a link up to the list this page belongs to. */
       icon?: Trailing;
       label?: never;
       pressed?: never;
@@ -123,7 +124,7 @@ const tagAttrs = isLink
   : { type: type === "submit" ? undefined : type };
 
 const marks = { play, close, arrow };
-const trailing = { arrow, diagonal, none: undefined };
+const trailing = { arrow, diagonal, back: undefined, none: undefined };
 /* main and link are written, the rest are marks with a label. */
 const isWritten = variant === "main" || variant === "link";
 const content = isWritten ? await slotContent(Astro.slots) : "";
@@ -144,6 +145,7 @@ const named = {
         variant !== "main" && variant,
         variant === "arrow" && direction === "back" && "back",
         isWritten && icon === "diagonal" && "diagonal",
+        isWritten && icon === "back" && "leading",
         className,
       ]}
       aria-label={isWritten ? undefined : (label ?? named[variant])}
@@ -151,6 +153,9 @@ const named = {
       {...tagAttrs}
       {...rest}
     >
+      {isWritten && icon === "back" && (
+        <Icon class="button_icon" src={back} variant="small" />
+      )}
       {isWritten && (
         <span class="button_text text-style-trim">
           <Fragment set:html={content} />
@@ -266,6 +271,19 @@ const named = {
       }
       &.back .button_mark {
         rotate: 180deg;
+      }
+      /* A back link leads with its arrow, which points and moves the other way */
+      &.leading .button_icon {
+        margin-right: 0;
+        margin-left: -0.25em;
+      }
+      &.link.leading .button_icon {
+        margin-left: 0;
+      }
+      @media (hover: hover) {
+        &.leading:hover:not(:disabled) .button_icon {
+          translate: -0.1875em 0;
+        }
       }
       &.play .button_pause {
         display: none;

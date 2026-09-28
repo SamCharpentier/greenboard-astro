@@ -46,7 +46,13 @@ const posters = await Promise.all(
   noindex={data.seo.noindex || undefined}
 >
   {/* Hero */}
-  <HeroPage eyebrow="Product" heading={data.title} maxWidth={18}>
+  <HeroPage
+    backHref="/products"
+    backLabel="All products"
+    eyebrow="Product"
+    heading={data.title}
+    maxWidth={18}
+  >
     <Paragraph variant="large">{data.lead}</Paragraph>
     <ButtonWrapper>
       <Button element="link" href="#demo">Book a demo</Button>

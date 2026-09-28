@@ -5,16 +5,26 @@ import { slotContent } from "@/utils/slots.ts";
 type Props = HTMLAttributes<"dl"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
+  /** Fact layout. `columns` sets them side by side from 48rem, `rows` keeps one per line. */
+  variant?: "columns" | "rows";
 };
 
-const { render = true, class: className, ...rest } = Astro.props;
+const {
+  render = true,
+  variant = "columns",
+  class: className,
+  ...rest
+} = Astro.props;
 
 const facts = await slotContent(Astro.slots);
 ---
 
 {
   render && facts && (
-    <dl class:list={["facts_wrap", className]} {...rest}>
+    <dl
+      class:list={["facts_wrap", variant !== "columns" && variant, className]}
+      {...rest}
+    >
       <Fragment set:html={facts} />
     </dl>
   )
@@ -44,16 +54,28 @@ const facts = await slotContent(Astro.slots);
         font-size: var(--text-large);
         line-height: var(--text-large-line-height);
       }
-      @media (width >= 48rem) {
-        grid-auto-columns: minmax(0, 1fr);
-        grid-auto-flow: column;
+      &.rows {
+        border-top: 0;
         & > div {
-          padding-right: var(--space-5);
+          padding-block: var(--space-5);
+          border-bottom: var(--border-width) solid var(--border);
         }
         & > div + div {
-          padding-left: var(--space-5);
           border-top: 0;
-          border-left: var(--border-width) solid var(--border);
+        }
+      }
+      @media (width >= 48rem) {
+        &:not(.rows) {
+          grid-auto-columns: minmax(0, 1fr);
+          grid-auto-flow: column;
+          & > div {
+            padding-right: var(--space-5);
+          }
+          & > div + div {
+            padding-left: var(--space-5);
+            border-top: 0;
+            border-left: var(--border-width) solid var(--border);
+          }
         }
       }
     }

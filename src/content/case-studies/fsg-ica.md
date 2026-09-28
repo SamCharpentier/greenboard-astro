@@ -23,6 +23,9 @@ facts:
     value: "Full Compliance Platform\neComms Archiving\nVendor Due Diligence\nMarketing Review"
   - label: "Consulting Partner"
     value: "Integrated Compliance Advisors (ICA)"
+highlight:
+  number: "99%"
+  label: "Reduction in Vendor Diligence Time"
 quote:
   text: "The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable... knowing that we're doing things the right way."
   person: "doug-thalhammer"

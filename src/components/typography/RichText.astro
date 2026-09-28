@@ -20,6 +20,8 @@ interface Props extends HTMLAttributes<"div"> {
   render?: boolean;
   /** Type style. */
   variant?: RichTextStyle;
+  /** Size headings for a reading column: `h2` reads as `h4`, `h3` as `h5`, `h4` as `h6`. */
+  article?: boolean;
   /**
    * Maximum line length in characters.
    *
@@ -32,6 +34,7 @@ interface Props extends HTMLAttributes<"div"> {
 const {
   render = true,
   variant = "inherit",
+  article = false,
   maxWidth,
   class: className,
   ...rest
@@ -47,6 +50,7 @@ const content = await slotContent(Astro.slots);
         "text",
         "rich-text",
         variant !== "inherit" && `text-style-${variant}`,
+        article && "article",
         className,
       ]}
       style={maxWidth ? `--_mw: ${maxWidth}ch;` : undefined}
@@ -141,26 +145,79 @@ const content = await slotContent(Astro.slots);
         background-color: var(--background-skeleton);
       }
 
+      /* A table sits on the surface color and scrolls inside it on a phone */
       & table {
         display: block;
         overflow-x: auto;
-        border-collapse: collapse;
+        padding: var(--space-2) var(--space-4);
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
         font-size: var(--text-small);
         line-height: var(--text-small-line-height);
       }
       & :is(th, td) {
-        min-width: 10rem;
+        min-width: 8rem;
         padding: var(--space-3) var(--space-4);
         border-bottom: var(--border-width) solid var(--border);
         text-align: left;
         vertical-align: top;
       }
-      & :is(th, td):first-child {
-        padding-left: 0;
+      & tbody tr:last-child > * {
+        border-bottom: 0;
       }
       & thead th {
         color: var(--text);
         font-weight: var(--primary-medium);
+      }
+      & tbody > tr > :first-child {
+        color: var(--text);
+      }
+      /* The Greenboard column, marked when the page is built */
+      & .is-ours {
+        background-color: color-mix(in srgb, var(--heading-accent) 10%, transparent);
+        color: var(--text);
+      }
+      & thead .is-ours {
+        border-top-left-radius: var(--radius-small);
+        border-top-right-radius: var(--radius-small);
+      }
+      & tbody tr:last-child .is-ours {
+        border-bottom-left-radius: var(--radius-small);
+        border-bottom-right-radius: var(--radius-small);
+      }
+
+      /* Headings one step closer to the text, for a reading column */
+      &.article {
+        & h2 {
+          font-size: var(--h4);
+          font-weight: var(--h4-font-weight);
+          line-height: var(--h4-line-height);
+          letter-spacing: var(--h4-letter-spacing);
+          --_margin-top: var(--space-8);
+          --_margin-bottom: var(--h4-margin-bottom);
+        }
+        & h3 {
+          font-size: var(--h5);
+          font-weight: var(--h5-font-weight);
+          line-height: var(--h5-line-height);
+          letter-spacing: var(--h5-letter-spacing);
+          --_margin-top: var(--space-7);
+          --_margin-bottom: var(--h5-margin-bottom);
+        }
+        & h4 {
+          font-size: var(--h6);
+          font-weight: var(--h6-font-weight);
+          line-height: var(--h6-line-height);
+          letter-spacing: var(--h6-letter-spacing);
+          --_margin-top: var(--h6-margin-top);
+          --_margin-bottom: var(--h6-margin-bottom);
+        }
+        & :is(p, ul, ol) + :is(img, iframe, table),
+        & p:has(> :is(img, iframe):only-child) {
+          margin-block: var(--space-7);
+        }
       }
     }
   }

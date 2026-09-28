@@ -5,6 +5,7 @@ date: "2026-03-13"
 author: "dave-feldman"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/greenboard-t3-survey-rating.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69b4350fff4ac570c4084e31_486125642_1387597855997201_6592963254432942939_n.jpg"
 status: "published"
 seo:

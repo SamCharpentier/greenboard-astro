@@ -4,6 +4,7 @@ summary: "Twelve compliance leaders from Betterment, Kroll, Adviser Compliance C
 date: "2026-09-10"
 featured: false
 whitepaperForm: false
+cover: "../../assets/images/blog/greenboards-customer-advisory-board.jpg"
 coverUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6ab5399032eb49e601b84d06_cab_hero_midnight_pistachio_safe.png"
 status: "published"
 seo:

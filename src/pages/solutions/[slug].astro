@@ -49,6 +49,8 @@ const firmTypes = new Map(
 >
   {/* Hero */}
   <HeroPage
+    backHref="/solutions"
+    backLabel="All solutions"
     eyebrow={data.tagline}
     heading={data.title}
     image={data.image}
@@ -94,10 +96,14 @@ const firmTypes = new Map(
         All case studies
       </Button>
     </ContentWrapper>
-    <Grid medium={2} large={3}>
+    <Grid medium={2} large={3} class="gap-row-8">
       {
         stories.map((story) => (
           <Card
+            variant="stacked"
+            image={story.data.logo}
+            imageAlt={story.data.customer}
+            imageFit="contain"
             eyebrow={firmTypes.get(story.data.firmType.id)}
             heading={story.data.title}
             text={story.data.excerpt}

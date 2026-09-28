@@ -1,6 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
 import { uid } from "@/utils/unique-id.ts";
 
 type Props = HTMLAttributes<"nav"> & {
@@ -15,7 +15,7 @@ type Props = HTMLAttributes<"nav"> & {
 const {
   render = true,
   headings = [],
-  heading = "On this page",
+  heading = "Table of Contents",
   class: className,
   ...rest
 } = Astro.props;
@@ -26,11 +26,13 @@ const titleId = uid("toc-title");
 {
   render && headings.length > 1 && (
     <nav
-      class:list={["table-of-contents_wrap", className]}
+      class:list={["table-of-contents_wrap", "margin-trim", className]}
       aria-labelledby={titleId}
       {...rest}
     >
-      <Eyebrow id={titleId}>{heading}</Eyebrow>
+      <Paragraph variant="large" id={titleId}>
+        {heading}
+      </Paragraph>
       <ol class="table-of-contents_list text-style-small" role="list">
         {headings.map((item) => (
           <li>
@@ -56,23 +58,40 @@ const titleId = uid("toc-title");
     .table-of-contents_list {
       display: flex;
       flex-direction: column;
-      border-left: var(--border-width) solid var(--border);
       &::before,
       &::after {
         content: none;
       }
+      & > li {
+        border-bottom: var(--border-width) solid var(--border);
+      }
     }
 
+    /* The section being read is marked with a dot that opens in front of it */
     .table-of-contents_link {
-      display: block;
-      padding: var(--space-2) 0 var(--space-2) var(--space-4);
+      display: flex;
+      align-items: center;
+      padding-block: var(--space-2);
       color: var(--text-2);
-      transition:
-        color var(--hover-duration) var(--hover-ease),
-        box-shadow var(--hover-duration) var(--hover-ease);
+      transition: color var(--hover-duration) var(--hover-ease);
+      &::before {
+        content: "";
+        flex: none;
+        width: 0;
+        aspect-ratio: 1 / 1;
+        margin-right: 0;
+        border-radius: var(--radius-round);
+        background-color: var(--heading-accent);
+        transition:
+          width var(--hover-duration) var(--hover-ease),
+          margin-right var(--hover-duration) var(--hover-ease);
+      }
       &[aria-current="true"] {
         color: var(--text);
-        box-shadow: inset calc(var(--border-width) * 2) 0 0 var(--heading-accent);
+        &::before {
+          width: 0.375em;
+          margin-right: 0.75em;
+        }
       }
       @media (hover: hover) {
         &:hover {

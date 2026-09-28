@@ -3,12 +3,17 @@ import type { ComponentProps, HTMLAttributes } from "astro/types";
 import Section from "@/components/wrapper/Section.astro";
 import Eyebrow from "@/components/typography/Eyebrow.astro";
 import Heading from "@/components/typography/Heading.astro";
+import Button from "@/components/Button.astro";
 import Img from "@/components/media/Img.astro";
 import { slotContent } from "@/utils/slots.ts";
 import { uid } from "@/utils/unique-id.ts";
 
-type Props = Pick<ComponentProps<typeof Section>, "render"> &
+type Props = Pick<ComponentProps<typeof Section>, "render" | "theme"> &
   HTMLAttributes<"section"> & {
+    /** Link up to the list this page belongs to. */
+    backHref?: string;
+    /** Back link text. */
+    backLabel?: string;
     /** Short label above the title, set as a tag. */
     eyebrow?: string;
     /** Page title. `<strong>` takes the accent, `<em>` the highlight. */
@@ -28,22 +33,27 @@ type Props = Pick<ComponentProps<typeof Section>, "render"> &
 
 const {
   render = true,
+  backHref,
+  backLabel,
   eyebrow,
   heading,
   image,
   imageAlt,
   maxWidth = 22,
+  theme = "dark",
   ...rest
 } = Astro.props;
 
 const content = await slotContent(Astro.slots);
+const aside = await slotContent(Astro.slots, "column2");
+const footer = await slotContent(Astro.slots, "footer");
 const titleId = uid("hero-title");
 ---
 
 <Section
   render={render && !!heading}
-  class:list={["hero-page_wrap", image && "has-image"]}
-  theme="dark"
+  class:list={["hero-page_wrap", image && "has-image", aside && "has-aside"]}
+  theme={theme}
   paddingTop={image ? "navoverlap" : "medium"}
   paddingBottom="small"
   data-nav-transparent={image ? "" : undefined}
@@ -63,13 +73,42 @@ const titleId = uid("hero-title");
     )
   }
   {image && <div slot="background" class="hero-page_scrim" />}
-  <div class="hero-page_content margin-trim">
-    <Eyebrow variant="tag">{eyebrow}</Eyebrow>
-    <Heading tag="h1" class="heading-accent" maxWidth={maxWidth} id={titleId}>
-      <Fragment set:html={heading} />
-    </Heading>
-    <Fragment set:html={content} />
+  <div class="hero-page_layout">
+    <div class="hero-page_content margin-trim">
+      {
+        backHref && backLabel && (
+          <Button
+            element="link"
+            href={backHref}
+            variant="link"
+            icon="back"
+            class="hero-page_back"
+          >
+            {backLabel}
+          </Button>
+        )
+      }
+      <Eyebrow variant="tag">{eyebrow}</Eyebrow>
+      <Heading tag="h1" class="heading-accent" maxWidth={maxWidth} id={titleId}>
+        <Fragment set:html={heading} />
+      </Heading>
+      <Fragment set:html={content} />
+    </div>
+    {
+      aside && (
+        <div class="hero-page_aside margin-trim">
+          <Fragment set:html={aside} />
+        </div>
+      )
+    }
   </div>
+  {
+    footer && (
+      <div class="hero-page_footer">
+        <Fragment set:html={footer} />
+      </div>
+    )
+  }
 </Section>
 
 <style is:global>
@@ -93,11 +132,41 @@ const titleId = uid("hero-title");
         );
     }
 
+    /* A second column sits beside the title from the desktop breakpoint */
+    .hero-page_layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      gap: var(--space-8) var(--section-space-small);
+      width: 100%;
+      @media (width >= 64rem) {
+        .has-aside > .container > & {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    }
+
+    .hero-page_aside {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* A row under a rule closes the hero: figures, or who wrote the page */
+    .hero-page_footer {
+      width: 100%;
+      padding-top: var(--space-6);
+      border-top: var(--border-width) solid var(--border);
+    }
+
     .hero-page_content {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width: 100%;
+      & > .hero-page_back {
+        margin-bottom: var(--space-7);
+      }
       & > .eyebrow_wrap + .heading {
         margin-top: var(--space-6);
       }

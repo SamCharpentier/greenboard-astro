@@ -1,0 +1,122 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import linkIcon from "@/assets/icons/link.svg";
+import linkedin from "@/assets/icons/linkedin.svg";
+import facebook from "@/assets/icons/facebook.svg";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Page to share. Defaults to the current page. */
+  url?: string;
+  /** Text before the links. */
+  label?: string;
+};
+
+const {
+  render = true,
+  url = new URL(Astro.url.pathname, Astro.site).href,
+  label = "Please share on",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const encoded = encodeURIComponent(url);
+---
+
+{
+  render && (
+    <div
+      class:list={["share_wrap", "text-style-small", className]}
+      data-url={url}
+      {...rest}
+    >
+      <span class="share_label" role="status">
+        {label}
+      </span>
+      <ul class="share_list" role="list">
+        <li>
+          <button class="share_link" type="button" data-share-copy aria-label="Copy link">
+            <Icon src={linkIcon} variant="medium" />
+          </button>
+        </li>
+        <li>
+          <a
+            class="share_link"
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`}
+            target="_blank"
+            rel="noopener"
+            aria-label="Share on LinkedIn"
+          >
+            <Icon src={linkedin} variant="medium" />
+          </a>
+        </li>
+        <li>
+          <a
+            class="share_link"
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encoded}`}
+            target="_blank"
+            rel="noopener"
+            aria-label="Share on Facebook"
+          >
+            <Icon src={facebook} variant="medium" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .share_wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2) var(--space-4);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .share_list {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .share_link {
+      display: flex;
+      padding: 0.25rem;
+      border-radius: var(--radius-small);
+      color: var(--text);
+      transition: color var(--hover-duration) var(--hover-ease);
+      @media (hover: hover) {
+        &:hover {
+          color: var(--link-text-hover);
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  for (const share of document.querySelectorAll<HTMLElement>(".share_wrap")) {
+    const button = share.querySelector<HTMLButtonElement>("[data-share-copy]");
+    const label = share.querySelector<HTMLElement>(".share_label");
+    const original = label?.textContent?.trim() ?? "";
+    let timer: number | undefined;
+    button?.addEventListener("click", async () => {
+      if (!label) return;
+      try {
+        await navigator.clipboard.writeText(share.dataset.url ?? location.href);
+        label.textContent = "Link copied";
+      } catch {
+        label.textContent = "Copy the address bar to share";
+      }
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => (label.textContent = original), 2500);
+    });
+  }
+</script>
