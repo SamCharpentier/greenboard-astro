@@ -25,7 +25,7 @@ gets unpublished and the answers stop being checkable.
 - **Collection CSVs** — not used; items pulled through the Webflow API into `content/cms/*.json` of the extraction.
 - **301 redirects** — not exported yet. Copy from Webflow Site settings before cutover.
 - **Webflow site ID** — `67d0a8a9156b7b7bd46ffdfd` (Greenboard, greenboard-00).
-- **CMS** — Sanity (client decision, Sept 2026). Collections (blog, case studies, partners, customers, comparisons, events, prospect pages, site settings) go to Sanity; page layouts stay in code, edited with Stacki. Jobs come from Ashby at build time.
+- **CMS** — Sanity (client decision, Sept 2026). Collections (blog, case studies, partners, customers, comparisons, events, prospect pages, site settings) go to Sanity. Page copy goes there too (decided 28 Sept 2026): the Greenboard team edits the site themselves, so pages are lists of Sanity sections, each mapped to one of our components; new section types still come from code. Stacki is dropped. Jobs come from Ashby at build time.
 - **Forms** — HubSpot (portal 243932974) is the likely target: the live site already posts to it. Not wired yet: the demo forms are Lumos `Form` with no `action`, so they validate and show the thank-you note without sending.
 - **Search** — none on the site.
 - **Hosting** — open. Client mentioned AWS; their booking widget already runs on AWS Amplify.
@@ -33,7 +33,7 @@ gets unpublished and the answers stop being checkable.
 - **Collections** — not bound yet (pass 3 waits on Sanity).
 - **List filters and sorts** — n/a until pass 3.
 - **Out of scope** — none of Ecommerce, Memberships, Logic or native search is used.
-- **Decisions** — Lumos for Astro is the source of truth; deviate only with a reason, listed in the commit that makes it. The new design system (tokens, themes light, soft, dark, deep, brand) wins over the live Webflow build; the live site is content only. Pages are edited in Stacki, so props hold single values, lists are child components in slots, and copy is written in the page rather than in data files. Repo: github.com/SamCharpentier/greenboard-astro (to transfer to the client before hosting is connected).
+- **Decisions** — Lumos for Astro is the source of truth; deviate only with a reason, listed in the commit that makes it. The new design system (tokens, themes light, soft, dark, deep, brand) wins over the live Webflow build; the live site is content only. Until the Sanity build lands, copy lives in the page files. The live site's 46 "rebuild" rows collapse into page types (product, solution, comparison, case study, post, partner, event, prospect page) plus about nine one-off pages: build each type once as a template, show the first instance, then fill the rest from the extraction by script. `/system` (hidden, noindex) is the design system reference, read from the code at build. Repo: github.com/SamCharpentier/greenboard-astro (to transfer to the client before hosting is connected).
 - **Still open** — demo flow (Amplify widget vs HubSpot router), product and firm-type names, Prediction Markets page, FAQ content, hosting.
 ```
 
