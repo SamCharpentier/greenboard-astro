@@ -19,22 +19,22 @@ it is answered, not at the end** — the end is exactly when the Webflow site
 gets unpublished and the answers stop being checkable.
 
 ```markdown
-- **Live URL** — what every page is compared against, until cutover
-- **Provenance** — Lumos for Webflow, or hand-built
-- **Code export** — path to the unzipped folder
-- **Collection CSVs** — path
-- **301 redirects** — path to the CSV from Site Settings → Publishing
-- **Webflow site ID** — `data-wf-site`, how every MCP call addresses the site
-- **CMS** — content collections, a headless CMS, or Webflow headless; and why
-- **Forms** — provider, and where submissions go
-- **Search** — what replaced Webflow's, or that the site has none
-- **Hosting** — where it deploys, and the domain cutover plan
-- **Breakpoints** — the site's own, in rem, replacing the framework's
-- **Collections** — each one, and the route or component it landed in
-- **List filters and sorts** — per list, since nothing but the Designer records them
-- **Out of scope** — Ecommerce, Memberships, Logic, and what was agreed instead
-- **Decisions** — anything the site's owner chose that the code cannot explain
-- **Still open** — questions waiting on an answer
+- **Live URL** — two sources. The design is the approved prototype (Official Partner's coded prototype on Lumos for Webflow conventions, published as a claude.ai artifact; local copy `/home/claude/gb/site`, pages home, product, about, solutions). The content is the live Webflow site, www.greenboard.com.
+- **Provenance** — hand-built prototype written in Lumos for Webflow conventions (`u-*` classes, `--_theme---*` variables, `data-trigger` / `data-state`). No Webflow components or IX2. Its generators: `/home/claude/gb/gbsite.py`, `gbcomp.py`, `build_*.py`.
+- **Code export** — design: `/home/claude/gb/site`. Content: Webflow export `/home/claude/gb/wf/export` and the cleaned extraction `greenboard-webflow-content.zip` (README, sitemap-old-to-new.csv, content/, assets/).
+- **Collection CSVs** — not used; items pulled through the Webflow API into `content/cms/*.json` of the extraction.
+- **301 redirects** — not exported yet. Copy from Webflow Site settings before cutover.
+- **Webflow site ID** — `67d0a8a9156b7b7bd46ffdfd` (Greenboard, greenboard-00).
+- **CMS** — Sanity (client decision, Sept 2026). Collections (blog, case studies, partners, customers, comparisons, events, prospect pages, site settings) go to Sanity; page layouts stay in code, edited with Stacki. Jobs come from Ashby at build time.
+- **Forms** — HubSpot (portal 243932974) is the likely target: the live site already posts to it. Not wired yet: the demo forms are Lumos `Form` with no `action`, so they validate and show the thank-you note without sending.
+- **Search** — none on the site.
+- **Hosting** — open. Client mentioned AWS; their booking widget already runs on AWS Amplify.
+- **Breakpoints** — the Lumos defaults (30, 48, 64rem), unchanged. The desktop nav starts at 64rem. A first pass converted the prototype's container queries to 23, 38 and 54rem; dropped on rebuild so the framework stays the source of truth and Stacki's tablet preview (768px) lands on a breakpoint. That pass is kept on the `first-pass` branch.
+- **Collections** — not bound yet (pass 3 waits on Sanity).
+- **List filters and sorts** — n/a until pass 3.
+- **Out of scope** — none of Ecommerce, Memberships, Logic or native search is used.
+- **Decisions** — Lumos for Astro is the source of truth; deviate only with a reason, listed in the commit that makes it. The new design system (tokens, themes light, soft, dark, deep, brand) wins over the live Webflow build; the live site is content only. Pages are edited in Stacki, so props hold single values, lists are child components in slots, and copy is written in the page rather than in data files. Repo: github.com/SamCharpentier/greenboard-astro (to transfer to the client before hosting is connected).
+- **Still open** — demo flow (Amplify widget vs HubSpot router), product and firm-type names, Prediction Markets page, FAQ content, hosting.
 ```
 
 **This section belongs to the project, not to the framework.** In a fresh
