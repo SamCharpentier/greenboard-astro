@@ -1,0 +1,214 @@
+---
+import type { ComponentProps, HTMLAttributes } from "astro/types";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Video from "@/components/media/Video.astro";
+import Button from "@/components/Button.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = Pick<ComponentProps<typeof Section>, "render"> &
+  HTMLAttributes<"section"> & {
+    /** Title. Break lines with `<br>`; `<strong>` takes the accent. */
+    heading?: string;
+    /** Background video URL. */
+    video?: string;
+    /** Poster image URL, shown before the video plays. */
+    poster?: string;
+    /** Note beside the video's pause button. */
+    caption?: string;
+  };
+
+const {
+  render = true,
+  heading,
+  video,
+  poster,
+  caption,
+  ...rest
+} = Astro.props;
+
+/* Each line rises into view from behind its own mask */
+const lines = (heading ?? "").split(/<br\s*\/?>/i).map((line) => line.trim());
+const content = await slotContent(Astro.slots);
+---
+
+<Section
+  render={render && !!heading}
+  class="hero-home_wrap"
+  theme="dark"
+  paddingTop="navoverlap"
+  containerClass="flex-grow justify-content-end"
+  data-nav-transparent
+  {...rest}
+>
+  <Video
+    slot="background"
+    render={!!video}
+    src={video}
+    poster={poster}
+    variant="auto"
+    preload="metadata"
+    class="hero-home_video"
+    aria-hidden="true"
+  />
+  <div slot="background" class="hero-home_scrim" />
+  <ContentWrapper variant="auto-width" class="hero-home_layout">
+    <div class="hero-home_content margin-trim">
+      <Heading tag="h1" variant="display" class="hero-home_title heading-accent">
+        {
+          lines.map((line) => (
+            <span class="hero-home_line">
+              <span class="hero-home_line_text" set:html={line} />
+            </span>
+          ))
+        }
+      </Heading>
+      <div class="hero-home_intro margin-trim" data-reveal>
+        <Fragment set:html={content} />
+      </div>
+    </div>
+    <div slot="column2" class="hero-home_aside" data-reveal>
+      {
+        video && (
+          <Button
+            variant="play"
+            emphasis="secondary"
+            pressed
+            label="Pause background video"
+            class="hero-home_toggle"
+          />
+        )
+      }
+      {caption && <p class="hero-home_caption text-style-small">{caption}</p>}
+    </div>
+  </ContentWrapper>
+</Section>
+
+<script>
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* In the builder the page must sit still and whole */
+  const designing = () =>
+    document.documentElement.classList.contains("stacki-designer");
+
+  for (const hero of document.querySelectorAll<HTMLElement>(".hero-home_wrap")) {
+    const video = hero.querySelector<HTMLVideoElement>(".hero-home_video");
+    const toggle = hero.querySelector<HTMLButtonElement>(".hero-home_toggle");
+
+    if (video && toggle) {
+      const sync = () => {
+        const playing = !video.paused;
+        toggle.setAttribute("aria-pressed", String(playing));
+        toggle.setAttribute(
+          "aria-label",
+          playing ? "Pause background video" : "Play background video",
+        );
+      };
+      video.addEventListener("play", sync);
+      video.addEventListener("pause", sync);
+      toggle.addEventListener("click", () => {
+        if (video.paused) video.play().catch(sync);
+        else video.pause();
+      });
+      if (reduced) {
+        video.pause();
+        toggle.closest(".hero-home_aside")?.setAttribute("hidden", "");
+      }
+      sync();
+    }
+
+    if (reduced || designing()) continue;
+    const ease = "cubic-bezier(.16, 1, .3, 1)";
+    hero.querySelectorAll<HTMLElement>(".hero-home_line_text").forEach((line, i) => {
+      line.animate([{ transform: "translateY(105%)" }, { transform: "none" }], {
+        duration: 1100,
+        delay: 150 + i * 120,
+        easing: ease,
+        fill: "backwards",
+      });
+    });
+    hero.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element, i) => {
+      element.animate(
+        [
+          { opacity: 0, transform: "translateY(0.75rem)" },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 800, delay: 550 + i * 110, easing: ease, fill: "backwards" },
+      );
+    });
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .hero-home_wrap {
+      min-height: min(100svh, 60rem);
+      padding-bottom: var(--space-8);
+      overflow: clip;
+    }
+
+    .hero-home_video {
+      background-color: var(--background-skeleton);
+      @media (prefers-reduced-motion: reduce) {
+        display: none;
+      }
+    }
+
+    .hero-home_scrim {
+      background-image:
+        linear-gradient(
+          to top,
+          color-mix(in srgb, var(--background) 94%, transparent) 0%,
+          color-mix(in srgb, var(--background) 70%, transparent) 38%,
+          color-mix(in srgb, var(--background) 25%, transparent) 75%,
+          color-mix(in srgb, var(--background) 35%, transparent) 100%
+        ),
+        linear-gradient(
+          to right,
+          color-mix(in srgb, var(--background) 55%, transparent) 0%,
+          transparent 70%
+        );
+    }
+
+    .hero-home_layout {
+      row-gap: var(--space-7);
+    }
+
+    .hero-home_content {
+      max-width: 48rem;
+    }
+
+    .hero-home_title {
+      margin-bottom: var(--space-6);
+    }
+
+    .hero-home_line {
+      display: block;
+      margin-bottom: -0.28em;
+      padding-bottom: 0.28em;
+      overflow: clip;
+    }
+
+    .hero-home_line_text {
+      display: block;
+    }
+
+    .hero-home_intro {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      max-width: 34rem;
+    }
+
+    .hero-home_aside {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      max-width: 24rem;
+    }
+
+    .hero-home_caption {
+      color: var(--text-2);
+    }
+  }
+</style>

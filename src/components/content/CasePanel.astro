@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Button from "@/components/Button.astro";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Link to the full story. */
+  href?: string;
+  /** Link text. */
+  linkLabel?: string;
+};
+
+const {
+  render = true,
+  href,
+  linkLabel,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const story = await slotContent(Astro.slots);
+const results = await slotContent(Astro.slots, "results");
+---
+
+<ContentWrapper
+  render={render && !!story}
+  variant="contain"
+  class:list={["case-panel_wrap", className]}
+  column1Class="case-panel_story"
+  column2Class="case-panel_results"
+  {...rest}
+>
+  <Fragment set:html={story} />
+  {
+    href && linkLabel && (
+      <Button element="link" href={href} variant="link" icon="diagonal">
+        {linkLabel}
+      </Button>
+    )
+  }
+  <Fragment slot="column2" set:html={results} />
+</ContentWrapper>
+
+<style is:global>
+  @layer components {
+    .case-panel_wrap {
+      align-items: start;
+    }
+
+    .case-panel_story {
+      gap: var(--space-6);
+    }
+
+    .case-panel_results {
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+  }
+</style>

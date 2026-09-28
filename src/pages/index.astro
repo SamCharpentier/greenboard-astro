@@ -1,41 +1,588 @@
 ---
 import Layout from "@/layouts/BaseLayout.astro";
+import HeroHome from "@/components/section/HeroHome.astro";
 import Section from "@/components/wrapper/Section.astro";
-import Heading from "@/components/typography/Heading.astro";
-import Eyebrow from "@/components/typography/Eyebrow.astro";
-import Img from "@/components/media/Img.astro";
-import lumos_background from "@/assets/graphics/lumos-background.svg";
-import Icon from "@/components/media/Icon.astro";
-import logo_icon from "@/assets/logo/logo-icon.svg";
 import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Eyebrow from "@/components/typography/Eyebrow.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import Stat from "@/components/item/Stat.astro";
+import List from "@/components/item/List.astro";
+import Quote from "@/components/item/Quote.astro";
+import Accordion from "@/components/interactive/Accordion.astro";
+import AccordionItem from "@/components/interactive/AccordionItem.astro";
+import Tabs from "@/components/interactive/Tabs.astro";
+import TabLink from "@/components/interactive/TabLink.astro";
+import Marquee from "@/components/interactive/Marquee.astro";
+import Slider from "@/components/interactive/Slider.astro";
+import Form from "@/components/form/Form.astro";
+import Input from "@/components/form/Input.astro";
+import Icon from "@/components/media/Icon.astro";
+import Video from "@/components/media/Video.astro";
+import GoMark from "@/components/media/GoMark.astro";
+import CasePanel from "@/components/content/CasePanel.astro";
+import records from "@/assets/icons/records.svg";
+import shield from "@/assets/icons/shield.svg";
+import lock from "@/assets/icons/lock.svg";
 ---
 
-<Layout theme="dark">
-  <Section
-    paddingBottom="even"
-    containerClass="flex-grow"
-    paddingTop="even"
-    class="flex-grow"
-    style="min-height: calc(100svh - var(--nav-height));"
+<Layout
+  title="AI-native compliance for SEC and FINRA firms"
+  description="Greenboard is the AI-native system of action for SEC and FINRA compliance."
+  overlap
+>
+  {/* Hero */}
+  <HeroHome
+    heading="Compliance<br>is mandatory,<br><strong>suffering is not.</strong>"
+    video="/video/greenboard-hero.mp4"
+    poster="/images/hero-poster.jpg"
+    caption="Yes, this video was made with AI. Your next deficiency letter might be too, so let’s get ahead of it together, with Go."
   >
-    <ContentWrapper
-      class="flex-grow theme-brand"
-      variant="card"
-      mediaOpacity={100}
-    >
-      <Icon src={logo_icon} variant="large" />
-      <Heading variant="display" tag="h1" class="margin-block-8"
-        >Style Guide</Heading
-      >
-      <Eyebrow variant="tag">v0.0.4</Eyebrow>
-      <Img
-        slot="column2"
-        src={lumos_background}
-        width={1920}
-        height={1080}
-        loading="eager"
-        fetchPriority="high"
+    <Paragraph variant="large" maxWidth={34}>
+      <GoMark href="#platform" /> makes compliance better for the people we serve.
+    </Paragraph>
+    <Form name="demo-request" variant="inline">
+      <Input
+        variant="email"
+        label="Work email"
+        placeholder="Enter your work email address"
+        labelHidden
+        required
       />
+      <Button type="submit">Book a demo</Button>
+    </Form>
+  </HeroHome>
+
+  {/* Trust */}
+  <Section theme="light" paddingTop="small" paddingBottom="small" gap="7" aria-label="Firms served">
+    <Grid small={2} large={4} class="gap-row-6">
+      <Stat number="703+" label="Regulated financial firms served last quarter, and counting" />
+      <Stat number="32 367+" label="People served last quarter, and counting" />
+    </Grid>
+    <hr />
+    <Marquee label="Customers" caption="Trusted by firms like">
+      <span>Betterment</span>
+      <span>Kroll</span>
+      <span>Fiduciary Financial</span>
+      <span>Root Financial</span>
+      <span>JMG Financial Group</span>
+      <span>FSG / ICA</span>
+      <span>S2 Capital</span>
+      <span>Retirable</span>
+      <span>Chicago Partners</span>
+      <span>Harbert Management Corporation</span>
+      <span>Summit Global</span>
+      <span>Compound</span>
+      <span>Accolade Partners</span>
+      <span>Matter Family Office</span>
+      <span>Triad</span>
+      <span>Tobias</span>
+    </Marquee>
+  </Section>
+
+  {/* Statement */}
+  <Section theme="light" paddingTop="small" aria-label="About Greenboard">
+    <ContentWrapper variant="auto-width">
+      <Paragraph variant="h2" class="heading-accent" maxWidth={30}>
+        Founded in 2023 to build compliance software so good not using it would
+        be <strong>negligent vendor selection.</strong>
+      </Paragraph>
+      <Stat slot="column2" number="99%" label="Industry-leading retention" />
+    </ContentWrapper>
+  </Section>
+
+  {/* Modules */}
+  <Section theme="dark" id="platform" aria-labelledby="platform-title">
+    <Heading tag="h2" maxWidth={26} id="platform-title">
+      Fully configurable, built on top of WORM and 17a-4 compliant backbone modules
+    </Heading>
+    <Accordion single={false}>
+      <AccordionItem heading="Archiving & Supervision" label="eComms" openTheme="deep" open>
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          Capture every channel your firm uses, then supervise it with a risk graph you configure yourself — AI rules and lexicons working together, cutting false positives by 99.14% and leaving a reviewable trail behind every decision.
+        </Paragraph>
+        <Eyebrow>Archiving</Eyebrow>
+        <Heading tag="h4" variant="h3">Every channel,<br />one record.</Heading>
+        <Paragraph>
+          Email, chat, text, voice, and social — captured where your people actually talk, then written once to a WORM, 17a-4 compliant record that supervision, review, and exams all read from.
+        </Paragraph>
+        <Paragraph>
+          Supervision runs on a risk graph you configure — combining AI rules and lexicons, so what gets escalated reflects your program, not a vendor’s default keyword list.
+        </Paragraph>
+        <List variant="inline">
+          <li>Gmail</li>
+          <li>Outlook</li>
+          <li>Slack</li>
+          <li>Teams</li>
+          <li>Zoom</li>
+          <li>WhatsApp</li>
+          <li>WeChat</li>
+          <li>Telegram</li>
+          <li>Signal</li>
+          <li>iMessage</li>
+          <li>Bloomberg Chat</li>
+          <li>LinkedIn</li>
+          <li>X</li>
+          <li>Instagram</li>
+          <li>Facebook</li>
+          <li>YouTube</li>
+          <li>Email</li>
+          <li>Website</li>
+          <li>Social</li>
+          <li>SMS</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Archiving & Supervision capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/archiving.mp4"
+          poster="/images/modules/archiving.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Employee Compliance" label="People" openTheme="soft">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          Personal trading, gifts and entertainment, outside business activities, and attestations in one place — with reminders your team will actually act on.
+        </Paragraph>
+        <Eyebrow>Employee compliance</Eyebrow>
+        <Heading tag="h4" variant="h3">Every person,<br />one regulatory profile.</Heading>
+        <Paragraph>
+          Trading, gifts, outside activities, and attestations all hang off the same employee record — so you see one person’s full picture instead of six disconnected spreadsheets.
+        </Paragraph>
+        <Paragraph>
+          Requests are pre-cleared against your restricted lists in seconds, reminders go out where people already work, and every approval writes itself to the record.
+        </Paragraph>
+        <List variant="inline">
+          <li>Personal trading & pre-clearance</li>
+          <li>Gifts & entertainment</li>
+          <li>Outside business activities</li>
+          <li>Political contributions</li>
+          <li>Code of ethics attestations</li>
+          <li>Licensing & registrations</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Employee Compliance capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/employee.mp4"
+          poster="/images/modules/employee.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Firm Compliance" label="Program" openTheme="deep">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          Every process, risk, and control mapped and documented in one place — built as workflows with Go Agents doing the monitoring, so the calendar and the evidence keep themselves current.
+        </Paragraph>
+        <Eyebrow>Firm compliance</Eyebrow>
+        <Heading tag="h4" variant="h3">No more spreadsheets.<br />No more clunky calendars.</Heading>
+        <Paragraph>
+          Every compliance process, risk, and control — mapped, documented, and connected to the program it belongs to, so nothing lives in someone’s tab or someone’s head.
+        </Paragraph>
+        <Paragraph>
+          Build each process as a workflow, drop a Go Agent into any step to do the watching and the drafting, and let the evidence write itself as the work happens.
+        </Paragraph>
+        <List variant="inline">
+          <li>Process & risk mapping</li>
+          <li>Control library</li>
+          <li>Compliance calendar</li>
+          <li>Policy management</li>
+          <li>Workflows & Go Agents</li>
+          <li>Risk assessments</li>
+          <li>Regulatory change monitoring</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Firm Compliance capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/firm.mp4"
+          poster="/images/modules/firm.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Third-Party Diligence" label="3rd party risk" openTheme="soft">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          Onboard and re-review every third party you rely on — questionnaires drafted from the web and their own documents, risk ratings set by your team, and the whole file kept with the rest of your records.
+        </Paragraph>
+        <Eyebrow>Third-party diligence</Eyebrow>
+        <Heading tag="h4" variant="h3">Intelligent questionnaire<br />and risk automation.</Heading>
+        <Paragraph>
+          Go pulls from the public web, the documents a counterparty sends you, and last year’s review, then drafts every answer with the source attached — so the questionnaire arrives mostly finished.
+        </Paragraph>
+        <Paragraph>
+          Your team reviews what actually needs judgment, sets the risk rating, and the whole file — evidence, findings, sign-off — lands in your records on a re-review schedule.
+        </Paragraph>
+        <List variant="inline">
+          <li>Vendors & service providers</li>
+          <li>Sub-advisers</li>
+          <li>Solicitors & promoters</li>
+          <li>Outsourced providers</li>
+          <li>Counterparties</li>
+          <li>Annual re-reviews</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Third-Party Diligence capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/third-party.mp4"
+          poster="/images/modules/third-party.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Content Reviews" label="Reviews" openTheme="deep">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          One integrated workflow from first draft to exam file — Go pre-reviews content wherever creators work, your team runs the review process you configure, and every version, flag, and approval is preserved.
+        </Paragraph>
+        <Eyebrow>Content reviews</Eyebrow>
+        <Heading tag="h4" variant="h3">Pre-review and post-review,<br />one workflow.</Heading>
+        <Paragraph>
+          <GoMark /> catches the obvious problems before anything reaches your queue, and everything that does arrive comes with its history intact.
+        </Paragraph>
+        <List variant="steps">
+          <li><strong>Pre-review, wherever the work happens</strong> Creators ask Go for feedback from Slack, Teams, or the browser and get it against your policies, your past decisions, and the rules — then submit for review from the same conversation, by chat or MCP.</li>
+          <li><strong>A review process you configure</strong> Set your own stages, reviewer questions, and approval logic. Reviewers see Go’s flags with the rule cited, leave comments on the piece, and route it onward — nothing leaves the system.</li>
+          <li><strong>Exam production in a click</strong> Every version, comment, flag, and approval stays attached to the piece, so producing the file for an exam is a query rather than a week of assembly.</li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/content.mp4"
+          poster="/images/modules/content.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Unified Books & Records" label="Recordkeeping" openTheme="soft">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          One WORM-based, 17a-4 compliant record for the whole firm — every message, approval, and attestation captured as it happens, so an exam request is a search instead of a scramble across vendors.
+        </Paragraph>
+        <Eyebrow>Unified books & records</Eyebrow>
+        <Heading tag="h4" variant="h3">Exam-ready, the day<br />it happens.</Heading>
+        <Paragraph>
+          Most firms keep their records in five systems and rebuild the file when a request arrives. Here every action — a supervised message, an attestation, a pre-clearance, a content approval, a vendor file — writes to one WORM-based, 17a-4 compliant record the moment it happens.
+        </Paragraph>
+        <List>
+          <li><strong>No reconstruction.</strong> Produce a complete, timestamped file for a deficiency letter or sweep in minutes, not the weeks it takes to pull exports from separate vendors and stitch them together.</li>
+          <li><strong>Nothing falls between systems.</strong> One record means no gaps, no duplicates, and no arguing about which system is authoritative when two of them disagree.</li>
+          <li><strong>Evidence, not assertions.</strong> Every entry carries who did it, when, under which policy version, and what they saw — so you can show a control operated, not just that it existed.</li>
+          <li><strong>Immutable by design.</strong> WORM storage and 17a-4 retention are enforced by the architecture, so nothing can be quietly edited or deleted after the fact.</li>
+        </List>
+        <Paragraph>
+          Because it’s one record on modern data infrastructure, it’s searchable by your team and callable by <GoMark /> — ask for every communication with a client over two years and get the file, not a project.
+        </Paragraph>
+        <List variant="inline">
+          <li>eComms archive</li>
+          <li>Employee attestations</li>
+          <li>Pre-clearance requests</li>
+          <li>Content reviews</li>
+          <li>Third-party files</li>
+          <li>Workflow evidence</li>
+          <li>Filings</li>
+          <li>Exception reports</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Unified Books & Records capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/records.mp4"
+          poster="/images/modules/records.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+      <AccordionItem heading="Privacy & Security" label="Trust" openTheme="deep">
+        <Paragraph slot="intro" variant="large" maxWidth={58}>
+          SOC 2 Type 2 controls, granular permissions, and smarter supervision methods that protect the firm without invasive oversight of your people.
+        </Paragraph>
+        <Eyebrow>Privacy & security</Eyebrow>
+        <Heading tag="h4" variant="h3">Protect the firm,<br />respect your people.</Heading>
+        <Paragraph>
+          SOC 2 Type 2 controls and permissions down to the individual record mean everyone sees exactly what their role requires — and nothing more.
+        </Paragraph>
+        <Paragraph>
+          Supervision focuses on real risk instead of blanket surveillance, so your program stays rigorous without making your people feel watched.
+        </Paragraph>
+        <List variant="inline">
+          <li>SOC 2 Type 2</li>
+          <li>Granular permissions</li>
+          <li>Role-based access</li>
+          <li>Encryption in transit & at rest</li>
+          <li>SSO & SCIM</li>
+          <li>Full audit trail</li>
+          <li>
+            <Button element="link" href="#" variant="link" icon="diagonal" aria-label="More Privacy & Security capabilities">
+              and more
+            </Button>
+          </li>
+        </List>
+        <Video
+          slot="visual"
+          src="/video/modules/security.mp4"
+          poster="/images/modules/security.jpg"
+          variant="1-1"
+          autoplay={false}
+          preload="none"
+          class="radius-main"
+          aria-hidden="true"
+        />
+      </AccordionItem>
+    </Accordion>
+  </Section>
+
+  {/* Principles */}
+  <Section theme="soft" id="principles" aria-labelledby="principles-title">
+    <ContentWrapper variant="auto-width">
+      <Eyebrow>What we believe</Eyebrow>
+      <Heading tag="h2" id="principles-title">Our principles</Heading>
+      <Button slot="column2" element="link" href="/#platform" variant="link">
+        See GreenboardGo
+      </Button>
+    </ContentWrapper>
+    <Grid medium={2} large={3} class="gap-row-7">
+      <Card
+        variant="feature"
+        heading="One system of action"
+        lead="Independence from fragmented tools."
+        text="Archiving, firm compliance, employee compliance, and marketing review belong in one system, where the work and the record of the work live together."
+      />
+      <Card
+        variant="feature"
+        heading="Automation everywhere"
+        lead="That’s Go."
+        text="AI-native automation built into every workflow rather than a chatbot layered on old tools. It drafts, triages, and routes so your people decide."
+      />
+      <Card
+        variant="feature"
+        heading="Software your team will love"
+        lead="Decades of usability research, applied."
+        text="Every workflow is built to reduce friction for the people outside compliance, because a culture of compliance only happens when the tool actually gets used."
+      />
+      <Card
+        variant="feature"
+        heading="Exam-ready by default"
+        lead="WORM-based and 17a-4 compliant."
+        text="Unified recordkeeping designed for CCO peace of mind, so an exam request becomes a query instead of a fire drill."
+      />
+      <Card
+        variant="feature"
+        heading="Privacy worth trusting"
+        lead="Enterprise-grade security, humane supervision."
+        text="Protect the firm’s critical data with smarter supervision methods that build trust with your people instead of eroding it."
+      />
+      <Card
+        variant="feature"
+        heading="Fiduciary care"
+        lead="A pact with our users, not just a promise."
+        text="Greenboard holds a strong fiduciary pact toward the betterment of our users, with governance mechanisms in place to ensure that responsibility continues no matter how the company grows."
+      />
+    </Grid>
+  </Section>
+
+  {/* Testimonials */}
+  <Section theme="soft" paddingTop="none" gap="6" id="testimonials" aria-labelledby="words-title">
+    <hr />
+    <Eyebrow tag="h2" id="words-title">In their words</Eyebrow>
+    <Slider label="Customer quotes" variant="contained" xsmall={1}>
+      <Quote variant="large" name="Brook Powers" position="CEO, Fiduciary Financial" initials="BP">
+        Greenboard helps us detect risk and automate more of our compliance program than was previously possible — and it’s easy to use.
+      </Quote>
+      <Quote variant="large" name="Adam Boyer" position="COO & CCO, JMG Financial Group" initials="AB">
+        I can’t say they like compliance, but I can tell you that advisors love Greenboard.
+      </Quote>
+      <Quote variant="large" name="Doug Thalhammer" position="CCO, FSG / ICA" initials="DT">
+        The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable… knowing that we’re doing things the right way.
+      </Quote>
+      <Quote variant="large" name="Alex Stickelman" position="CCO & COO, Root Financial" initials="AS">
+        Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved.
+      </Quote>
+    </Slider>
+    <Button element="link" href="#" variant="link" class="align-self-end">
+      Read customer stories
+    </Button>
+  </Section>
+
+  {/* Firm types */}
+  <Section theme="light" id="segments" aria-labelledby="segments-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={22} id="segments-title">
+        All-in-one compliance for financial services
+      </Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        Configured during implementation to match your team’s roles, groups, and
+        the exact standards of your program.
+      </Paragraph>
+    </ContentWrapper>
+    <Grid ruled medium={2} large={3}>
+      <Card heading="Financial Advisors" text="RIAs running lean programs that still need to pass a full SEC exam." buttonHref="/solutions" />
+      <Card heading="Private Funds" text="Fund managers juggling investor commitments, side letters, and personal trading." buttonHref="/solutions" />
+      <Card heading="Hedge Funds" text="High-velocity trading desks that need supervision without slowing the floor." buttonHref="/solutions" />
+      <Card heading="Broker Dealers" text="FINRA-registered firms with layered supervisory structures and 17a-4 obligations." buttonHref="/solutions" />
+      <Card heading="Service Partners" text="Outsourced CCOs and consultants managing many firms from one console." buttonHref="/solutions" />
+      <Card heading="Regulatory Registration" text="New registrants standing up a compliance program from day one." buttonHref="/solutions" />
+    </Grid>
+    <List variant="icons">
+      <li><Icon src={records} />Leading auditability and recordkeeping</li>
+      <li><Icon src={shield} />Built-in regulatory guidance: WORM and 17a-4 compliant</li>
+      <li><Icon src={lock} />Enterprise-grade security and privacy: SOC 2 Type 2</li>
+    </List>
+  </Section>
+
+  {/* Firm sizes */}
+  <Section theme="soft" id="firm-sizes" aria-labelledby="sizes-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={16} id="sizes-title">Right-sized for your firm</Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        The same records backbone whether you’re one person or a multi-entity
+        organization, configured to the program you actually run.
+      </Paragraph>
+    </ContentWrapper>
+    <Grid large={3}>
+      <Card
+        eyebrow="Small firms"
+        meta="1–25 people"
+        heading="A full program without a full team."
+        text="One person often carries the whole program. Greenboard gives them the archive, the calendar, the attestations, and the exam file in one place, with Go handling the busywork."
+        buttonLabel="Talk to us"
+        buttonHref="/#demo"
+      >
+        <List>
+          <li>Fast, guided setup</li>
+          <li>Templates for every policy</li>
+          <li>Exam-ready from day one</li>
+        </List>
+      </Card>
+      <Card
+        eyebrow="Growing businesses"
+        meta="25–250 people"
+        heading="Scale the program, not the headcount."
+        text="As headcount and channels multiply, supervision has to keep pace. Configure your own risk graph, route work to the right reviewers, and keep everything on one record."
+        buttonLabel="Talk to us"
+        buttonHref="/#demo"
+      >
+        <List>
+          <li>Roles, groups, and delegation</li>
+          <li>Custom Go Agents</li>
+          <li>Consolidate point solutions</li>
+        </List>
+      </Card>
+      <Card
+        eyebrow="Enterprise"
+        meta="250+ people"
+        heading="Built for layered supervisory structures."
+        text="Multi-entity firms, complex hierarchies, and heavy recordkeeping obligations, served on WORM-based, 17a-4 compliant infrastructure with SOC 2 Type 2 controls."
+        buttonLabel="Talk to us"
+        buttonHref="/#demo"
+      >
+        <List>
+          <li>Multi-entity and hierarchy support</li>
+          <li>SSO, SCIM, granular permissions</li>
+          <li>Dedicated implementation team</li>
+        </List>
+      </Card>
+    </Grid>
+  </Section>
+
+  {/* Case studies */}
+  <Section theme="deep" id="case-studies" aria-labelledby="cases-title">
+    <ContentWrapper variant="auto-width">
+      <Eyebrow>Case studies</Eyebrow>
+      <Heading tag="h2" maxWidth={20} id="cases-title">
+        Real results from teams running on Greenboard
+      </Heading>
+      <Paragraph slot="column2" maxWidth={44} class="color-faded">
+        Private funds, advisors, and service partners use Greenboard to surface
+        risk, prioritize reviews, and recover time across the program.
+      </Paragraph>
+    </ContentWrapper>
+    <Tabs variant="pills" id="case">
+      <TabLink slot="links">Root Financial</TabLink>
+      <TabLink slot="links">JMG Financial Group</TabLink>
+      <TabLink slot="links">FSG / ICA</TabLink>
+      <CasePanel href="#" linkLabel="Read the Root Financial story">
+        <Quote name="Alex Stickelman" position="CCO & COO, Root Financial">
+          Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved.
+        </Quote>
+        <Stat slot="results" variant="highlight" number="24" unit="hrs" label="Estimated weekly time saved on marketing review" />
+        <Stat slot="results" variant="highlight" number="70+" label="Greenboard users" />
+        <Stat slot="results" variant="highlight" number="20%" label="Month over month headcount growth enabled" />
+      </CasePanel>
+      <CasePanel href="#" linkLabel="Read the JMG Financial Group story">
+        <Quote name="Adam Boyer" position="COO & CCO, JMG Financial Group">
+          I can’t say they like compliance, but I can tell you that advisors love Greenboard.
+        </Quote>
+        <Stat slot="results" variant="highlight" number="100+" label="Greenboard users" />
+        <Stat slot="results" variant="highlight" number="3" label="Legacy systems consolidated" />
+        <Stat slot="results" variant="highlight" number="60%+" label="Estimated reduction in compliance onboarding time" />
+      </CasePanel>
+      <CasePanel href="#" linkLabel="Read the FSG / ICA story">
+        <Quote name="Doug Thalhammer" position="CCO, FSG / ICA">
+          The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable… knowing that we’re doing things the right way.
+        </Quote>
+        <Stat slot="results" variant="highlight" number="99%" label="Less time on vendor diligence: one to two hours instead of a week" />
+        <Stat slot="results" variant="highlight" number="2" label="Legacy systems replaced" />
+        <Stat slot="results" variant="highlight" number="25+" label="Greenboard users" />
+      </CasePanel>
+    </Tabs>
+  </Section>
+
+  {/* Closing call to action */}
+  <Section theme="dark" paddingTop="large" paddingBottom="large" id="demo" aria-labelledby="cta-title">
+    <ContentWrapper centered>
+      <Heading tag="h2" variant="h1" class="heading-accent" maxWidth={16} id="cta-title">
+        Built for <strong>AI-native</strong> compliance teams.
+      </Heading>
+      <Paragraph variant="large" maxWidth={44} class="color-faded">
+        See how your program runs on one system. Implementation is measured in
+        weeks, not quarters.
+      </Paragraph>
+      <Form name="demo-request" variant="inline" class="margin-top-6">
+        <Input
+          variant="email"
+          label="Work email"
+          placeholder="Enter your work email address"
+          labelHidden
+          required
+        />
+        <Button type="submit">Book a demo</Button>
+      </Form>
     </ContentWrapper>
   </Section>
 </Layout>
