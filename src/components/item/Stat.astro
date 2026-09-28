@@ -1,0 +1,70 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** The figure, as it should read. */
+  number?: string;
+  /** Unit set small after the figure. */
+  unit?: string;
+  /** What the figure counts. */
+  label?: string;
+  /** Figure color. `highlight` draws the eye on dark themes. */
+  variant?: "default" | "highlight";
+};
+
+const {
+  render = true,
+  number,
+  unit,
+  label,
+  variant = "default",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+{
+  render && number && (
+    <div
+      class:list={["stat_wrap", variant !== "default" && variant, className]}
+      {...rest}
+    >
+      <p class="stat_number text-style-h1">
+        {number}
+        {unit && <span class="stat_unit">{unit}</span>}
+      </p>
+      {label && <p class="stat_label text-style-small">{label}</p>}
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .stat_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      width: 100%;
+      &.highlight .stat_number {
+        color: var(--highlight);
+      }
+    }
+
+    .stat_number {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat_unit {
+      margin-left: 0.12em;
+      font-size: 0.5em;
+      letter-spacing: var(--letter-spacing-normal);
+    }
+
+    .stat_label {
+      max-width: 26ch;
+      color: var(--text-2);
+    }
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"figure"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Who said it. */
+  name?: string;
+  /** Their role and company. */
+  position?: string;
+  /** Letters shown in place of a portrait. */
+  initials?: string;
+  /** Quote size. */
+  variant?: "default" | "large";
+};
+
+const {
+  render = true,
+  name,
+  position,
+  initials,
+  variant = "default",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const text = await slotContent(Astro.slots);
+---
+
+{
+  render && text && (
+    <figure
+      class:list={["quote_wrap", variant !== "default" && variant, className]}
+      {...rest}
+    >
+      <blockquote
+        class:list={[
+          "quote_text",
+          variant === "large" ? "text-style-h2" : "text-style-h3",
+        ]}
+      >
+        <p>
+          “<Fragment set:html={text} />”
+        </p>
+      </blockquote>
+      {name && (
+        <figcaption class="quote_author">
+          {initials && (
+            <span class="quote_avatar" aria-hidden="true">
+              {initials}
+            </span>
+          )}
+          <span class="quote_author_content text-style-small">
+            <span class="quote_name">{name}</span>
+            {position && <span class="quote_position">{position}</span>}
+          </span>
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .quote_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      width: 100%;
+    }
+
+    .quote_text {
+      max-width: 34ch;
+      & p {
+        text-wrap: inherit;
+      }
+    }
+
+    .quote_author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .quote_avatar {
+      display: flex;
+      flex-shrink: 0;
+      justify-content: center;
+      align-items: center;
+      width: 3rem;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-round);
+      background-color: var(--text);
+      color: var(--background);
+      font-size: var(--text-small);
+      font-weight: var(--primary-medium);
+    }
+
+    .quote_author_content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      min-width: 0;
+      color: var(--text-2);
+      &::before,
+      &::after {
+        content: none;
+      }
+    }
+
+    .quote_name {
+      color: var(--text);
+      font-weight: var(--primary-medium);
+    }
+
+    /* Without a portrait, name and role run on one line */
+    .quote_author:not(:has(.quote_avatar)) .quote_author_content {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0 0.35em;
+      & .quote_name {
+        color: inherit;
+        font-weight: inherit;
+        &:has(+ .quote_position)::after {
+          content: ",";
+        }
+      }
+    }
+  }
+</style>

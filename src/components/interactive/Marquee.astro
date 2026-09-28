@@ -8,6 +8,8 @@ type Props = HTMLAttributes<"div"> & {
   render?: boolean;
   /** Accessible label. Defaults to `Marquee`. */
   label?: string;
+  /** Visible caption before the strip. */
+  caption?: string;
   /** Travel direction. */
   direction?: "forwards" | "backwards";
 };
@@ -15,6 +17,7 @@ type Props = HTMLAttributes<"div"> & {
 const {
   render = true,
   label = "Marquee",
+  caption,
   direction = "forwards",
   class: className,
   ...rest
@@ -81,6 +84,7 @@ const locals = `--_count: ${count}`;
       aria-label={label}
       {...rest}
     >
+      {caption && <p class="marquee_caption text-style-small">{caption}</p>}
       <div class="marquee_viewport">
         <div class="marquee_track">
           <div class="marquee_panel">
@@ -217,6 +221,19 @@ const locals = `--_count: ${count}`;
         width: auto;
         height: var(--_item-height);
       }
+
+      /* Names written as plain text read like quiet wordmarks */
+      > :is(span, p):not([class]) {
+        color: var(--text-2);
+        font-size: var(--h5);
+        white-space: nowrap;
+      }
+    }
+
+    .marquee_caption {
+      flex-shrink: 0;
+      max-width: 12ch;
+      color: var(--text-2);
     }
 
     .marquee_toggle {

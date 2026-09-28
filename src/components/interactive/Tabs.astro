@@ -7,7 +7,7 @@ type Props = HTMLAttributes<"div"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
   /** Tab layout. */
-  variant?: "horizontal" | "side";
+  variant?: "horizontal" | "side" | "pills";
   /** Panel playback. */
   playback?: "manual" | "auto";
   /** Show all panels in design mode. */
@@ -344,6 +344,41 @@ const panels = await slotContent(Astro.slots);
         &.is-active {
           background-color: var(--text);
           color: var(--background);
+        }
+      }
+    }
+
+    .tabs_wrap.pills {
+      .tabs_links {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        overflow-x: visible;
+      }
+      .tabs_link {
+        flex: none;
+        min-width: 0;
+        min-height: 2.5rem;
+        padding: var(--space-1) var(--space-4);
+        border: var(--border-width) solid var(--button-2-border);
+        border-radius: var(--radius-round);
+        background-color: var(--button-2-background);
+        color: var(--button-2-text);
+        font-size: var(--text-small);
+        font-weight: var(--primary-medium);
+        white-space: nowrap;
+        transition:
+          background-color var(--hover-duration) var(--hover-ease),
+          color var(--hover-duration) var(--hover-ease),
+          border-color var(--hover-duration) var(--hover-ease);
+        @media (hover: hover) {
+          &:hover {
+            border-color: var(--button-2-text);
+          }
+        }
+        &.is-active {
+          border-color: var(--button-border);
+          background-color: var(--button-background);
+          color: var(--button-text);
         }
       }
     }

@@ -1,0 +1,129 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { slotContent } from "@/utils/slots.ts";
+
+type Props = HTMLAttributes<"ul"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** List style. Items are `li` elements; a `strong` opening an item is its title. */
+  variant?: "check" | "steps" | "icons" | "inline";
+};
+
+const { render = true, variant = "check", class: className, ...rest } = Astro.props;
+
+const Tag = variant === "steps" ? "ol" : "ul";
+const content = await slotContent(Astro.slots);
+---
+
+{
+  render && content && (
+    <Tag
+      class:list={["list_wrap", "text-style-small", variant, className]}
+      {...rest}
+    >
+      <Fragment set:html={content} />
+    </Tag>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .list_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      width: 100%;
+      margin-top: var(--space-5);
+      /* The text style's trim boxes would join the flex items */
+      &::before,
+      &::after {
+        content: none;
+      }
+
+      & > li {
+        position: relative;
+        min-width: 0;
+      }
+      /* A title opening an item sits on its own line, the rest reads quieter */
+      & > li:has(> strong:first-child) {
+        color: var(--text-2);
+      }
+      & > li > strong:first-child {
+        display: block;
+        margin-bottom: 0.25em;
+        color: var(--text);
+        font-weight: var(--primary-medium);
+      }
+
+      &:is(.check, .steps) > li {
+        padding-left: 1.75em;
+      }
+      &:has(> li > strong:first-child) {
+        gap: var(--space-4);
+      }
+
+      &.check > li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.1em;
+        width: 1.125em;
+        aspect-ratio: 1 / 1;
+        background-color: var(--heading-accent);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")
+          center / contain no-repeat;
+      }
+
+      &.steps {
+        counter-reset: step;
+        gap: var(--space-5);
+        & > li {
+          counter-increment: step;
+          padding-left: 2.25em;
+          &::before {
+            content: counter(step, decimal-leading-zero);
+            position: absolute;
+            left: 0;
+            color: var(--heading-accent);
+            font-weight: var(--primary-medium);
+            font-variant-numeric: tabular-nums;
+          }
+        }
+      }
+
+      /* Each item opens with an `Icon`, drawn in a tile */
+      &.icons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+        gap: var(--space-5) var(--site-gutter);
+        padding-top: var(--space-6);
+        border-top: var(--border-width) solid var(--border);
+        & > li {
+          display: flex;
+          align-items: center;
+          gap: var(--space-3);
+          font-weight: var(--primary-medium);
+        }
+        & > li > .icon:first-child {
+          width: 2.5rem;
+          padding: 0.625rem;
+          border-radius: var(--radius-small);
+          background-color: var(--background-2);
+          color: var(--heading-accent);
+        }
+      }
+
+      /* A run of short items under a rule, such as the channels a module covers */
+      &.inline {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2) var(--space-4);
+        margin-top: var(--space-6);
+        padding-top: var(--space-5);
+        border-top: var(--border-width) solid var(--border);
+        color: var(--text-2);
+      }
+    }
+  }
+</style>

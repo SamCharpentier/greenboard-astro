@@ -7,6 +7,11 @@ type Base = HTMLAttributes<"div"> & {
   render?: boolean;
 };
 
+type Tail = {
+  /** Hairlines between items and around the grid, in place of the gap. */
+  ruled?: boolean;
+};
+
 type Props = Base &
   (
     | {
@@ -66,9 +71,11 @@ type Props = Base &
         medium?: never;
         large?: never;
       }
-  );
+  ) &
+  Tail;
 
-type AllProps = Base & {
+type AllProps = Base &
+  Tail & {
   variant?: "columns" | "autofit" | "autofill";
   xsmall?: number;
   small?: number;
@@ -87,6 +94,7 @@ const {
   large,
   maxColumnCount,
   minColumnWidth,
+  ruled = false,
   class: className,
   ...rest
 } = Astro.props as AllProps;
@@ -128,7 +136,12 @@ const columns =
 {
   render && content && (
     <div
-      class:list={["grid", variant !== "columns" && variant, className]}
+      class:list={[
+        "grid",
+        variant !== "columns" && variant,
+        ruled && "ruled",
+        className,
+      ]}
       style={columns}
       {...rest}
     >
@@ -169,6 +182,17 @@ const columns =
           max(calc(var(--_min-col-width) * 1rem), var(--_fit)),
           100%
         );
+      }
+      &.ruled {
+        --_gap-size: var(--border-width);
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-main);
+        background-color: var(--border);
+        overflow: clip;
+        & > * {
+          background-color: var(--background);
+          border-radius: 0;
+        }
       }
       &.autofit {
         grid-template-columns: repeat(auto-fit, minmax(var(--_track), 1fr));

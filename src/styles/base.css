@@ -577,6 +577,12 @@ label {
   font-weight: inherit;
 }
 
+hr {
+  width: 100%;
+  border: 0;
+  border-top: var(--border-width) solid var(--border);
+}
+
 select:has(option[value=""]:checked) {
   color: color-mix(in lab, currentcolor 60%, transparent);
 }

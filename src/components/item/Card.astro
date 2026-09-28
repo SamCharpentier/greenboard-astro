@@ -7,6 +7,9 @@ import Button from "@/components/Button.astro";
 import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
 import Img from "@/components/media/Img.astro";
 import Overlay from "@/components/media/Overlay.astro";
+import Icon from "@/components/media/Icon.astro";
+import diagonal from "@/assets/icons/arrow-up-right.svg";
+import { slotContent } from "@/utils/slots.ts";
 
 type ImageSource = ImageMetadata | string;
 
@@ -15,20 +18,24 @@ type Base = HTMLAttributes<"div"> & {
   render?: boolean;
   /** Eyebrow text. Supports inline markup. */
   eyebrow?: string;
+  /** Short note beside the eyebrow. */
+  meta?: string;
   /** Card title. Supports inline markup. */
   heading?: string;
   /** Heading level. */
   headingTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  /** Line under the heading, in the accent color. */
+  lead?: string;
   /** Body text. Supports inline markup. */
   text?: string;
-  /** Button label. Omit to hide the button. */
+  /** Button label. Omit for an arrow alone when `buttonHref` is set. */
   buttonLabel?: string;
   /** Button destination. Omit for a `<button>`. */
   buttonHref?: string;
   /** Card layout. */
-  variant?: "default" | "cover" | "stacked";
+  variant?: "default" | "cover" | "stacked" | "feature";
   /** Color theme of element and its children. */
-  theme?: "inherit" | "light" | "dark" | "brand" | "invert";
+  theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand" | "invert";
 };
 
 type Props = Base &
@@ -54,6 +61,13 @@ type Props = Base &
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
       }
+    | {
+        variant: "feature";
+        /** Color theme of element and its children. */
+        theme?: never;
+        image?: never;
+        imageAlt?: never;
+      }
   );
 
 type AllProps = Base & {
@@ -64,8 +78,10 @@ type AllProps = Base & {
 const {
   render = true,
   eyebrow,
+  meta,
   heading,
   headingTag = "h3",
+  lead,
   text,
   buttonLabel,
   buttonHref,
@@ -77,29 +93,36 @@ const {
   ...rest
 } = Astro.props as AllProps;
 
-const hasImage = variant !== "default" && !!image;
-const hasContent = !!(eyebrow || heading || text || buttonLabel);
-const hasTheme = variant !== "stacked" && theme !== "inherit";
+const details = await slotContent(Astro.slots);
+
+const surfaced = variant === "default" || variant === "cover";
+const hasImage = (variant === "cover" || variant === "stacked") && !!image;
+const arrowOnly = !buttonLabel && !!buttonHref;
+const hasContent = !!(eyebrow || heading || text || details || buttonLabel || arrowOnly);
+const hasTheme = surfaced && theme !== "inherit";
 
 /* The button each variant closes with, so a set of cards reads as one system.
    A link carries no emphasis of its own, so the two are picked together. */
 const buttonKind =
-  variant === "stacked"
-    ? ({ variant: "link" } as const)
-    : ({ emphasis: variant === "cover" ? "primary" : "secondary" } as const);
+  variant === "cover"
+    ? ({ emphasis: "primary" } as const)
+    : ({ variant: "link", icon: "diagonal" } as const);
+
+/* The arrow alone still needs a name: the heading, without its markup */
+const arrowLabel = heading?.replace(/<[^>]*>/g, "").trim();
 
 if (import.meta.env.DEV && render) {
-  if (variant === "stacked" && theme !== "inherit") {
+  if (!surfaced && theme !== "inherit") {
     console.warn(
-      '[lumos] <Card variant="stacked"> has no surface to color, so `theme` was dropped. It keeps the theme around it.',
+      `[lumos] <Card variant="${variant}"> has no surface to color, so \`theme\` was dropped. It keeps the theme around it.`,
     );
   }
-  if (variant === "default" && image) {
+  if ((variant === "default" || variant === "feature") && image) {
     console.warn(
-      '[lumos] <Card variant="default"> holds no image, so `image` was dropped. Use the cover or stacked variant to show it.',
+      `[lumos] <Card variant="${variant}"> holds no image, so \`image\` was dropped. Use the cover or stacked variant to show it.`,
     );
   }
-  if (variant !== "default" && !image) {
+  if ((variant === "cover" || variant === "stacked") && !image) {
     console.warn(
       `[lumos] <Card variant="${variant}"> has no \`image\`, so it renders as a plain card.`,
     );
@@ -126,24 +149,41 @@ if (import.meta.env.DEV && render) {
       )}
       {hasContent && (
         <div class="card_content margin-trim">
-          <Eyebrow>
-            <Fragment set:html={eyebrow} />
-          </Eyebrow>
-          <Heading tag={headingTag} variant="h5">
+          {(eyebrow || meta) && (
+            <div class="card_header">
+              <Eyebrow variant={surfaced ? "tag" : "default"}>
+                <Fragment set:html={eyebrow} />
+              </Eyebrow>
+              {meta && <p class="card_meta text-style-small">{meta}</p>}
+            </div>
+          )}
+          <Heading tag={headingTag} variant="h4">
             <Fragment set:html={heading} />
           </Heading>
-          <Paragraph>
+          {lead && <p class="card_lead text-style-small">{lead}</p>}
+          <Paragraph variant="small" class="color-faded">
             <Fragment set:html={text} />
           </Paragraph>
-          <ButtonWrapper>
-            {buttonHref ? (
-              <Button element="link" href={buttonHref} {...buttonKind}>
-                {buttonLabel}
-              </Button>
-            ) : (
-              <Button {...buttonKind}>{buttonLabel}</Button>
-            )}
-          </ButtonWrapper>
+          {details && (
+            <div class="card_details margin-trim">
+              <Fragment set:html={details} />
+            </div>
+          )}
+          {arrowOnly ? (
+            <a class="card_arrow" href={buttonHref} aria-label={arrowLabel}>
+              <Icon src={diagonal} variant="small" />
+            </a>
+          ) : (
+            <ButtonWrapper>
+              {buttonHref ? (
+                <Button element="link" href={buttonHref} {...buttonKind}>
+                  {buttonLabel}
+                </Button>
+              ) : (
+                <Button {...buttonKind}>{buttonLabel}</Button>
+              )}
+            </ButtonWrapper>
+          )}
         </div>
       )}
     </div>
@@ -168,9 +208,13 @@ if (import.meta.env.DEV && render) {
       &.cover {
         min-height: var(--_min-height);
       }
-      &.stacked {
+      &:is(.stacked, .feature) {
         background-color: transparent;
         overflow: visible;
+      }
+      &.feature {
+        border-top: var(--border-width) solid var(--border);
+        border-radius: 0;
       }
     }
 
@@ -208,7 +252,7 @@ if (import.meta.env.DEV && render) {
 
     /* Buttons closing a card sit on its floor, however tall the row around it
        grows. This outranks the margin `.button-wrapper` sets for itself. */
-    .card_content > .button-wrapper:last-child {
+    .card_content > :is(.button-wrapper, .card_arrow):last-child {
       margin-top: auto;
       padding-top: var(--space-6);
     }
@@ -227,20 +271,62 @@ if (import.meta.env.DEV && render) {
         z-index: 1;
       }
 
-      .stacked > & {
+      :is(.stacked, .feature) > & {
         padding-inline: 0;
         padding-top: 0;
       }
+
+      .feature > & {
+        padding-top: var(--space-5);
+        padding-bottom: 0;
+      }
     }
 
-    .card_wrap:has(.button_wrap) {
-      .button_wrap::after {
+    .card_header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-2) var(--space-4);
+      width: 100%;
+      margin-bottom: var(--space-6);
+    }
+
+    .card_meta {
+      color: var(--text-2);
+    }
+
+    .card_lead {
+      margin-top: var(--space-2);
+      color: var(--heading-accent);
+      font-weight: var(--primary-medium);
+    }
+
+    .card_lead + .text {
+      margin-top: var(--space-2);
+    }
+
+    .card_details {
+      width: 100%;
+      margin-top: var(--space-5);
+      padding-top: var(--space-5);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    .card_arrow {
+      display: flex;
+      color: var(--text);
+      transition: translate var(--hover-duration) var(--hover-ease);
+    }
+
+    .card_wrap:has(:is(.button_wrap, .card_arrow)) {
+      :is(.button_wrap, .card_arrow)::after {
         content: "";
         position: absolute;
         inset: 0;
       }
 
-      .card_content a:not(.button_wrap) {
+      .card_content a:not(.button_wrap, .card_arrow) {
         position: relative;
         z-index: 1;
       }
@@ -252,6 +338,9 @@ if (import.meta.env.DEV && render) {
       @media (hover: hover) {
         &:hover .image {
           scale: 1.04;
+        }
+        &:hover .card_arrow {
+          translate: 0.125em -0.125em;
         }
       }
     }

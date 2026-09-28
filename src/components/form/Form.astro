@@ -13,6 +13,8 @@ interface Props extends HTMLAttributes<"form"> {
   successMessage?: string;
   /** Message shown after an error. */
   errorMessage?: string;
+  /** Field layout. `inline` sets one field and its button on a single bar. */
+  variant?: "default" | "inline";
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   action,
   successMessage = "Thanks — we will be in touch.",
   errorMessage = "That did not send. Please try again.",
+  variant = "default",
   method = "post",
   class: className,
   ...rest
@@ -32,7 +35,7 @@ const content = await slotContent(Astro.slots);
 {
   render && name && content && (
     <div
-      class:list={["form_wrap", className]}
+      class:list={["form_wrap", variant !== "default" && variant, className]}
       data-state="idle"
       data-endpoint={action}
     >
@@ -108,6 +111,42 @@ const content = await slotContent(Astro.slots);
       gap: var(--space-5);
       row-gap: var(--space-8);
       column-gap: var(--space-8);
+    }
+
+    .form_wrap.inline {
+      max-width: 34rem;
+      & .form_fields {
+        align-items: stretch;
+        gap: var(--space-2);
+        padding: 0.375rem;
+        border: var(--border-width) solid
+          color-mix(in srgb, var(--text) 55%, transparent);
+        border-radius: var(--radius-main);
+        background-color: var(--background-2);
+        transition: border-color var(--hover-duration) var(--hover-ease);
+        &:focus-within {
+          border-color: var(--text);
+        }
+        @media (width >= 30rem) {
+          flex-direction: row;
+          align-items: center;
+          border-radius: var(--radius-round);
+        }
+      }
+      & .field {
+        flex: 1;
+        min-width: 0;
+      }
+      /* The bar carries the border and the focus, so the field inside stays quiet */
+      & .field-control {
+        padding-inline: var(--space-4);
+        background-color: transparent;
+        border: 0;
+        outline-style: none;
+      }
+      & .button_wrap {
+        flex-shrink: 0;
+      }
     }
 
     .form_note {

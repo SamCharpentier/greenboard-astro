@@ -1,0 +1,74 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import go from "@/assets/logo/go.svg";
+import diagonal from "@/assets/icons/arrow-up-right.svg";
+
+type Props = HTMLAttributes<"a"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Link destination. A linked mark is set as a tag with an arrow. */
+  href?: string;
+};
+
+const { render = true, href, class: className, ...rest } = Astro.props;
+---
+
+{
+  render &&
+    (href ? (
+      <a
+        class:list={["go-mark_wrap", "linked", "theme-brand", className]}
+        href={href}
+        aria-label="GreenboardGo"
+        {...rest}
+      >
+        <Icon class="go-mark_logo" src={go} />
+        <Icon class="go-mark_arrow" src={diagonal} />
+      </a>
+    ) : (
+      <span
+        class:list={["go-mark_wrap", className]}
+        role="img"
+        aria-label="Go"
+      >
+        <Icon class="go-mark_logo" src={go} />
+      </span>
+    ))
+}
+
+<style is:global>
+  @layer components {
+    /* Sits in running text and scales with it, on the baseline at cap height */
+    .go-mark_wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28em;
+      color: var(--heading-accent);
+      vertical-align: baseline;
+
+      &.linked {
+        padding: 0.24em 0.42em 0.24em 0.5em;
+        border-radius: var(--radius-small);
+        background-color: var(--background);
+        color: var(--text);
+        text-decoration: none;
+        vertical-align: 0.02em;
+      }
+      .go-mark_logo {
+        width: auto;
+        height: 0.7em;
+        aspect-ratio: auto;
+      }
+      .go-mark_arrow {
+        --_size: 0.66em;
+        transition: translate var(--hover-duration) var(--hover-ease);
+      }
+      @media (hover: hover) {
+        &.linked:hover .go-mark_arrow {
+          translate: 0.1em -0.1em;
+        }
+      }
+    }
+  }
+</style>
