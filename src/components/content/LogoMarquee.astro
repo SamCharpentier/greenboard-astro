@@ -9,7 +9,7 @@ type Props = ComponentProps<typeof Marquee> & {
   logos?: { image: ImageMetadata; name: string }[];
 };
 
-const { render = true, logos = [], label, caption, ...rest } = Astro.props;
+const { render = true, logos = [], label, caption, class: className, ...rest } = Astro.props;
 
 /* Every logo covers the same area in its own colors, so a wide wordmark and a
    square crest read at the same weight; none grows taller than the row. They
@@ -27,6 +27,7 @@ const items = logos.map(({ image, name }) => {
   render={render && items.length > 0}
   label={label}
   caption={caption}
+  class:list={["logos", className]}
   {...rest}
 >
   {
@@ -43,3 +44,13 @@ const items = logos.map(({ image, name }) => {
     ))
   }
 </Marquee>
+
+<style is:global>
+  @layer components {
+    /* Logos need more air than words: each mark reads as its own company
+       rather than one run of type */
+    .marquee_wrap.logos {
+      --_gap-size: var(--space-8);
+    }
+  }
+</style>
