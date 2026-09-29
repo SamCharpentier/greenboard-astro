@@ -32,6 +32,14 @@ import Byline from "@/components/item/Byline.astro";
 import Share from "@/components/interactive/Share.astro";
 import TableOfContents from "@/components/interactive/TableOfContents.astro";
 import Filter from "@/components/interactive/Filter.astro";
+import LogoField from "@/components/section/LogoField.astro";
+import handshake from "@/assets/icons/handshake.svg";
+import landmark from "@/assets/icons/landmark.svg";
+import partnerKroll from "@/assets/images/partners/kroll.png";
+import partnerAws from "@/assets/images/partners/aws.png";
+import partnerFirmScribe from "@/assets/images/partners/firmscribe.png";
+import partnerMicrosoft from "@/assets/images/partners/microsoft.png";
+import partnerMorningstar from "@/assets/images/partners/morningstar.png";
 import FilterOption from "@/components/interactive/FilterOption.astro";
 import VideoEmbed from "@/components/media/VideoEmbed.astro";
 import rootLogo from "@/assets/images/case-studies/root-financial.svg";
@@ -967,6 +975,36 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
               </li>
             </List>
           </ContentWrapper>
+          <ContentWrapper>
+            <Heading tag="h4" variant="h6">rows, with a title after the icon</Heading>
+            <List variant="rows">
+              <li>
+                <Icon src={handshake} />
+                <strong>Compliance Services Partners</strong>
+                Connect with regulatory and advisory experts who help firms stay
+                compliant and confident as they grow.
+              </li>
+              <li>
+                <Icon src={landmark} />
+                <strong>Data & Custody</strong>
+                Securely aggregate and monitor assets, trades, and client data.
+              </li>
+            </List>
+          </ContentWrapper>
+        </SystemBlock>
+        <SystemBlock
+          heading="Logo field"
+          text="<code>LogoField</code> is a band of logos drifting slowly in every direction, as if the camera were moving across them. The layout and the path are drawn fresh on every visit, every logo covers the same area and takes the theme&rsquo;s text color, and the band has no edge. It starts still for anyone who asks for less motion, and the button in the corner pauses it. Used under the Partnerships hero."
+        >
+          <LogoField
+            logos={[
+              { image: partnerKroll, name: "Kroll" },
+              { image: partnerAws, name: "AWS" },
+              { image: partnerFirmScribe, name: "FirmScribe" },
+              { image: partnerMicrosoft, name: "Microsoft" },
+              { image: partnerMorningstar, name: "Morningstar" },
+            ]}
+          />
         </SystemBlock>
         <SystemBlock
           heading="Logo list"
@@ -1471,7 +1509,7 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
         id="longform"
         number="15"
         heading="Stories and articles"
-        text="Case studies and blog posts share one reading layout: the text sits at a reading measure in the middle of the page, with the table of contents beside it when the page has one. Headings inside the text step down a size, so a narrow column keeps its rhythm."
+        text="Case studies, blog posts and partner pages share one reading layout: the text sits at a reading measure in the middle of the page, with the table of contents beside it when the page has one. Headings inside the text step down a size, so a narrow column keeps its rhythm."
       >
         <SystemBlock
           heading="Table of contents"
@@ -1550,6 +1588,19 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
               <Card variant="row" eyebrow="Hedge Funds" heading="Sample story three" data-filter="hedge-funds" />
               <Card variant="row" eyebrow="Financial Advisors" heading="Sample story four" data-filter="financial-advisors" />
               <Card variant="row" eyebrow="Private Funds" heading="Sample story five" data-filter="private-funds" />
+            </Grid>
+          </Filter>
+        </SystemBlock>
+        <SystemBlock
+          heading="Filter as a menu"
+          text='<code>variant="menu"</code> folds the options into a panel that opens from <code>Filter by</code>, and names the choice on the button once it closes. Escape closes it. Used for the partner directory.'
+        >
+          <Filter id="sample-menu" variant="menu" allLabel="All">
+            <FilterOption slot="options" value="compliance-services">Compliance Services</FilterOption>
+            <FilterOption slot="options" value="data-custody">Data & Custody</FilterOption>
+            <Grid medium={2} class="gap-3">
+              <Card variant="row" eyebrow="Compliance Services" heading="Sample partner one" data-filter="compliance-services" />
+              <Card variant="row" eyebrow="Data & Custody" heading="Sample partner two" data-filter="data-custody" />
             </Grid>
           </Filter>
         </SystemBlock>

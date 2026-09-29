@@ -2,6 +2,8 @@
 import type { HTMLAttributes } from "astro/types";
 import Button from "@/components/Button.astro";
 import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Icon from "@/components/media/Icon.astro";
+import plus from "@/assets/icons/plus.svg";
 import { slotContent } from "@/utils/slots.ts";
 import { uid } from "@/utils/unique-id.ts";
 
@@ -12,6 +14,8 @@ type Props = HTMLAttributes<"div"> & {
   label?: string;
   /** The option that clears the filter. */
   allLabel?: string;
+  /** Option layout. `menu` folds the options into a panel that opens from a button. */
+  variant?: "inline" | "menu";
   /**
    * Items shown before `Load more`, and how many each press adds. Omit to show every item.
    *
@@ -25,6 +29,7 @@ const {
   render = true,
   label = "Filter by",
   allLabel = "Show all",
+  variant = "inline",
   pageSize,
   class: className,
   ...rest
@@ -33,16 +38,17 @@ const {
 const options = await slotContent(Astro.slots, "options");
 const list = await slotContent(Astro.slots);
 const labelId = uid("filter-label");
+const menu = variant === "menu";
 ---
 
 {
   render && list && (
     <div
-      class:list={["filter_wrap", className]}
+      class:list={["filter_wrap", variant !== "inline" && variant, className]}
       data-page-size={pageSize}
       {...rest}
     >
-      {options && (
+      {options && !menu && (
         <div class="filter_bar" role="group" aria-labelledby={labelId}>
           <p class="filter_label" id={labelId}>
             {label}
@@ -57,6 +63,26 @@ const labelId = uid("filter-label");
           </button>
           <Fragment set:html={options} />
         </div>
+      )}
+      {options && menu && (
+        <details class="filter_bar">
+          <summary class="filter_toggle">
+            <span id={labelId}>{label}</span>
+            <span class="filter_current" />
+            <Icon class="filter_toggle-icon" src={plus} variant="small" />
+          </summary>
+          <div class="filter_options" role="group" aria-labelledby={labelId}>
+            <button
+              class="filter_option"
+              type="button"
+              aria-pressed="true"
+              data-filter-value=""
+            >
+              <span class="text-style-trim">{allLabel}</span>
+            </button>
+            <Fragment set:html={options} />
+          </div>
+        </details>
       )}
       <Fragment set:html={list} />
       <p class="filter_status sr-only" role="status" />
@@ -87,6 +113,8 @@ const labelId = uid("filter-label");
     const items = [...wrap.querySelectorAll<HTMLElement>("[data-filter]")];
     const more = wrap.querySelector<HTMLElement>(".filter_more");
     const status = wrap.querySelector<HTMLElement>(".filter_status");
+    const current = wrap.querySelector<HTMLElement>(".filter_current");
+    const panel = wrap.querySelector<HTMLDetailsElement>("details.filter_bar");
     const pageSize = Number(wrap.dataset.pageSize) || Infinity;
     const key = wrap.id || "filter";
     const known = new Set(options.map((option) => option.dataset.filterValue));
@@ -108,6 +136,13 @@ const labelId = uid("filter-label");
         const value = option.dataset.filterValue ?? "";
         const pressed = value ? selected.has(value) : selected.size === 0;
         option.setAttribute("aria-pressed", String(pressed));
+      }
+      /* A closed menu still says what it is showing */
+      if (current) {
+        current.textContent = options
+          .filter((option) => selected.has(option.dataset.filterValue ?? ""))
+          .map((option) => option.textContent?.trim())
+          .join(", ");
       }
       if (more) more.hidden = matching.length <= limit;
       if (announce && status) {
@@ -138,6 +173,12 @@ const labelId = uid("filter-label");
         remember();
       });
     }
+
+    panel?.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !panel.open) return;
+      panel.open = false;
+      panel.querySelector("summary")?.focus();
+    });
 
     more?.querySelector("button")?.addEventListener("click", () => {
       const next = items.filter(matches)[limit];
@@ -215,6 +256,77 @@ const labelId = uid("filter-label");
 
     .filter_more {
       align-self: center;
+    }
+
+    /* The menu: a button that opens into a panel listing the options */
+    .filter_wrap.menu > .filter_bar {
+      display: block;
+      width: fit-content;
+      border-radius: var(--radius-small);
+      background-color: var(--background-2);
+      &[open] {
+        min-width: min(17rem, 100%);
+      }
+    }
+
+    .filter_toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      padding: 0.75em 1.25em;
+      font-weight: var(--primary-medium);
+      line-height: 1.2;
+      list-style: none;
+      cursor: pointer;
+      &::-webkit-details-marker {
+        display: none;
+      }
+      [open] > & {
+        padding-bottom: 0.5em;
+      }
+    }
+
+    .filter_current {
+      color: var(--text-2);
+      font-weight: normal;
+      &:empty {
+        display: none;
+      }
+      [open] > .filter_toggle > & {
+        display: none;
+      }
+    }
+
+    /* The plus turns into the mark that closes the panel */
+    .filter_toggle-icon {
+      margin-left: auto;
+      margin-right: -0.25em;
+      transition: rotate var(--hover-duration) var(--hover-ease);
+      [open] > .filter_toggle > & {
+        rotate: 45deg;
+      }
+    }
+
+    .filter_options {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.125rem;
+      padding: 0 0.75em 1em;
+      & > .filter_option {
+        padding: 0.4em 0.5em;
+        background-color: transparent;
+        font-weight: normal;
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--background-3);
+          }
+        }
+        &[aria-pressed="true"] {
+          background-color: color-mix(in srgb, var(--selection-background) 45%, transparent);
+          color: var(--text);
+        }
+      }
     }
   }
 </style>

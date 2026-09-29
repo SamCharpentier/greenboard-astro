@@ -272,4 +272,64 @@ for md in sorted((CMS / "blog").glob("*.md")):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(front_matter(data) + text)
 
+# ---------------------------------------------------------------- partners
+from wordmark import wordmark_svg
+
+for item in json.loads((CMS / "partners-category.json").read_text())["items"]:
+    path = CONTENT / "partner-categories" / f"{item['slug']}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = {"name": clean(item["name"]), "order": item["fields"]["sort"]}
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+
+LOGO_TYPES = (".svg", ".png", ".webp", ".jpg")
+wordmarks = []
+for item in json.loads((CMS / "partners.json").read_text())["items"]:
+    if item["status"] == "archived":
+        continue
+    slug, f = item["slug"], item["fields"]
+    name = clean(item["name"])
+    body = (CMS / "partners" / f"{slug}.md").read_text().split("---", 2)[2]
+    body = body.replace("## [Content]", "", 1).replace("\u200d", "")
+    out = []
+    for line in body.splitlines():
+        # Webflow wrote each list item as its own paragraph opening with a middle dot
+        bullet = re.match(r"^\s*·\s+(.+)$", line)
+        if bullet:
+            if out and out[-1] == "" and len(out) > 1 and out[-2].startswith("- "):
+                out.pop()
+            out.append(f"- {clean(bullet.group(1))}")
+        else:
+            out.append(clean(line) if line.strip() else "")
+    text = re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip() + "\n"
+    text = re.sub(r"(^[^-\n].*\n)(- )", r"\1\n\2", text, flags=re.M)
+    # The real logo when it is in the repo, otherwise the name set as a stand-in
+    real = next((ASSETS / "partners" / f"{slug}{ext}" for ext in LOGO_TYPES if (ASSETS / "partners" / f"{slug}{ext}").exists()), None)
+    if real:
+        logo = f"../../assets/images/partners/{real.name}"
+    else:
+        mark = ASSETS / "partners" / "wordmarks" / f"{slug}.svg"
+        mark.parent.mkdir(parents=True, exist_ok=True)
+        mark.write_text(wordmark_svg(name))
+        logo = f"../../assets/images/partners/wordmarks/{slug}.svg"
+        wordmarks.append(slug)
+    category = f.get("category") or {}
+    data = {
+        "name": name,
+        "category": category.get("slug") if isinstance(category, dict) else category,
+        "logo": logo,
+        "logoUrl": (f.get("logo") or {}).get("url"),
+        "summary": clean(f.get("short-description") or ""),
+        "website": f.get("website"),
+        "status": "published" if item["status"] == "published" else "draft",
+        "seo": {
+            "title": f"{name} Partners With Greenboard",
+            "description": clean(f.get("short-description") or ""),
+        },
+    }
+    data = {k: v for k, v in data.items() if v is not None}
+    path = CONTENT / "partners" / f"{slug}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(front_matter(data) + text)
+print("partner logos still set as wordmarks:", wordmarks)
+
 print("typos fixed:", sorted(set(fixed)))

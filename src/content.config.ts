@@ -142,6 +142,31 @@ const caseStudies = defineCollection({
     }),
 });
 
+/* The layers of the partner ecosystem: compliance services, data and
+   custody, cloud and technology. Each partner belongs to one. */
+const partnerCategories = defineCollection({
+  loader: glob({ pattern: "*.json", base: "./src/content/partner-categories" }),
+  schema: z.object({
+    name: z.string(),
+    order: z.number(),
+  }),
+});
+
+const partners = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/partners" }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      category: reference("partnerCategories"),
+      logo: image(),
+      logoUrl: z.url().optional(),
+      summary: z.string(),
+      website: z.url().optional(),
+      status,
+      seo,
+    }),
+});
+
 const posts = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/posts" }),
   schema: ({ image }) =>
@@ -168,5 +193,7 @@ export const collections = {
   solutions,
   comparisons,
   caseStudies,
+  partnerCategories,
+  partners,
   posts,
 };

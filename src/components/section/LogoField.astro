@@ -1,0 +1,247 @@
+---
+import type { ComponentProps, HTMLAttributes } from "astro/types";
+import { getImage } from "astro:assets";
+import Section from "@/components/wrapper/Section.astro";
+import Button from "@/components/Button.astro";
+import { logoHeight } from "@/utils/logo.ts";
+
+type Props = Pick<ComponentProps<typeof Section>, "render" | "theme"> &
+  HTMLAttributes<"section"> & {
+  /** Logos to scatter across the field, each with the name it stands for. */
+  logos?: { image: ImageMetadata; name: string }[];
+};
+
+const { render = true, logos = [], theme = "dark", ...rest } = Astro.props;
+
+/* One tile of the field. The script repeats it in both directions and moves
+   the whole plane, so the field has no edge. */
+const COLUMNS = 12;
+const ROWS = 6;
+/* Logos of any shape cover the same area, so none reads louder than another,
+   and none runs wider than its cell allows */
+const LOGO_AREA = 4200;
+const LOGO_MAX_WIDTH = 152;
+
+const marks = await Promise.all(
+  logos.map(async ({ image }) => {
+    const natural = logoHeight(image, LOGO_AREA);
+    const scale = Math.min(1, LOGO_MAX_WIDTH / ((natural * image.width) / image.height));
+    const height = Math.round(natural * scale);
+    const width = Math.round((height * image.width) / image.height);
+    const src =
+      image.format === "svg"
+        ? image.src
+        : (await getImage({ src: image, height: height * 2, format: "webp" })).src;
+    return `--_src: url("${src}"); width: ${width / 16}rem; height: ${height / 16}rem`;
+  }),
+);
+
+/* Every other row sits half a cell over, so the field reads as scattered
+   rather than ruled. An even row count keeps that rhythm across the seam
+   where one tile meets the next. */
+const cells = Array.from({ length: marks.length ? COLUMNS * ROWS : 0 }, (_, index) => ({
+  logo: marks[index % marks.length],
+  shift: Math.floor(index / COLUMNS) % 2 ? "--_shift: 0.5" : undefined,
+}));
+---
+
+<Section
+  render={render && marks.length > 0}
+  theme={theme}
+  paddingTop="none"
+  paddingBottom="none"
+  class="logo-field_wrap"
+  {...rest}
+>
+  <div slot="background" class="logo-field_viewport" aria-hidden="true">
+    <div class="logo-field_plane">
+      <div
+        class="logo-field_tile"
+        style={`--_columns: ${COLUMNS}`}
+        data-logo-count={marks.length}
+      >
+        {
+          cells.map(({ logo, shift }) => (
+            <span class="logo-field_cell" style={shift}>
+              <span class="logo-field_logo" style={logo} />
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <Button
+    variant="play"
+    emphasis="secondary"
+    label="Pause the moving logos"
+    pressed
+    class="logo-field_toggle"
+  />
+</Section>
+
+<script>
+  const TURN = Math.PI * 2;
+  /* A full swing of the heading takes minutes, with a slower wander on top,
+     so the drift never settles into one direction */
+  const SWING = 150;
+  const WANDER = 41;
+  const SPEED = 0.9;
+
+  const wrap = (value: number, size: number) => ((value % size) + size) % size;
+
+  const shuffle = <T,>(list: T[]) => {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
+  };
+
+  for (const field of document.querySelectorAll<HTMLElement>(".logo-field_wrap")) {
+    const viewport = field.querySelector<HTMLElement>(".logo-field_viewport");
+    const plane = field.querySelector<HTMLElement>(".logo-field_plane");
+    const tile = field.querySelector<HTMLElement>(".logo-field_tile");
+    const toggle = field.querySelector<HTMLButtonElement>(".logo-field_toggle");
+    if (!viewport || !plane || !tile || !toggle) continue;
+
+    /* A new arrangement on every visit: logos dealt out in a fresh order,
+       each nudged off its grid point */
+    const cells = [...tile.querySelectorAll<HTMLElement>(".logo-field_cell")];
+    const count = Number(tile.dataset.logoCount) || 1;
+    const styles = cells.slice(0, count).map((cell) => cell.firstElementChild!.getAttribute("style") ?? "");
+    let deck: string[] = [];
+    for (const cell of cells) {
+      if (deck.length === 0) deck = shuffle([...styles]);
+      cell.firstElementChild!.setAttribute("style", deck.pop()!);
+      cell.style.setProperty("--_dx", (Math.random() * 2 - 1).toFixed(3));
+      cell.style.setProperty("--_dy", (Math.random() * 2 - 1).toFixed(3));
+    }
+
+    /* Enough copies of the tile to cover the field wherever the plane sits */
+    const fill = () => {
+      const across = Math.ceil(viewport.offsetWidth / tile.offsetWidth) + 1;
+      const down = Math.ceil(viewport.offsetHeight / tile.offsetHeight) + 1;
+      if (plane.children.length === across * down) return;
+      plane.replaceChildren(tile);
+      for (let i = 1; i < across * down; i++) plane.append(tile.cloneNode(true));
+      plane.style.setProperty("--_across", String(across));
+    };
+    fill();
+    new ResizeObserver(fill).observe(viewport);
+
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    let x = Math.random() * tile.offsetWidth;
+    let y = Math.random() * tile.offsetHeight;
+    const start = Math.random() * TURN;
+    const phase = Math.random() * TURN;
+    let time = 0;
+    let last = 0;
+    let frame = 0;
+    let playing = false;
+    let visible = true;
+
+    const place = () => {
+      plane.style.translate = `${-wrap(x, tile.offsetWidth)}px ${-wrap(y, tile.offsetHeight)}px`;
+    };
+
+    const step = (now: number) => {
+      const seconds = last ? Math.min((now - last) / 1000, 0.05) : 0;
+      last = now;
+      time += seconds;
+      const heading =
+        start + (time / SWING) * TURN + 0.9 * Math.sin((time / WANDER) * TURN + phase);
+      x += Math.cos(heading) * SPEED * rem * seconds;
+      y += Math.sin(heading) * SPEED * rem * seconds;
+      place();
+      frame = requestAnimationFrame(step);
+    };
+
+    const run = () => {
+      cancelAnimationFrame(frame);
+      last = 0;
+      if (playing && visible) frame = requestAnimationFrame(step);
+    };
+
+    const setPlaying = (next: boolean) => {
+      playing = next;
+      toggle.setAttribute("aria-pressed", String(next));
+      toggle.setAttribute("aria-label", next ? "Pause the moving logos" : "Play the moving logos");
+      run();
+    };
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      run();
+    }).observe(field);
+
+    /* Anyone who asked for less motion gets a still field, and can start it */
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    place();
+    setPlaying(!reduced.matches);
+    reduced.addEventListener("change", () => setPlaying(!reduced.matches));
+    toggle.addEventListener("click", () => setPlaying(!playing));
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .logo-field_wrap {
+      --_cell-width: 13rem;
+      --_cell-height: 6rem;
+      min-height: clamp(16rem, 30vw, 24rem);
+      overflow: clip;
+      background-color: var(--background-2);
+
+      /* The toggle rests in the corner; the field fills the rest */
+      & > .container {
+        flex: 1;
+        justify-content: flex-end;
+        align-items: flex-end;
+        padding-block: var(--space-4);
+      }
+    }
+
+    /* Fades what drifts in and out at the sides rather than cutting it off */
+    .logo-field_viewport {
+      overflow: clip;
+      mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    }
+
+    .logo-field_plane {
+      display: grid;
+      grid-template-columns: repeat(var(--_across, 1), max-content);
+      width: max-content;
+      will-change: translate;
+    }
+
+    .logo-field_tile {
+      display: grid;
+      grid-template-columns: repeat(var(--_columns), var(--_cell-width));
+      grid-auto-rows: var(--_cell-height);
+    }
+
+    /* A shifted row runs half a cell into the next tile, where the same row
+       starts half a cell in, so the join is invisible */
+    .logo-field_cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      translate: calc((var(--_shift, 0) + var(--_dx, 0) * 0.08) * var(--_cell-width))
+        calc(var(--_dy, 0) * 0.2 * var(--_cell-height));
+    }
+
+    /* Each logo is drawn in the text color of the theme, whatever its own */
+    .logo-field_logo {
+      display: block;
+      flex: none;
+      background-color: color-mix(in srgb, var(--text) 88%, transparent);
+      mask: var(--_src) center / contain no-repeat;
+    }
+
+    /* A solid backing keeps the toggle legible over whatever drifts past */
+    .logo-field_wrap .logo-field_toggle.secondary {
+      --button-background: var(--background);
+      position: relative;
+    }
+  }
+</style>

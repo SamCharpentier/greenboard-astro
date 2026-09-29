@@ -1,0 +1,167 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/BaseLayout.astro";
+import HeroPage from "@/components/section/HeroPage.astro";
+import LogoField from "@/components/section/LogoField.astro";
+import Section from "@/components/wrapper/Section.astro";
+import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Heading from "@/components/typography/Heading.astro";
+import Paragraph from "@/components/typography/Paragraph.astro";
+import Button from "@/components/Button.astro";
+import Card from "@/components/item/Card.astro";
+import List from "@/components/item/List.astro";
+import Icon from "@/components/media/Icon.astro";
+import Img from "@/components/media/Img.astro";
+import Filter from "@/components/interactive/Filter.astro";
+import FilterOption from "@/components/interactive/FilterOption.astro";
+import handshake from "@/assets/icons/handshake.svg";
+import landmark from "@/assets/icons/landmark.svg";
+import cloud from "@/assets/icons/cloud.svg";
+import partnerPhoto from "@/assets/images/partnerships/partner-with-greenboard.webp";
+
+const partners = (
+  await getCollection("partners", ({ data }) => data.status === "published")
+).sort((a, b) => a.data.name.localeCompare(b.data.name));
+const categories = (await getCollection("partnerCategories")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const categoryNames = new Map(categories.map((entry) => [entry.id, entry.data.name]));
+
+/* Only categories with a partner to show get an option */
+const options = categories.filter((entry) =>
+  partners.some((partner) => partner.data.category.id === entry.id),
+);
+---
+
+<Layout
+  title="Greenboard Partners | Compliance Technology Partnerships"
+  description="Partner with the compliance platform trusted by 500+ financial firms with 99%+ customer retention. Integrate with Greenboard to deliver modern SEC and FINRA compliance solutions to your clients."
+>
+  {/* Hero */}
+  <HeroPage
+    heading="<strong>The compliance operating system</strong> connecting the industry’s best."
+    maxWidth={16}
+  >
+    <Paragraph slot="column2" variant="large">
+      Greenboard partners with the foremost leaders across financial services,
+      including compliance consultancies, custody and data, and cloud
+      technology. Their expertise, data, and technology come together in one
+      interconnected, AI-enabled platform, giving your compliance team a modern
+      experience that scales as you grow.
+    </Paragraph>
+    <ButtonWrapper slot="column2">
+      <Button element="link" href="/become-a-partner">Become a partner</Button>
+      <Button element="link" href="#partners" emphasis="secondary" icon="down">
+        See all partners
+      </Button>
+    </ButtonWrapper>
+  </HeroPage>
+
+  {/* Partner logos */}
+  <LogoField
+    logos={partners.map((partner) => ({ image: partner.data.logo, name: partner.data.name }))}
+  />
+
+  {/* Ecosystem */}
+  <Section theme="soft" aria-labelledby="layers-title">
+    <ContentWrapper variant="columns" column1Class="align-self-start">
+      <Heading tag="h2" maxWidth={16} id="layers-title">
+        Partners at every layer of your compliance stack.
+      </Heading>
+      <Paragraph maxWidth={44} class="color-faded">
+        Our ecosystem spans compliance services, data & custody, and cloud
+        technology, each integrated to strengthen the workflows at the core of
+        Greenboard and automate more of your compliance program.
+      </Paragraph>
+      <ButtonWrapper>
+        <Button element="link" href="#partners" emphasis="secondary" icon="down">
+          See all partners
+        </Button>
+      </ButtonWrapper>
+      <List slot="column2" variant="rows">
+        <li>
+          <Icon src={handshake} />
+          <strong>Compliance Services Partners</strong>
+          Connect with regulatory and advisory experts who help firms stay
+          compliant and confident as they grow.
+        </li>
+        <li>
+          <Icon src={landmark} />
+          <strong>Data & Custody</strong>
+          Securely aggregate and monitor assets, trades, and client data through
+          the most trusted custodians and integrations in the industry.
+        </li>
+        <li>
+          <Icon src={cloud} />
+          <strong>Cloud & Technology</strong>
+          Seamlessly capture communications and integrate everyday tools through
+          our partnerships with leading cloud and software providers.
+        </li>
+      </List>
+    </ContentWrapper>
+  </Section>
+
+  {/* Partner directory */}
+  <Section theme="light" id="partners" aria-labelledby="partners-title">
+    <ContentWrapper variant="auto-width">
+      <Heading tag="h2" maxWidth={15} id="partners-title">
+        Explore by partnership type
+      </Heading>
+      <Paragraph slot="column2" maxWidth={48} class="color-faded">
+        Each category reflects a key layer of the Greenboard operating system.
+        Select a type below to see the partners that power it.
+      </Paragraph>
+    </ContentWrapper>
+    <Filter id="category" variant="menu" allLabel="All" pageSize={12}>
+      {
+        options.map((entry) => (
+          <FilterOption slot="options" value={entry.id}>
+            {entry.data.name}
+          </FilterOption>
+        ))
+      }
+      <Grid medium={2} large={3} class="gap-row-8">
+        {
+          partners.map((partner) => (
+            <Card
+              variant="stacked"
+              image={partner.data.logo}
+              imageAlt={partner.data.name}
+              imageFit="contain"
+              eyebrow={categoryNames.get(partner.data.category.id)}
+              heading={partner.data.name}
+              text={partner.data.summary}
+              buttonLabel="Read more"
+              buttonHref={`/partners/${partner.id}`}
+              data-filter={partner.data.category.id}
+            />
+          ))
+        }
+      </Grid>
+    </Filter>
+  </Section>
+
+  {/* Become a partner */}
+  <Section theme="soft" aria-labelledby="join-title">
+    <ContentWrapper variant="columns">
+      <Heading tag="h2" maxWidth={16} id="join-title">
+        Partner with Greenboard
+      </Heading>
+      <Paragraph maxWidth={40} class="color-faded">
+        If your company provides technology, custody, or compliance services
+        that could integrate with our platform, we’d love to hear from you.
+      </Paragraph>
+      <ButtonWrapper>
+        <Button element="link" href="/become-a-partner">Become a partner</Button>
+      </ButtonWrapper>
+      <Img
+        slot="column2"
+        src={partnerPhoto}
+        alt="Two colleagues reviewing work together at a laptop"
+        class="radius-main"
+      />
+    </ContentWrapper>
+  </Section>
+</Layout>
