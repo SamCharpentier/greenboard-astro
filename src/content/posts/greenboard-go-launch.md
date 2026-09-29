@@ -98,10 +98,6 @@ That's the shift GreenboardGo is built to enable. Compliance is no longer just a
 
 It's becoming a system of action.
 
-‍**‍**
-
 **Read more:** [Full press release](https://www.businesswire.com/news/home/20260512170224/en/Greenboard-Raises-%2420M-to-Make-Everyone-a-Compliance-Champion)
 
 **Media inquiries:** press@greenboard.com
-
-‍

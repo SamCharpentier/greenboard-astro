@@ -54,9 +54,16 @@ const results = await slotContent(Astro.slots, "results");
       gap: var(--space-6);
     }
 
+    /* A rule sets the results apart from the story: across the top while the
+       two stack, down the left once they sit side by side */
     .case-panel_results {
       gap: var(--space-6);
       padding: var(--space-6);
+      border-top: var(--border-width) solid var(--border);
+      @media (width >= 64rem) {
+        border-top: 0;
+        border-left: var(--border-width) solid var(--border);
+      }
     }
   }
 </style>

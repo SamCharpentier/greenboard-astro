@@ -17,6 +17,7 @@ import Button from "@/components/Button.astro";
 import Byline from "@/components/item/Byline.astro";
 import Card from "@/components/item/Card.astro";
 import Share from "@/components/interactive/Share.astro";
+import TableOfContents from "@/components/interactive/TableOfContents.astro";
 import CtaWhitepaper from "@/components/content/CtaWhitepaper.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
 import defaultCover from "@/assets/images/blog/default-cover.jpg";
@@ -43,7 +44,12 @@ type Props = {
 
 const { post, related } = Astro.props;
 const { data } = post;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+/* The contents list the post's top level of sections. Posts brought over from
+   Webflow open their sections at h3 as often as h2, so the level is read from
+   the post rather than fixed. */
+const sectionDepth = Math.min(...headings.map((item) => item.depth).filter((depth) => depth > 1));
+const sections = headings.filter((item) => item.depth === sectionDepth);
 const author = data.author ? await getEntry(data.author) : undefined;
 const byline = author && {
   name: author.data.name,
@@ -104,10 +110,15 @@ const structuredData = {
   {/* Article */}
   <Section theme="light" aria-label="Article">
     <ContentWrapper variant="article">
-      <RichText article>
+      <TableOfContents headings={sections} />
+      <RichText slot="column2" article>
         <Content />
       </RichText>
-      <ContentWrapper variant="auto-width" class="align-items-center margin-top-8">
+      <ContentWrapper
+        slot="column2"
+        variant="auto-width"
+        class="align-items-center margin-top-8"
+      >
         <Byline {...byline} />
         <Share slot="column2" />
       </ContentWrapper>

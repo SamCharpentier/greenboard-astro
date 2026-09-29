@@ -45,7 +45,7 @@ const trusted = await trustedLogos();
     poster="/images/hero-poster.jpg"
     caption="Yes, this video was made with AI. Your next deficiency letter might be too, so let’s get ahead of it together, with Go."
   >
-    <Paragraph variant="large" maxWidth={34}>
+    <Paragraph variant="large" maxWidth={34} class="text-wrap-balance">
       <GoMark href="#platform" /> makes compliance better for the people we serve.
     </Paragraph>
     <Form name="demo-request" variant="inline">
@@ -87,7 +87,7 @@ const trusted = await trustedLogos();
       Fully configurable, built on top of WORM and 17a-4 compliant backbone modules
     </Heading>
     <Accordion single={false}>
-      <AccordionItem heading="Archiving & Supervision" label="eComms" openTheme="deep" open>
+      <AccordionItem heading="Archiving & Supervision" label="eComms" openTheme="deep">
         <Paragraph slot="intro" variant="large" maxWidth={58}>
           Capture every channel your firm uses, then supervise it with a risk graph you configure yourself — AI rules and lexicons working together, cutting false positives by 99.14% and leaving a reviewable trail behind every decision.
         </Paragraph>

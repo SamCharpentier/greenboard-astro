@@ -17,6 +17,9 @@ import Form from "@/components/form/Form.astro";
 import Input from "@/components/form/Input.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
 import posterSource from "@/assets/images/greenboardgo-poster.jpg";
+import pencil from "@/assets/icons/pencil.svg";
+import brain from "@/assets/icons/brain.svg";
+import code from "@/assets/icons/code.svg";
 
 const poster = await getImage({ src: posterSource, width: 960, format: "webp" });
 ---
@@ -59,18 +62,21 @@ const poster = await getImage({ src: posterSource, width: 960, format: "webp" })
     <Grid medium={3} class="gap-row-7">
       <Card
         variant="feature"
+        icon={pencil}
         eyebrow="Ask"
         heading="Ask it like you'd ask a colleague."
         text="GreenboardGo works the way people actually think — type a question in plain language and get an answer in seconds. No prompts to learn, no workflows to navigate."
       />
       <Card
         variant="feature"
+        icon={brain}
         eyebrow="Decide"
         heading="From question to documented decision in seconds."
         text="GreenboardGo works the way people actually think — type a question in plain language and get an answer in seconds. No prompts to learn, no workflows to navigate."
       />
       <Card
         variant="feature"
+        icon={code}
         eyebrow="Prove"
         heading="Answers grounded in your actual program."
         text="GreenboardGo is trained on your firm's policies, procedures, and books and records — so every answer is grounded in what your regulators expect to see."

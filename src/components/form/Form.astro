@@ -144,6 +144,18 @@ const content = await slotContent(Astro.slots);
         border: 0;
         outline-style: none;
       }
+      /* On one line the button sets the height of the bar, so it sits the same
+         distance from the edge above, below and to the right. The field fills
+         that height rather than adding padding of its own. */
+      @media (width >= 30rem) {
+        & .field {
+          align-self: stretch;
+        }
+        & .field-control {
+          --_field-pad-block: 0;
+          flex: 1;
+        }
+      }
       & .button_wrap {
         flex-shrink: 0;
       }

@@ -33,6 +33,10 @@ def fix(text):
 
 
 def clean(text):
+    # Webflow pads empty rich-text blocks with a zero-width joiner, which the
+    # Markdown export leaves stuck to the asterisks around it, and a bold run
+    # emptied that way leaves four asterisks behind
+    text = text.replace("\u200d", "").replace("****", "")
     return fix(re.sub(r"[​ ]+", " ", text)).strip()
 
 
@@ -171,7 +175,8 @@ for slug, (customer, logo) in CASES.items():
         heading = re.match(r"^(#{2,4}) \**(.+?)\**\s*$", line)
         if heading:
             level = {"##": "##", "###": "##", "####": "###"}[heading.group(1)]
-            out.append(f"{level} {clean(heading.group(2))}")
+            # A heading is bold already, so a bold run left open inside it goes
+            out.append(f"{level} {clean(heading.group(2)).strip('*').strip()}")
         elif re.fullmatch(r"\*\*[^*]{3,90}\*\*", line.strip()):
             out.append(f"### {clean(line.strip()[2:-2])}")
         else:
@@ -222,7 +227,8 @@ for md in sorted((CMS / "blog").glob("*.md")):
         video = re.match(r"^\[Video embed: (\S+)\]$", line.strip())
         if heading:
             level = "##" if heading.group(1) == "#" else heading.group(1)
-            out.append(f"{level} {clean(heading.group(2))}")
+            # A heading is bold already, so a bold run left open inside it goes
+            out.append(f"{level} {clean(heading.group(2)).strip('*').strip()}")
         elif video:
             out.append(f'<iframe src="{video.group(1)}" title="{clean(item["name"])}" loading="lazy" allow="fullscreen; picture-in-picture"></iframe>')
         elif re.fullmatch(r"\*\*[^*\[\]]{3,90}\*\*", line.strip()):

@@ -1,10 +1,13 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import type { HTMLAttributes, SvgComponent } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
 import { slotContent } from "@/utils/slots.ts";
 
 type Props = HTMLAttributes<"div"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
+  /** Icon before the text. Takes the place of the marker. */
+  icon?: SvgComponent;
   /** HTML element. */
   tag?: "span" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   /** Eyebrow style. */
@@ -13,6 +16,7 @@ type Props = HTMLAttributes<"div"> & {
 
 const {
   render = true,
+  icon,
   tag: Tag = "p",
   variant = "default",
   class: className,
@@ -28,8 +32,10 @@ const content = await slotContent(Astro.slots);
       class:list={["eyebrow_wrap", variant !== "default" && variant, className]}
       {...rest}
     >
-      {variant === "default" && (
-        <span class="eyebrow_marker" aria-hidden="true" />
+      {icon ? (
+        <Icon src={icon} class="eyebrow_icon" />
+      ) : (
+        variant === "default" && <span class="eyebrow_marker" aria-hidden="true" />
       )}
       <Tag class="eyebrow_text text-style-small">
         <Fragment set:html={content} />
@@ -61,6 +67,13 @@ const content = await slotContent(Astro.slots);
         aspect-ratio: 1 / 1;
         border-radius: 0.125rem;
         background-color: var(--heading-accent);
+      }
+      .eyebrow_icon {
+        --_size: 1.5rem;
+        color: var(--heading-accent);
+      }
+      &.tag .eyebrow_icon {
+        --_size: 1rem;
       }
       .eyebrow_text {
         color: var(--text-2);

@@ -12,6 +12,70 @@ interface Props {
 }
 
 const { render = true } = Astro.props;
+
+const groups: { title: string; links: [label: string, href: string][] }[] = [
+  {
+    title: "Product",
+    links: [
+      ["Product overview", "/products"],
+      ["Archiving & supervision", "/products/communications-archiving-supervision"],
+      ["Employee compliance", "/products/employee-compliance"],
+      ["Firm compliance", "/products/firm-compliance"],
+      ["Third-party diligence", "/products/third-party-compliance"],
+      ["Content reviews", "/products/marketing-compliance"],
+      ["Unified books & records", "/products/platform"],
+    ],
+  },
+  {
+    title: "GreenboardGo",
+    links: [
+      ["Overview", "/greenboardgo"],
+      ["Capabilities", "/greenboardgo#use-cases"],
+      ["Go Agents", "#"],
+      ["Slack & Teams", "#"],
+      ["Book a demo", "/#demo"],
+    ],
+  },
+  {
+    title: "Customers",
+    links: [
+      ["Solutions overview", "/solutions"],
+      ["Financial advisors", "/solutions/financial-advisors"],
+      ["Private funds", "/solutions/private-funds"],
+      ["Hedge funds", "/solutions/hedge-funds"],
+      ["Broker dealers", "/solutions/broker-dealers"],
+      ["Partnerships", "/partnerships"],
+      ["Small firms", "/#firm-sizes"],
+      ["Growing businesses", "/#firm-sizes"],
+      ["Enterprise", "/#firm-sizes"],
+    ],
+  },
+  {
+    title: "Customer love",
+    links: [
+      ["Case studies", "/case-studies"],
+      ["In their words", "/#testimonials"],
+      ["Trusted by 500+ firms", "#"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About", "/about"],
+      ["Blog", "/blog"],
+      ["Our fiduciary commitment", "#"],
+      ["Security & privacy", "#"],
+      ["Trust Center", "#"],
+      ["Contact", "#"],
+    ],
+  },
+];
+
+/** Marks the link for the page being viewed, as the nav does. A link to a spot
+    on a page is not the page itself, and trailing slashes are ignored. */
+const here = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const current = (href: string) =>
+  !href.includes("#") && href.replace(/\/+$/, "") === here ? "page" : undefined;
 ---
 
 {
@@ -47,61 +111,22 @@ const { render = true } = Astro.props;
             </div>
           </div>
           <nav class="footer_groups" aria-label="Footer">
-            <div>
-              <h2 class="footer_group_title text-style-small">Product</h2>
-              <ul class="footer_links">
-                <li><a class="footer_link" href="/products">Product overview</a></li>
-                <li><a class="footer_link" href="/products/communications-archiving-supervision">Archiving & supervision</a></li>
-                <li><a class="footer_link" href="/products/employee-compliance">Employee compliance</a></li>
-                <li><a class="footer_link" href="/products/firm-compliance">Firm compliance</a></li>
-                <li><a class="footer_link" href="/products/third-party-compliance">Third-party diligence</a></li>
-                <li><a class="footer_link" href="/products/marketing-compliance">Content reviews</a></li>
-                <li><a class="footer_link" href="/products/platform">Unified books & records</a></li>
-              </ul>
-            </div>
-            <div>
-              <h2 class="footer_group_title text-style-small">GreenboardGo</h2>
-              <ul class="footer_links">
-                <li><a class="footer_link" href="/greenboardgo">Overview</a></li>
-                <li><a class="footer_link" href="/greenboardgo#use-cases">Capabilities</a></li>
-                <li><a class="footer_link" href="#">Go Agents</a></li>
-                <li><a class="footer_link" href="#">Slack & Teams</a></li>
-                <li><a class="footer_link" href="/#demo">Book a demo</a></li>
-              </ul>
-            </div>
-            <div>
-              <h2 class="footer_group_title text-style-small">Customers</h2>
-              <ul class="footer_links">
-                <li><a class="footer_link" href="/solutions">Solutions overview</a></li>
-                <li><a class="footer_link" href="/solutions/financial-advisors">Financial advisors</a></li>
-                <li><a class="footer_link" href="/solutions/private-funds">Private funds</a></li>
-                <li><a class="footer_link" href="/solutions/hedge-funds">Hedge funds</a></li>
-                <li><a class="footer_link" href="/solutions/broker-dealers">Broker dealers</a></li>
-                <li><a class="footer_link" href="/partnerships">Partnerships</a></li>
-                <li><a class="footer_link" href="/#firm-sizes">Small firms</a></li>
-                <li><a class="footer_link" href="/#firm-sizes">Growing businesses</a></li>
-                <li><a class="footer_link" href="/#firm-sizes">Enterprise</a></li>
-              </ul>
-            </div>
-            <div>
-              <h2 class="footer_group_title text-style-small">Customer love</h2>
-              <ul class="footer_links">
-                <li><a class="footer_link" href="/case-studies">Case studies</a></li>
-                <li><a class="footer_link" href="/#testimonials">In their words</a></li>
-                <li><a class="footer_link" href="#">Trusted by 500+ firms</a></li>
-              </ul>
-            </div>
-            <div>
-              <h2 class="footer_group_title text-style-small">Company</h2>
-              <ul class="footer_links">
-                <li><a class="footer_link" href="/about">About</a></li>
-                <li><a class="footer_link" href="/blog">Blog</a></li>
-                <li><a class="footer_link" href="#">Our fiduciary commitment</a></li>
-                <li><a class="footer_link" href="#">Security & privacy</a></li>
-                <li><a class="footer_link" href="#">Trust Center</a></li>
-                <li><a class="footer_link" href="#">Contact</a></li>
-              </ul>
-            </div>
+            {
+              groups.map(({ title, links }) => (
+                <div>
+                  <h2 class="footer_group_title text-style-small">{title}</h2>
+                  <ul class="footer_links">
+                    {links.map(([label, href]) => (
+                      <li>
+                        <a class="footer_link" href={href} aria-current={current(href)}>
+                          {label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
           </nav>
         </div>
         <div class="footer_bottom">
@@ -241,6 +266,12 @@ const { render = true } = Astro.props;
         &:hover {
           color: var(--heading-accent);
         }
+      }
+      /* The page being viewed is underlined like a link in running text */
+      &[aria-current="page"] {
+        text-decoration-line: underline;
+        text-decoration-thickness: var(--border-width);
+        text-underline-offset: 0.2em;
       }
     }
 

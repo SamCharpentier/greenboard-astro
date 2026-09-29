@@ -39,7 +39,7 @@ Neural networks are composed of exponentially more parameters than a statisticia
 
 Inference is the process by which the AI model we interact with takes a new piece of data (e.g., a prompt given) and probabilistically assesses how it aligns with the broader dataset it was trained on. ChatGPT, for example, works by predicting the highest probability next word that will occur given each word that occurred before it. Our CEO Dave aptly put it this way: “in the same way that Excel was developed to be really good at crunching numbers, this generation of artificial intelligence is really good at crunching words” in [a recent episode of The Trust Podcast](https://greenboard.com/resources/kitces).
 
-**What Does this Mean for Compliance?**‍
+**What Does this Mean for Compliance?**
 
 It wasn’t always the case that financial firms could count on cheap hard drives and cloud storage to keep records. Back when filing cabinets (and file rooms) were the norm, businesses needed to dedicate substantial resources to keeping their files organized and accessible. But it turns out computers are cheaper and better than humans at storing files by a wide margin. And so, there are no longer roles for file clerks in the economy and computers became the tools that these employees used to become more efficient and productive.
 
@@ -68,5 +68,3 @@ To contact the author or learn more about Greenboard please contact [cameron@gre
 [5] <https://the-decoder.com/gpt-4-architecture-datasets-costs-and-more-leaked/>
 
 [6] <https://spectrum.ieee.org/what-is-deep-learning>
-
-‍

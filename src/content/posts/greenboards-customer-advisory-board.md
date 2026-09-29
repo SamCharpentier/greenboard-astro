@@ -79,7 +79,7 @@ Cindy oversees compliance at Onyx Bridge Wealth Group, where she translates evol
 
 Alex serves as both Chief Operating Officer and Chief Compliance Officer at Root Financial, a fiduciary, fee-only advisory firm. She previously held compliance and operational leadership roles at Turning Point Financial and Rossby.
 
-‍**Christian Szautner**, Chief Compliance Officer & Chief Legal Officer, TIFF Investment Management
+**Christian Szautner**, Chief Compliance Officer & Chief Legal Officer, TIFF Investment Management
 
 Christian has led compliance at TIFF Investment Management since 2008, overseeing regulatory matters across TIFF’s investment advisers, mutual fund, and more than 40 private funds. He designed the firm’s operational and compliance due diligence program covering over 100 global third-party managers. Christian previously spent 11 years as an investment management partner at Ballard Spahr LLP.
 

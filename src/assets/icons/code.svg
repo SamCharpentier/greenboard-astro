@@ -1,0 +1,6 @@
+<!-- From the Greenboard Webflow site (GreenboardGo steps) -->
+<svg width="24" height="24" viewBox="-1.5 -3.5 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.97403 4.97656L1 8.28825L4.97403 11.5999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width: var(--icon-stroke-width)"/>
+<path d="M15.5713 4.97656L19.5453 8.28825L15.5713 11.5999" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width: var(--icon-stroke-width)"/>
+<path d="M12.922 1L7.62329 15.5714" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width: var(--icon-stroke-width)"/>
+</svg>

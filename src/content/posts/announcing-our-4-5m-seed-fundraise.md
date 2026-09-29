@@ -31,7 +31,7 @@ To get in touch with the Greenboard team, reach out at [founders@greenboard.com]
 
 Greenboard, Inc. was founded in 2023 to build an all-in-one operating system for financial back-offices. Greenboard's founding team consists of Dave Feldman (CEO) and Ed Schembor (CTO) who have a 10+ year relationship. The team participated in the Y Combinator Winter 2024 accelerator program, and now help protect billions in client assets. Visit [www.greenboard.com](https://c212.net/c/link/?t=0&l=en&o=4161869-1&h=2065699608&u=http%3A%2F%2Fwww.greenboard.com%2F&a=www.greenboard.com) for more information.
 
-**About Base10 Partners**‍
+**About Base10 Partners**
 
 Founded by Adeyemi Ajao and TJ Nahigian, Base10 is a San Francisco-based venture capital fund investing in founders who believe purpose is key to profits and companies that are automating sectors of the Real Economy, including transportation, retail, logistics, and construction. Through its program, The Advancement Initiative, Base10 aims to donate 50% of profits to underfunded colleges and universities to support financial aid and other key initiatives. Portfolio companies include Notion, Figma, Nubank, Stripe, Motive, Chili Piper, and Popmenu. Connect via [base10.vc](https://c212.net/c/link/?t=0&l=en&o=4161869-1&h=2323106945&u=https%3A%2F%2Fbase10.vc%2F&a=base10.vc).
 

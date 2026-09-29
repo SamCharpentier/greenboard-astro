@@ -34,6 +34,11 @@ const content = await slotContent(Astro.slots);
       gap: var(--space-2);
       width: 100%;
       margin-top: var(--space-5);
+      /* The space sets a list apart from what comes before it. Opening its
+         column, it would push the list below the content beside it. */
+      &:first-child {
+        margin-top: 0;
+      }
       /* The text style's trim boxes would join the flex items */
       &::before,
       &::after {
@@ -133,6 +138,11 @@ const content = await slotContent(Astro.slots);
           border-radius: var(--radius-small);
           background-color: var(--background-2);
           color: var(--heading-accent);
+          /* On a dark surface the accent reads as a stain, so the icon takes
+             the text color */
+          .theme-dark & {
+            color: var(--text);
+          }
         }
         /* A title after the icon heads the item and the text runs under it */
         & > li:has(> .icon:first-child + strong) {
@@ -168,6 +178,21 @@ const content = await slotContent(Astro.slots);
         padding-top: var(--space-5);
         border-top: var(--border-width) solid var(--border);
         color: var(--text-2);
+        /* The items recede so the link closing the run still reads as the action */
+        & > li:not(:has(> .button_wrap)) {
+          opacity: 0.55;
+        }
+        /* A link item is a flex row one line tall, the height of the items
+           beside it, rather than a line of text wrapped around the button */
+        & > li:has(> .button_wrap) {
+          display: flex;
+          align-items: center;
+          min-height: 1lh;
+        }
+        & .button_wrap.link {
+          padding-block: 0;
+          line-height: inherit;
+        }
       }
     }
   }

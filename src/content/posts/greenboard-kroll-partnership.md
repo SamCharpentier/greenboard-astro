@@ -62,10 +62,6 @@ For firms facing increasing regulatory pressure, this shift matters.
 
 Compliance has always been about demonstrating that a program works. This partnership makes that easier to prove.
 
-‍
-
-‍*Learn more*
+*Learn more*
 
 *To learn more about the partnership, visit* [*greenboard.com*](/) *or explore the Kroll partnership page at* [*greenboard.com/partners/kroll.*](/partners/kroll)
-
-‍

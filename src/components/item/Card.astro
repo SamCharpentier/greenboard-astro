@@ -1,5 +1,5 @@
 ---
-import type { HTMLAttributes } from "astro/types";
+import type { HTMLAttributes, SvgComponent } from "astro/types";
 import Eyebrow from "@/components/typography/Eyebrow.astro";
 import Heading from "@/components/typography/Heading.astro";
 import Paragraph from "@/components/typography/Paragraph.astro";
@@ -18,6 +18,8 @@ type ImageSource = ImageMetadata | string;
 type Base = HTMLAttributes<"div"> & {
   /** Set to `false` to omit the component. */
   render?: boolean;
+  /** Icon before the eyebrow, in place of its marker. */
+  icon?: SvgComponent;
   /** Eyebrow text. Supports inline markup. */
   eyebrow?: string;
   /** Short note beside the eyebrow. */
@@ -133,6 +135,7 @@ type AllProps = Base & {
 
 const {
   render = true,
+  icon,
   eyebrow,
   meta,
   heading,
@@ -245,7 +248,7 @@ if (import.meta.env.DEV && render) {
         <div class="card_content margin-trim">
           {(eyebrow || meta) && (
             <div class="card_header">
-              <Eyebrow variant={surfaced ? "tag" : "default"}>
+              <Eyebrow variant={surfaced ? "tag" : "default"} icon={icon}>
                 <Fragment set:html={eyebrow} />
               </Eyebrow>
               {meta && <p class="card_meta text-style-small">{meta}</p>}
@@ -574,11 +577,35 @@ if (import.meta.env.DEV && render) {
       margin-top: var(--space-2);
     }
 
+    /* A card that also carries a details list has a lot to hold, so its parts
+       sit closer and the card keeps to the height of its content */
+    .card_wrap:not(.quote):has(> .card_content > .card_details) {
+      --_padding: var(--space-5);
+      & > .card_content {
+        & > .card_header {
+          margin-bottom: var(--space-4);
+        }
+        & > .card_header + .heading {
+          margin-top: 0;
+        }
+        & > :is(.button-wrapper, .card_arrow):last-child {
+          padding-top: var(--space-5);
+        }
+      }
+    }
+
     .card_details {
       width: 100%;
       margin-top: var(--space-5);
       padding-top: var(--space-5);
       border-top: var(--border-width) solid var(--border);
+
+      /* The rule and its padding already hold the space above, so what comes
+         first adds none of its own. margin-trim can't do this: it sits in a
+         lower layer than the margin a list sets for itself. */
+      & > :first-child {
+        margin-top: 0;
+      }
 
       /* The rule runs edge to edge under a quote */
       .quote > .card_content > & {

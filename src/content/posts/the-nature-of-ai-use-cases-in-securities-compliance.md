@@ -50,7 +50,7 @@ At Greenboard, we're building software that we believe the whole industry will b
 
 How is it possible for our technology to be so much better than the alternatives available? Aside from our **comparative expertise in working with AI** versus the leadership of some of the mega-compliance corporations, we also don't have hundreds of millions (yes, you read that right) in annual profits riding upon maintaining the status quo. **It's a classic case of an innovator's dilemma, and it's a structural force that is hampering innovation in this sector (and is also why incumbents are already falsely attacking our product - see below).**
 
-**‍**Each and every securities compliance officer will face a choice in their careers at some point in the next 10 years. They can continue to trust the tools built by companies that have a vested interest in maintaining the status quo and risk being outdone by someone who adopts new technologies, or risk looking foolish for entrusting new technology too early.***‍***
+Each and every securities compliance officer will face a choice in their careers at some point in the next 10 years. They can continue to trust the tools built by companies that have a vested interest in maintaining the status quo and risk being outdone by someone who adopts new technologies, or risk looking foolish for entrusting new technology too early.**
 
 <iframe src="https://player.vimeo.com/video/1037259855" title="The Nature of AI Use Cases in Securities Compliance" loading="lazy" allow="fullscreen; picture-in-picture"></iframe>
 
