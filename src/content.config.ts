@@ -62,6 +62,16 @@ const products = defineCollection({
     }),
 });
 
+/* The kinds of firm Greenboard serves. Stories are tagged with one, solution
+   pages speak to one, and the case study list filters by them. */
+const firmTypes = defineCollection({
+  loader: glob({ pattern: "*.json", base: "./src/content/firm-types" }),
+  schema: z.object({
+    name: z.string(),
+    order: z.number(),
+  }),
+});
+
 const solutions = defineCollection({
   loader: glob({ pattern: "*.json", base: "./src/content/solutions" }),
   schema: ({ image }) =>
@@ -73,6 +83,7 @@ const solutions = defineCollection({
       image: image(),
       imageAlt: z.string().optional(),
       order: z.number(),
+      firmType: reference("firmTypes").optional(),
       benefits: z.array(z.object({ heading: z.string(), text: z.string() })),
       seo,
     }),
@@ -105,7 +116,7 @@ const caseStudies = defineCollection({
     z.object({
       title: z.string(),
       customer: z.string(),
-      firmType: reference("solutions"),
+      firmType: reference("firmTypes"),
       logo: image(),
       summary: z.string(),
       excerpt: z.string(),
@@ -153,6 +164,7 @@ export const collections = {
   people,
   customers,
   products,
+  firmTypes,
   solutions,
   comparisons,
   caseStudies,

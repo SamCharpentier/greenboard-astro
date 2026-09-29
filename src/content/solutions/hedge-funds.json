@@ -6,6 +6,7 @@
   "image": "../../assets/images/solutions/hedge-funds.jpg",
   "imageAlt": "A portfolio manager working on a laptop outdoors",
   "order": 4,
+  "firmType": "hedge-funds",
   "benefits": [
     {
       "heading": "All-in-One Compliance OS",

@@ -13,6 +13,7 @@ import Button from "@/components/Button.astro";
 import Card from "@/components/item/Card.astro";
 import Form from "@/components/form/Form.astro";
 import Input from "@/components/form/Input.astro";
+import CaseQuotes from "@/components/content/CaseQuotes.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
 
 export const getStaticPaths = (async () => {
@@ -28,17 +29,14 @@ type Props = { solution: CollectionEntry<"solutions"> };
 const { solution } = Astro.props;
 const { data } = solution;
 
+/* Stories from the firm type this page speaks to come first, newest first */
+const ours = (story: CollectionEntry<"caseStudies">) =>
+  Number(story.data.firmType.id === data.firmType?.id);
 const stories = (
   await getCollection("caseStudies", ({ data }) => data.status === "published")
-).sort(
-  (a, b) =>
-    Number(b.data.firmType.id === solution.id) -
-      Number(a.data.firmType.id === solution.id) ||
-    b.data.date.getTime() - a.data.date.getTime(),
-);
-const firmTypes = new Map(
-  (await getCollection("solutions")).map((entry) => [entry.id, entry.data.name]),
-);
+)
+  .sort((a, b) => ours(b) - ours(a) || b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 ---
 
 <Layout
@@ -96,23 +94,7 @@ const firmTypes = new Map(
         All case studies
       </Button>
     </ContentWrapper>
-    <Grid medium={2} large={3} class="gap-row-8">
-      {
-        stories.map((story) => (
-          <Card
-            variant="stacked"
-            image={story.data.logo}
-            imageAlt={story.data.customer}
-            imageFit="contain"
-            eyebrow={firmTypes.get(story.data.firmType.id)}
-            heading={story.data.title}
-            text={story.data.excerpt}
-            buttonLabel="Read the story"
-            buttonHref={`/case-studies/${story.id}`}
-          />
-        ))
-      }
-    </Grid>
+    <CaseQuotes stories={stories} />
   </Section>
 
   {/* Closing call to action */}

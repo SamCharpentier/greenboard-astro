@@ -1,0 +1,220 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Button from "@/components/Button.astro";
+import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
+import { slotContent } from "@/utils/slots.ts";
+import { uid } from "@/utils/unique-id.ts";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Text before the options. */
+  label?: string;
+  /** The option that clears the filter. */
+  allLabel?: string;
+  /**
+   * Items shown before `Load more`, and how many each press adds. Omit to show every item.
+   *
+   * @min 1
+   * @int
+   */
+  pageSize?: number;
+};
+
+const {
+  render = true,
+  label = "Filter by",
+  allLabel = "Show all",
+  pageSize,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const options = await slotContent(Astro.slots, "options");
+const list = await slotContent(Astro.slots);
+const labelId = uid("filter-label");
+---
+
+{
+  render && list && (
+    <div
+      class:list={["filter_wrap", className]}
+      data-page-size={pageSize}
+      {...rest}
+    >
+      {options && (
+        <div class="filter_bar" role="group" aria-labelledby={labelId}>
+          <p class="filter_label" id={labelId}>
+            {label}
+          </p>
+          <button
+            class="filter_option"
+            type="button"
+            aria-pressed="true"
+            data-filter-value=""
+          >
+            <span class="text-style-trim">{allLabel}</span>
+          </button>
+          <Fragment set:html={options} />
+        </div>
+      )}
+      <Fragment set:html={list} />
+      <p class="filter_status sr-only" role="status" />
+      {pageSize && (
+        <ButtonWrapper class="filter_more" hidden>
+          <Button emphasis="secondary" icon="down">
+            Load more
+          </Button>
+        </ButtonWrapper>
+      )}
+    </div>
+  )
+}
+
+<noscript>
+  <style>
+    .filter_bar {
+      display: none;
+    }
+  </style>
+</noscript>
+
+<script>
+  for (const wrap of document.querySelectorAll<HTMLElement>(".filter_wrap")) {
+    const options = [
+      ...wrap.querySelectorAll<HTMLButtonElement>(".filter_option"),
+    ];
+    const items = [...wrap.querySelectorAll<HTMLElement>("[data-filter]")];
+    const more = wrap.querySelector<HTMLElement>(".filter_more");
+    const status = wrap.querySelector<HTMLElement>(".filter_status");
+    const pageSize = Number(wrap.dataset.pageSize) || Infinity;
+    const key = wrap.id || "filter";
+    const known = new Set(options.map((option) => option.dataset.filterValue));
+
+    const selected = new Set<string>();
+    let limit = pageSize;
+
+    const matches = (item: HTMLElement) =>
+      selected.size === 0 ||
+      (item.dataset.filter ?? "")
+        .split(/\s+/)
+        .some((value) => selected.has(value));
+
+    const update = (announce: boolean) => {
+      const matching = items.filter(matches);
+      for (const item of items) item.hidden = true;
+      matching.forEach((item, index) => (item.hidden = index >= limit));
+      for (const option of options) {
+        const value = option.dataset.filterValue ?? "";
+        const pressed = value ? selected.has(value) : selected.size === 0;
+        option.setAttribute("aria-pressed", String(pressed));
+      }
+      if (more) more.hidden = matching.length <= limit;
+      if (announce && status) {
+        const shown = Math.min(limit, matching.length);
+        const noun = matching.length === 1 ? "result" : "results";
+        status.textContent =
+          shown < matching.length
+            ? `Showing ${shown} of ${matching.length} ${noun}`
+            : `${matching.length} ${noun}`;
+      }
+    };
+
+    const remember = () => {
+      const url = new URL(location.href);
+      if (selected.size) url.searchParams.set(key, [...selected].join(","));
+      else url.searchParams.delete(key);
+      history.replaceState(history.state, "", url);
+    };
+
+    for (const option of options) {
+      option.addEventListener("click", () => {
+        const value = option.dataset.filterValue ?? "";
+        if (!value) selected.clear();
+        else if (selected.has(value)) selected.delete(value);
+        else selected.add(value);
+        limit = pageSize;
+        update(true);
+        remember();
+      });
+    }
+
+    more?.querySelector("button")?.addEventListener("click", () => {
+      const next = items.filter(matches)[limit];
+      limit += pageSize;
+      update(true);
+      next?.querySelector<HTMLElement>("a[href], button")?.focus();
+    });
+
+    const saved = new URLSearchParams(location.search).get(key);
+    for (const value of saved?.split(",") ?? []) {
+      if (value && known.has(value)) selected.add(value);
+    }
+    update(false);
+  }
+</script>
+
+<style is:global>
+  @layer components {
+    .filter_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      width: 100%;
+    }
+
+    .filter_bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* On a phone the label takes its own line and the options wrap under it */
+    .filter_label {
+      flex-basis: 100%;
+      color: var(--text-2);
+      @media (width >= 48rem) {
+        flex-basis: auto;
+        margin-right: var(--space-2);
+      }
+    }
+
+    .filter_option {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
+      padding: 0.75em 1.25em;
+      border-radius: var(--radius-small);
+      background-color: var(--background-2);
+      color: var(--text);
+      font-weight: var(--primary-medium);
+      line-height: 1.2;
+      transition:
+        background-color var(--hover-duration) var(--hover-ease),
+        color var(--hover-duration) var(--hover-ease);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--background-3);
+        }
+      }
+      &[aria-pressed="true"] {
+        background-color: var(--text);
+        color: var(--background);
+      }
+    }
+
+    /* A chosen option shows how to drop it; clearing all has nothing to drop */
+    .filter_option-icon {
+      display: none;
+      margin-right: -0.25em;
+      [aria-pressed="true"]:not([data-filter-value=""]) > & {
+        display: block;
+      }
+    }
+
+    .filter_more {
+      align-self: center;
+    }
+  }
+</style>

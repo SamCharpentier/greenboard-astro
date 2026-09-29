@@ -1,0 +1,59 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { getEntry, type CollectionEntry } from "astro:content";
+import Grid from "@/components/wrapper/Grid.astro";
+import Card from "@/components/item/Card.astro";
+import Stat from "@/components/item/Stat.astro";
+
+type Props = HTMLAttributes<"div"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** Stories to show, each as its lead quote and headline figure. */
+  stories?: CollectionEntry<"caseStudies">[];
+};
+
+const { render = true, stories = [], class: className, ...rest } = Astro.props;
+
+const cards = await Promise.all(
+  stories.map(async (story) => ({
+    story,
+    person: await getEntry(story.data.quote.person),
+  })),
+);
+
+/* Two stories share the row rather than leave a column empty */
+const columns = Math.min(cards.length, 3);
+---
+
+<Grid
+  render={render && cards.length > 0}
+  medium={Math.min(columns, 2)}
+  large={columns}
+  class:list={["gap-3", className]}
+  {...rest}
+>
+  {
+    cards.map(({ story, person }) => (
+      <Card
+        variant="quote"
+        image={story.data.logo}
+        imageAlt={story.data.customer}
+        quote={story.data.quote.text}
+        name={person?.data.name}
+        position={[person?.data.role, person?.data.company].filter(Boolean).join(", ")}
+        portrait={person?.data.image}
+        buttonLabel={`Read the ${story.data.customer} story`}
+        buttonHref={`/case-studies/${story.id}`}
+      >
+        {story.data.highlight && (
+          <Stat
+            size="small"
+            number={story.data.highlight.number}
+            unit={story.data.highlight.unit}
+            label={story.data.highlight.label}
+          />
+        )}
+      </Card>
+    ))
+  }
+</Grid>

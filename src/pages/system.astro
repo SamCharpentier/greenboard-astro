@@ -31,10 +31,13 @@ import CasePanel from "@/components/content/CasePanel.astro";
 import Byline from "@/components/item/Byline.astro";
 import Share from "@/components/interactive/Share.astro";
 import TableOfContents from "@/components/interactive/TableOfContents.astro";
+import Filter from "@/components/interactive/Filter.astro";
+import FilterOption from "@/components/interactive/FilterOption.astro";
 import VideoEmbed from "@/components/media/VideoEmbed.astro";
 import rootLogo from "@/assets/images/case-studies/root-financial.svg";
 import jmgLogo from "@/assets/images/case-studies/jmg-financial-group.webp";
 import alexStickelman from "@/assets/images/people/alex-stickelman.jpeg";
+import adamBoyer from "@/assets/images/people/adam-boyer.jpg";
 import cabCover from "@/assets/images/blog/greenboards-customer-advisory-board.jpg";
 import podcastStill from "@/assets/images/blog/the-trust-podcast-episode-1-michael-kitces.jpg";
 import SystemLayout from "@/components/content/system/SystemLayout.astro";
@@ -1499,6 +1502,56 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
               fast as the content creators moved.
             </Quote>
           </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Story quote card"
+          text='<code>Card variant="quote"</code>: the customer logo, the lead quote with a portrait, and the headline figure as a <code>Stat size="small"</code> in its slot. The whole card links to the story. In a grid the cards share their rows, so the rules above the figures line up. Used for related stories on case study and solution pages.'
+        >
+          <Grid medium={2} class="gap-3">
+            <Card
+              variant="quote"
+              image={rootLogo}
+              imageAlt="Root Financial"
+              quote="Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved."
+              name="Alex Stickelman"
+              position="CCO & COO, Root Financial"
+              portrait={alexStickelman}
+              buttonLabel="Read the Root Financial story"
+              buttonHref="/case-studies/root-financial"
+            >
+              <Stat size="small" number="24" unit="hours" label="Est. weekly time saved on marketing review" />
+            </Card>
+            <Card
+              variant="quote"
+              image={jmgLogo}
+              imageAlt="JMG Financial Group"
+              quote="I can’t say they like compliance, but I can tell you that advisors love Greenboard."
+              name="Adam Boyer"
+              position="COO & CCO, JMG Financial Group"
+              portrait={adamBoyer}
+              buttonLabel="Read the JMG Financial Group story"
+              buttonHref="/case-studies/jmg-financial-group"
+            >
+              <Stat size="small" number="$7.5B" label="Assets Under Management" />
+            </Card>
+          </Grid>
+        </SystemBlock>
+        <SystemBlock
+          heading="Filter"
+          text='<code>Filter</code> shows the items in its slot that carry a matching <code>data-filter</code>. Options toggle, so several can be on at once, and <code>Show all</code> clears them. The choice is kept in the address under the filter&rsquo;s <code>id</code>. With <code>pageSize</code> set, <code>Load more</code> adds that many at a time. The case study list filters by firm type and shows six at a time; this sample shows two.'
+        >
+          <Filter id="sample-filter" pageSize={2}>
+            <FilterOption slot="options" value="financial-advisors">Financial Advisors</FilterOption>
+            <FilterOption slot="options" value="private-funds">Private Funds</FilterOption>
+            <FilterOption slot="options" value="hedge-funds">Hedge Funds</FilterOption>
+            <Grid medium={2} class="gap-3">
+              <Card variant="row" eyebrow="Financial Advisors" heading="Sample story one" data-filter="financial-advisors" />
+              <Card variant="row" eyebrow="Private Funds" heading="Sample story two" data-filter="private-funds" />
+              <Card variant="row" eyebrow="Hedge Funds" heading="Sample story three" data-filter="hedge-funds" />
+              <Card variant="row" eyebrow="Financial Advisors" heading="Sample story four" data-filter="financial-advisors" />
+              <Card variant="row" eyebrow="Private Funds" heading="Sample story five" data-filter="private-funds" />
+            </Grid>
+          </Filter>
         </SystemBlock>
         <SystemBlock
           heading="Byline and sharing"

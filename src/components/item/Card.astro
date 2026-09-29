@@ -6,10 +6,12 @@ import Paragraph from "@/components/typography/Paragraph.astro";
 import Button from "@/components/Button.astro";
 import ButtonWrapper from "@/components/wrapper/ButtonWrapper.astro";
 import Img from "@/components/media/Img.astro";
+import Byline from "@/components/item/Byline.astro";
 import Overlay from "@/components/media/Overlay.astro";
 import Icon from "@/components/media/Icon.astro";
 import diagonal from "@/assets/icons/arrow-up-right.svg";
 import { slotContent } from "@/utils/slots.ts";
+import { logoHeight } from "@/utils/logo.ts";
 
 type ImageSource = ImageMetadata | string;
 
@@ -33,26 +35,33 @@ type Base = HTMLAttributes<"div"> & {
   /** Button destination. Omit for a `<button>`. */
   buttonHref?: string;
   /** Card layout. */
-  variant?: "default" | "cover" | "stacked" | "feature" | "split" | "person" | "row";
+  variant?: "default" | "cover" | "stacked" | "feature" | "split" | "person" | "row" | "quote";
   /** Color theme of element and its children. */
   theme?: "inherit" | "light" | "soft" | "dark" | "deep" | "brand" | "invert";
 };
 
+type Unquoted = {
+  quote?: never;
+  name?: never;
+  position?: never;
+  portrait?: never;
+};
+
 type Props = Base &
   (
-    | {
+    | (Unquoted & {
         variant?: "default";
         image?: never;
         imageAlt?: never;
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "cover";
         /** Image source. */
         image?: ImageSource;
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "stacked";
         /** Color theme of element and its children. */
         theme?: never;
@@ -62,15 +71,15 @@ type Props = Base &
         imageAlt?: string;
         /** How the image fills its frame. `contain` sets a logo on the surface color, uncropped. */
         imageFit?: "cover" | "contain";
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "feature";
         /** Color theme of element and its children. */
         theme?: never;
         image?: never;
         imageAlt?: never;
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "split";
         /** Image source. */
         image?: ImageSource;
@@ -78,8 +87,8 @@ type Props = Base &
         imageAlt?: string;
         /** How the image fills its frame. `contain` sets a logo on the surface color, uncropped. */
         imageFit?: "cover" | "contain";
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "person";
         /** Color theme of element and its children. */
         theme?: never;
@@ -87,11 +96,28 @@ type Props = Base &
         image?: ImageSource;
         /** Image alt text. Omit for decorative images. */
         imageAlt?: string;
-      }
-    | {
+      })
+    | (Unquoted & {
         variant: "row";
         image?: never;
         imageAlt?: never;
+      })
+    | {
+        variant: "quote";
+        /** Company logo, set above the quote. */
+        image?: ImageSource;
+        /** Image alt text. Omit for decorative images. */
+        imageAlt?: string;
+        /** What they said. */
+        quote?: string;
+        /** Who said it. */
+        name?: string;
+        /** Their role and company. */
+        position?: string;
+        /** Portrait of who said it. */
+        portrait?: ImageMetadata;
+        /** Names the arrow in the corner for screen readers. The whole card links to `buttonHref`. */
+        buttonLabel?: string;
       }
   );
 
@@ -99,6 +125,10 @@ type AllProps = Base & {
   image?: ImageSource;
   imageAlt?: string;
   imageFit?: "cover" | "contain";
+  quote?: string;
+  name?: string;
+  position?: string;
+  portrait?: ImageMetadata;
 };
 
 const {
@@ -116,14 +146,18 @@ const {
   image,
   imageAlt,
   imageFit = "cover",
+  quote,
+  name,
+  position,
+  portrait,
   class: className,
   ...rest
 } = Astro.props as AllProps;
 
 const details = await slotContent(Astro.slots);
 
-const surfaced = ["default", "cover", "split", "row"].includes(variant);
-const pictured = ["cover", "stacked", "split", "person"].includes(variant);
+const surfaced = ["default", "cover", "split", "row", "quote"].includes(variant);
+const pictured = ["cover", "stacked", "split", "person", "quote"].includes(variant);
 const hasImage = pictured && !!image;
 
 /* Titles and text sized to the card, so a set of cards reads as one system */
@@ -131,8 +165,11 @@ const headingVariant = ({ split: "h3", row: "h5", person: "h6" } as const)[
   variant as "split" | "row" | "person"
 ] ?? "h4";
 const textVariant = variant === "split" ? "main" : "small";
-const arrowOnly = !buttonLabel && !!buttonHref;
-const hasContent = !!(eyebrow || heading || text || details || buttonLabel || arrowOnly);
+const quoted = variant === "quote";
+const arrowOnly = (quoted || !buttonLabel) && !!buttonHref;
+const hasContent = !!(
+  eyebrow || heading || text || quote || details || buttonLabel || arrowOnly
+);
 const hasTheme = surfaced && theme !== "inherit";
 
 /* The button each variant closes with, so a set of cards reads as one system.
@@ -143,7 +180,14 @@ const buttonKind =
     : ({ variant: "link", icon: "diagonal" } as const);
 
 /* The arrow alone still needs a name: the heading, without its markup */
-const arrowLabel = heading?.replace(/<[^>]*>/g, "").trim();
+const arrowLabel = quoted ? buttonLabel : heading?.replace(/<[^>]*>/g, "").trim();
+
+/* A logo covers the same area whatever its shape, so a set of them reads level */
+const LOGO_AREA = 5600;
+const logo =
+  quoted && image && typeof image !== "string"
+    ? logoHeight(image, LOGO_AREA)
+    : undefined;
 
 if (import.meta.env.DEV && render) {
   if (!surfaced && theme !== "inherit") {
@@ -153,10 +197,10 @@ if (import.meta.env.DEV && render) {
   }
   if (!pictured && image) {
     console.warn(
-      `[lumos] <Card variant="${variant}"> holds no image, so \`image\` was dropped. Use the cover, stacked, split or person variant to show it.`,
+      `[lumos] <Card variant="${variant}"> holds no image, so \`image\` was dropped. Use the cover, stacked, split, person or quote variant to show it.`,
     );
   }
-  if (pictured && !image) {
+  if (pictured && !quoted && !image) {
     console.warn(
       `[lumos] <Card variant="${variant}"> has no \`image\`, so it renders as a plain card.`,
     );
@@ -176,8 +220,24 @@ if (import.meta.env.DEV && render) {
       {...rest}
     >
       {hasImage && (
-        <div class:list={["card_visual", imageFit === "contain" && "contain"]}>
-          <Img src={image!} alt={imageAlt} transparent={imageFit === "contain"} />
+        <div
+          class:list={[
+            "card_visual",
+            quoted ? "logo" : imageFit === "contain" && "contain",
+          ]}
+          style={logo ? `--_logo-height: ${logo / 16}rem` : undefined}
+        >
+          {quoted ? (
+            <Img
+              src={image!}
+              alt={imageAlt}
+              variant="densities"
+              height={logo}
+              transparent
+            />
+          ) : (
+            <Img src={image!} alt={imageAlt} transparent={imageFit === "contain"} />
+          )}
           {variant === "cover" && <Overlay variant="gradient" />}
         </div>
       )}
@@ -195,6 +255,25 @@ if (import.meta.env.DEV && render) {
             <Fragment set:html={heading} />
           </Heading>
           {lead && <p class="card_lead text-style-small">{lead}</p>}
+          {quoted && quote && (
+            <figure class="card_quote">
+              <blockquote class="text-style-h5">
+                <p>
+                  “<Fragment set:html={quote} />”
+                </p>
+              </blockquote>
+              {name && (
+                <figcaption>
+                  <Byline
+                    name={name}
+                    position={position}
+                    image={portrait}
+                    size="large"
+                  />
+                </figcaption>
+              )}
+            </figure>
+          )}
           <Paragraph variant={textVariant} class="color-faded">
             <Fragment set:html={text} />
           </Paragraph>
@@ -299,6 +378,34 @@ if (import.meta.env.DEV && render) {
         background-color: transparent;
         overflow: visible;
       }
+      /* The logo and the arrow share the top row, the quote the next, and the
+         result closes the card across its full width. In a grid the rows are
+         shared, so every card in a row draws its rule at the same height. */
+      &.quote {
+        display: grid;
+        grid-row: span 3;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: subgrid;
+        gap: var(--space-6) var(--space-4);
+        padding: var(--_padding);
+        & > .card_content {
+          display: contents;
+        }
+        & > .card_content > :not(.card_arrow) {
+          grid-column: 1 / -1;
+        }
+        &:has(.card_arrow) {
+          transition: background-color var(--hover-duration) var(--hover-ease);
+          &:has(:focus-visible) {
+            background-color: var(--background-3);
+          }
+          @media (hover: hover) {
+            &:hover {
+              background-color: var(--background-3);
+            }
+          }
+        }
+      }
     }
 
     .card_visual {
@@ -316,6 +423,22 @@ if (import.meta.env.DEV && render) {
       .person > & {
         border-radius: var(--radius-main);
         background-color: var(--background-2);
+      }
+
+      /* A logo on a quote card sits in a band of fixed height, so the quotes
+         beside it start level */
+      &.logo {
+        display: flex;
+        align-items: center;
+        width: auto;
+        height: 4rem;
+        border-radius: 0;
+        overflow: visible;
+        & > .image {
+          width: auto;
+          height: var(--_logo-height, 2.5rem);
+          max-height: 100%;
+        }
       }
 
       /* A logo sits small and centred on the surface, whatever its shape */
@@ -353,9 +476,14 @@ if (import.meta.env.DEV && render) {
       padding-top: var(--space-6);
     }
 
-    .row > .card_content > :is(.button-wrapper, .card_arrow):last-child {
+    :is(.row, .quote) > .card_content > :is(.button-wrapper, .card_arrow):last-child {
       margin-top: 0;
       padding-top: 0;
+    }
+
+    .quote > .card_content > .card_arrow {
+      grid-area: 1 / 2;
+      align-self: center;
     }
 
     .card_content {
@@ -451,14 +579,30 @@ if (import.meta.env.DEV && render) {
       margin-top: var(--space-5);
       padding-top: var(--space-5);
       border-top: var(--border-width) solid var(--border);
+
+      /* The rule runs edge to edge under a quote */
+      .quote > .card_content > & {
+        width: auto;
+        margin: 0 calc(var(--_padding) * -1);
+        padding-inline: var(--_padding);
+      }
     }
 
+    .card_quote {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    /* The icon moves, not the link: a moved link would hold the overlay that
+       makes the whole card clickable to its own small box */
     .card_arrow {
       display: flex;
       color: var(--text);
-      transition:
-        translate var(--hover-duration) var(--hover-ease),
-        color var(--hover-duration) var(--hover-ease);
+      transition: color var(--hover-duration) var(--hover-ease);
+      & > .icon {
+        transition: translate var(--hover-duration) var(--hover-ease);
+      }
     }
 
     .card_wrap:has(:is(.button_wrap, .card_arrow)) {
@@ -478,12 +622,14 @@ if (import.meta.env.DEV && render) {
       }
 
       @media (hover: hover) {
-        &:hover .image {
+        &:hover .card_visual:not(.logo) > .image {
           scale: 1.04;
         }
         &:hover .card_arrow {
-          translate: 0.125em -0.125em;
           color: var(--link-text-hover);
+        }
+        &:hover .card_arrow > .icon {
+          translate: 0.125em -0.125em;
         }
       }
     }

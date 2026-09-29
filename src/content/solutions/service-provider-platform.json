@@ -6,6 +6,7 @@
   "image": "../../assets/images/solutions/service-partners.jpg",
   "imageAlt": "A compliance consultant working at her laptop",
   "order": 6,
+  "firmType": "service-partners",
   "benefits": [
     {
       "heading": "White-Label Portal",

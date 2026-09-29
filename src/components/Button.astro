@@ -4,6 +4,7 @@ import Icon from "@/components/media/Icon.astro";
 import arrow from "@/assets/icons/arrow-full.svg";
 import diagonal from "@/assets/icons/arrow-up-right.svg";
 import back from "@/assets/icons/arrow-left.svg";
+import down from "@/assets/icons/arrow-down.svg";
 import close from "@/assets/icons/close.svg";
 import play from "@/assets/icons/play.svg";
 import pause from "@/assets/icons/pause.svg";
@@ -11,7 +12,7 @@ import { slotContent } from "@/utils/slots.ts";
 
 type Emphasis = "primary" | "secondary";
 
-type Trailing = "arrow" | "diagonal" | "back" | "none";
+type Trailing = "arrow" | "diagonal" | "back" | "down" | "none";
 
 type Tag =
   | (HTMLAttributes<"button"> & {
@@ -37,7 +38,7 @@ type Kind =
       variant?: "main";
       /** Visual emphasis. */
       emphasis?: Emphasis;
-      /** Icon beside the text. `diagonal` marks a link that leaves the page, `back` a link up to the list this page belongs to. */
+      /** Icon beside the text. `diagonal` marks a link that leaves the page, `back` a link up to the list this page belongs to, `down` a button that loads more below. */
       icon?: Trailing;
       label?: never;
       pressed?: never;
@@ -124,7 +125,7 @@ const tagAttrs = isLink
   : { type: type === "submit" ? undefined : type };
 
 const marks = { play, close, arrow };
-const trailing = { arrow, diagonal, back: undefined, none: undefined };
+const trailing = { arrow, diagonal, down, back: undefined, none: undefined };
 /* main and link are written, the rest are marks with a label. */
 const isWritten = variant === "main" || variant === "link";
 const content = isWritten ? await slotContent(Astro.slots) : "";
@@ -145,6 +146,7 @@ const named = {
         variant !== "main" && variant,
         variant === "arrow" && direction === "back" && "back",
         isWritten && icon === "diagonal" && "diagonal",
+        isWritten && icon === "down" && "down",
         isWritten && icon === "back" && "leading",
         className,
       ]}
@@ -217,6 +219,9 @@ const named = {
         }
         &.diagonal:hover:not(:disabled) .button_icon {
           translate: 0.125em -0.125em;
+        }
+        &.down:hover:not(:disabled) .button_icon {
+          translate: 0 0.1875em;
         }
       }
       &.secondary {

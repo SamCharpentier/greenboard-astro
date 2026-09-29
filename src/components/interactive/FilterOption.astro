@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@/components/media/Icon.astro";
+import close from "@/assets/icons/close.svg";
+import { slotContent } from "@/utils/slots.ts";
+import { slug } from "@/utils/slug.ts";
+
+type Props = HTMLAttributes<"button"> & {
+  /** Set to `false` to omit the component. */
+  render?: boolean;
+  /** What the option matches in each item's `data-filter`. Defaults to the label as a slug. */
+  value?: string;
+};
+
+const { render = true, value, class: className, ...rest } = Astro.props;
+
+const content = await slotContent(Astro.slots);
+const matches = value ?? slug(content.replace(/<[^>]*>/g, ""));
+---
+
+{
+  render && content && (
+    <button
+      class:list={["filter_option", className]}
+      type="button"
+      aria-pressed="false"
+      data-filter-value={matches}
+      {...rest}
+    >
+      <span class="text-style-trim">
+        <Fragment set:html={content} />
+      </span>
+      <Icon class="filter_option-icon" src={close} variant="small" />
+    </button>
+  )
+}

@@ -13,6 +13,8 @@ type Props = HTMLAttributes<"div"> & {
   image?: ImageMetadata;
   /** Letters shown in place of a portrait. */
   initials?: string;
+  /** Portrait size. `large` sets the name and role level with its foot, beside a quote in a card. */
+  size?: "default" | "large";
 };
 
 const {
@@ -21,20 +23,26 @@ const {
   position,
   image,
   initials,
+  size = "default",
   class: className,
   ...rest
 } = Astro.props;
+
+const portrait = size === "large" ? 80 : 56;
 ---
 
 {
   render && name && (
-    <div class:list={["byline_wrap", className]} {...rest}>
+    <div
+      class:list={["byline_wrap", size !== "default" && size, className]}
+      {...rest}
+    >
       {image ? (
         <Img
           src={image}
           variant="densities"
-          width={56}
-          height={56}
+          width={portrait}
+          height={portrait}
           class="byline_portrait"
         />
       ) : (
@@ -58,6 +66,10 @@ const {
       display: flex;
       align-items: center;
       gap: var(--space-3);
+      &.large {
+        align-items: end;
+        gap: var(--space-4);
+      }
     }
 
     .byline_portrait {
@@ -66,6 +78,10 @@ const {
       height: 3.5rem;
       border-radius: var(--radius-small);
       object-fit: cover;
+      .large > & {
+        width: 5rem;
+        height: 5rem;
+      }
     }
 
     .byline_avatar {

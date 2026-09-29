@@ -6,6 +6,7 @@
   "image": "../../assets/images/solutions/financial-advisors.jpg",
   "imageAlt": "Two advisors reviewing a report together at a laptop",
   "order": 1,
+  "firmType": "financial-advisors",
   "benefits": [
     {
       "heading": "All-in-One Compliance OS",

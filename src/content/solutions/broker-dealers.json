@@ -6,6 +6,7 @@
   "image": "../../assets/images/solutions/broker-dealers.jpg",
   "imageAlt": "A hand pointing at a trading chart on a screen",
   "order": 5,
+  "firmType": "broker-dealers",
   "benefits": [
     {
       "heading": "Omnichannel WORM Archiving",

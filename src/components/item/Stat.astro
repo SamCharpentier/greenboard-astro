@@ -12,8 +12,8 @@ type Props = HTMLAttributes<"div"> & {
   label?: string;
   /** Figure color. `highlight` draws the eye on dark themes. */
   variant?: "default" | "highlight";
-  /** Figure size. `medium` sits under a page title without competing with it. */
-  size?: "large" | "medium";
+  /** Figure size. `medium` sits under a page title without competing with it, `small` closes a card. */
+  size?: "large" | "medium" | "small";
 };
 
 const {
@@ -34,7 +34,12 @@ const {
       class:list={["stat_wrap", variant !== "default" && variant, className]}
       {...rest}
     >
-      <p class:list={["stat_number", size === "large" ? "text-style-h1" : "text-style-h2"]}>
+      <p
+        class:list={[
+          "stat_number",
+          ({ large: "text-style-h1", medium: "text-style-h2", small: "text-style-h3" } as const)[size],
+        ]}
+      >
         {number}
         {unit && <span class="stat_unit">{unit}</span>}
       </p>

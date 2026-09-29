@@ -139,7 +139,26 @@ for order, slug in enumerate(PRODUCT_ORDER, 1):
         "seo": seo(meta, title),
     })
 
+# -------------------------------------------------------------- firm types
+# The case study categories. Ordered as the solution pages are, then the rest.
+FIRM_TYPE_ORDER = [
+    "financial-advisors", "private-funds", "hedge-funds", "broker-dealers",
+    "service-partners", "asset-managers", "private-equity", "fintech",
+]
+for item in json.loads((CMS / "case-study-category.json").read_text())["items"]:
+    write_json("firm-types", item["slug"], {
+        "name": clean(item["name"]),
+        "order": FIRM_TYPE_ORDER.index(item["slug"]) + 1,
+    })
+
 # --------------------------------------------------------------- solutions
+SOLUTION_FIRM_TYPES = {
+    "financial-advisors": "financial-advisors",
+    "private-funds": "private-funds",
+    "hedge-funds": "hedge-funds",
+    "broker-dealers": "broker-dealers",
+    "service-provider-platform": "service-partners",
+}
 SOLUTION_IMAGES = {
     "financial-advisors": "financial-advisors.jpg",
     "ria-registration": "registration.jpg",
@@ -185,6 +204,7 @@ for order, slug in enumerate(SOLUTION_IMAGES, 1):
         "image": f"../../assets/images/solutions/{SOLUTION_IMAGES[slug]}",
         "imageAlt": SOLUTION_ALTS[slug],
         "order": order,
+        **({"firmType": SOLUTION_FIRM_TYPES[slug]} if slug in SOLUTION_FIRM_TYPES else {}),
         "benefits": benefits,
         "seo": seo(meta, title),
     })
