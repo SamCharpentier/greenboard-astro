@@ -1,7 +1,7 @@
 ---
 name: "Brightstar Law Group"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/brightstar-law-group.svg"
+logo: "../../assets/images/partners/brightstar-law-group.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6917f04b82f9f72fca0fcd91_Screenshot%202025-11-14%20at%2010.13.22%E2%80%AFPM.png"
 summary: "Brightstar Law Group protects hundreds of RIAs with compliance, business, and M&A advice, delivering peace of mind so firms can focus on clients and growth."
 website: "https://brightstarlawgroup.com/"

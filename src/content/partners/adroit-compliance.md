@@ -1,7 +1,7 @@
 ---
 name: "Adroit Compliance, LLC™"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/adroit-compliance.svg"
+logo: "../../assets/images/partners/adroit-compliance.webp"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6908f43e22a599734c0ea774_Adroit%20Compliance.webp"
 summary: "Adroit Compliance delivers practical, right-sized compliance solutions for small and mid-sized registered investment advisers."
 website: "https://www.adroitcompliance.com/"

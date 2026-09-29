@@ -1,7 +1,7 @@
 ---
 name: "Asgard Regulatory Group"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/asgard-regulatory-group.svg"
+logo: "../../assets/images/partners/asgard-regulatory-group.webp"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6917ef0f92354dd3933f3deb_erasebg-transformed.webp"
 summary: "Asgard delivers practical, strategic compliance support for financial institutions, combining regulatory expertise with tailored solutions to help firms navigate complex rules."
 website: "https://www.asgardcompliance.com/"

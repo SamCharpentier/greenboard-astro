@@ -1,7 +1,7 @@
 ---
 name: "Integrated Compliance Advisors (ICA)"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/integrated-compliance-advisors-ica.svg"
+logo: "../../assets/images/partners/integrated-compliance-advisors-ica.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69b8bbdb771be5e11aeb7d91_ICA%20Full%20Logo%20.png"
 summary: "ICA puts compliance first, delivering practical, exam-ready, scalable solutions tailored to your firm, with cyber and creative offerings to enhance industry presence."
 website: "https://www.integrated-compliance.com/"

@@ -1,7 +1,7 @@
 ---
 name: "Adviser Compliance Consulting (ACC)"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/adviser-compliance-consulting-acc.svg"
+logo: "../../assets/images/partners/adviser-compliance-consulting-acc.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69127afdf51f414b2cad146b_ACC-logo-blue.png"
 summary: "ACC delivers proactive, tech-enabled compliance solutions for investment advisers and funds, combining deep regulatory expertise with AI-powered automation."
 website: "https://outsourcecco.com/"

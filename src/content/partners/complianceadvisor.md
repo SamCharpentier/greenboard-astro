@@ -1,7 +1,7 @@
 ---
 name: "ComplianceAdvisor"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/complianceadvisor.svg"
+logo: "../../assets/images/partners/complianceadvisor.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6a5918ab1d22b65442922245_ComplianceAdvisor%20logo%20color%20new%20(2).png"
 summary: "ComplianceAdvisor delivers tailored compliance solutions for SEC- and state-registered RIAs, from Form ADV filings to outsourced CCO and mock exams."
 website: "https://stpis.com/services/compliance/"

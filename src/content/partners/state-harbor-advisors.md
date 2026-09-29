@@ -1,7 +1,7 @@
 ---
 name: "State Harbor Advisors"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/state-harbor-advisors.svg"
+logo: "../../assets/images/partners/state-harbor-advisors.svg"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/691deb0392338f41ee28388e_SH_LOGODEVELOPMENT_R3v2.svg"
 summary: "State Harbor delivers high-touch compliance support to help investment advisers, including crypto firms, expand and thrive in a complex regulatory environment."
 website: "https://stateharbor.com/"

@@ -1,7 +1,7 @@
 ---
 name: "Adam Langley Compliance Consulting"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/adam-langley-compliance-consulting.svg"
+logo: "../../assets/images/partners/adam-langley-compliance-consulting.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6a63869ffb0f63ebe2d9f451_adam-logo-transparent.png"
 summary: "Expert compliance and operations solutions for investment advisers and registered funds, delivered personally by an experienced CCO, COO, and fund officer."
 website: "https://adamlangley.us/"

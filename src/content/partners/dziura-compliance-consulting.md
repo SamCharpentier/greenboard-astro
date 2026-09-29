@@ -1,7 +1,7 @@
 ---
 name: "Dziura Compliance Consulting"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/dziura-compliance-consulting.svg"
+logo: "../../assets/images/partners/dziura-compliance-consulting.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69137d8e5c9ac09401eac2eb_Capture-d%E2%80%99e%CC%81cran%2C-le-2025-11-11-a%CC%80-13.16.03.png"
 summary: "Proven compliance experts delivering practical, tailored solutions by strengthening governance, reducing risk, and building resilient, future-ready programs."
 website: "https://www.dziuracompliance.com/"

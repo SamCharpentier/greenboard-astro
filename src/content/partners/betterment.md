@@ -1,7 +1,7 @@
 ---
 name: "Betterment Advisor Solutions"
 category: "data-custody"
-logo: "../../assets/images/partners/wordmarks/betterment.svg"
+logo: "../../assets/images/partners/betterment.webp"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69f953d3de5ed418ebd0c26c_Logo-BAS-Stacked-Gold-Navy.webp"
 summary: "Betterment Advisor Solutions is a tech-enabled custodian for independent RIAs, combining custody and essential practice management software in one platform."
 website: "https://www.betterment.com/advisors?utm_source=Greenboard&utm_medium=partner&utm_campaign=2026Greenboard"

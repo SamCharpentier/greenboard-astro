@@ -1,7 +1,7 @@
 ---
 name: "Salus GRC"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/salus-grc.svg"
+logo: "../../assets/images/partners/salus-grc.webp"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/691210ad8211b7fde24d9551_Salus_GRC_Color_Stacked%201.webp"
 summary: "Salus GRC combines white-glove compliance leadership with AI-native technology to reduce risk, streamline operations, and scale with firms."
 website: "https://www.salusgrc.com/"

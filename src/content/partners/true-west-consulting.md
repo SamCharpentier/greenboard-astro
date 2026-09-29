@@ -1,7 +1,7 @@
 ---
 name: "True West Consulting"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/true-west-consulting.svg"
+logo: "../../assets/images/partners/true-west-consulting.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69137c53050c3c90c8f273ad_TrueWest-WhiteLogo-Transparent.png"
 summary: "True West partners with independent RIAs to manage compliance, operations, and risk, empowering advisers to focus on clients while building stronger, more resilient firms."
 website: "https://www.truewest-consulting.com/"

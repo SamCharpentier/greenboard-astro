@@ -1,7 +1,7 @@
 ---
 name: "Providence Compliance"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/providence-compliance.svg"
+logo: "../../assets/images/partners/providence-compliance.webp"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/6912109b806c62f8c53e2a23_prove.webp"
 summary: "Providence Compliance helps RIAs build strong, practical, and affordable compliance programs through tailored, expert guidance at every stage of the regulatory journey."
 website: "https://www.providence-compliance.com/"

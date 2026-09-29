@@ -1,7 +1,7 @@
 ---
 name: "Charles Schwab"
 category: "data-custody"
-logo: "../../assets/images/partners/wordmarks/charles-schwab.svg"
+logo: "../../assets/images/partners/charles-schwab.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/691214f417a17b7ccaf96f9b_500px-Charles-Schwab-2001.svg.png"
 summary: "Greenboard partners with Schwab to deliver secure brokerage and custodial data that powers automated trade oversight and personal trading compliance."
 website: "https://advisorservices.schwab.com/"

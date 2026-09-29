@@ -1,7 +1,7 @@
 ---
 name: "V17 Advisors"
 category: "compliance-services"
-logo: "../../assets/images/partners/wordmarks/v17-advisors.svg"
+logo: "../../assets/images/partners/v17-advisors.png"
 logoUrl: "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69137caef1e3fa9dca10319c_Capture-d%E2%80%99e%CC%81cran%2C-le-2025-11-11-a%CC%80-13.12.31.png"
 summary: "V17 Advisors delivers tailored compliance and CFO solutions for alternative investment funds, providing strategic guidance and expert support to help firms stay agile."
 website: "https://www.v17advisors.com/"
