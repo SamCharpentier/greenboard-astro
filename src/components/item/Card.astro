@@ -162,6 +162,8 @@ const details = await slotContent(Astro.slots);
 const surfaced = ["default", "cover", "split", "row", "quote"].includes(variant);
 const pictured = ["cover", "stacked", "split", "person", "quote"].includes(variant);
 const hasImage = pictured && !!image;
+/* A stacked card's eyebrow sits as a tag in the corner of its image */
+const tagged = variant === "stacked" && hasImage && !!eyebrow;
 
 /* Titles and text sized to the card, so a set of cards reads as one system */
 const headingVariant = ({ split: "h3", row: "h5", person: "h6" } as const)[
@@ -242,13 +244,22 @@ if (import.meta.env.DEV && render) {
             <Img src={image!} alt={imageAlt} transparent={imageFit === "contain"} />
           )}
           {variant === "cover" && <Overlay variant="gradient" />}
+          {tagged && (
+            <Eyebrow variant="tag" icon={icon} class="card_tag">
+              <Fragment set:html={eyebrow} />
+            </Eyebrow>
+          )}
         </div>
       )}
       {hasContent && (
         <div class="card_content margin-trim">
-          {(eyebrow || meta) && (
+          {((eyebrow && !tagged) || meta) && (
             <div class="card_header">
-              <Eyebrow variant={surfaced ? "tag" : "default"} icon={icon}>
+              <Eyebrow
+                render={!tagged}
+                variant={surfaced ? "tag" : "default"}
+                icon={icon}
+              >
                 <Fragment set:html={eyebrow} />
               </Eyebrow>
               {meta && <p class="card_meta text-style-small">{meta}</p>}
@@ -346,9 +357,11 @@ if (import.meta.env.DEV && render) {
         background-color: transparent;
         overflow: visible;
       }
-      /* Wide enough for a cover designed at 1.9:1 to keep its edges */
+      /* Wide enough for a cover designed at 1.9:1 to keep its edges. The
+         text sits close under the image, which frames it from above. */
       &.stacked {
         --_visual-ratio: 16 / 9;
+        gap: var(--space-4);
       }
       &.feature {
         border-top: var(--border-width) solid var(--border);
@@ -359,7 +372,7 @@ if (import.meta.env.DEV && render) {
         transition: border-color var(--hover-duration) var(--hover-ease);
         @media (hover: hover) {
           &:has(:is(.button_wrap, .card_arrow)):hover {
-            border-color: var(--background-2);
+            border-color: var(--background-3);
           }
         }
       }
@@ -397,15 +410,35 @@ if (import.meta.env.DEV && render) {
         & > .card_content > :not(.card_arrow) {
           grid-column: 1 / -1;
         }
-        &:has(.card_arrow) {
-          transition: background-color var(--hover-duration) var(--hover-ease);
-          &:has(:focus-visible) {
+      }
+
+      /* A card that links deepens its surface one step while it is hovered
+         or focused. A card with no surface of its own deepens the panel
+         behind its logo; a photo scales instead. A card in a ruled grid
+         lifts off the section color, above. */
+      &:not(.cover, .stacked, .feature, .person):not(.ruled > *):has(:is(.button_wrap, .card_arrow)),
+      &:has(:is(.button_wrap, .card_arrow)) > .card_visual.contain {
+        transition:
+          background-color var(--hover-duration) var(--hover-ease),
+          border-color var(--hover-duration) var(--hover-ease);
+      }
+      &:not(.cover, .stacked, .feature, .person):not(.ruled > *):has(:is(.button_wrap, .card_arrow)) {
+        &:has(:focus-visible) {
+          background-color: var(--background-3);
+        }
+        @media (hover: hover) {
+          &:hover {
             background-color: var(--background-3);
           }
-          @media (hover: hover) {
-            &:hover {
-              background-color: var(--background-3);
-            }
+        }
+      }
+      &:has(:is(.button_wrap, .card_arrow)) > .card_visual.contain {
+        :has(:focus-visible) > & {
+          background-color: var(--background-3);
+        }
+        @media (hover: hover) {
+          :hover > & {
+            background-color: var(--background-3);
           }
         }
       }
@@ -442,6 +475,14 @@ if (import.meta.env.DEV && render) {
           height: var(--_logo-height, 2.5rem);
           max-height: 100%;
         }
+      }
+
+      /* A stacked card's eyebrow, as a tag in the corner of its image */
+      & > .card_tag {
+        position: absolute;
+        top: var(--space-3);
+        left: var(--space-3);
+        z-index: 1;
       }
 
       /* A logo sits small and centred on the surface, whatever its shape */
