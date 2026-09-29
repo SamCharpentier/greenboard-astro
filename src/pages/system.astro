@@ -33,6 +33,11 @@ import Share from "@/components/interactive/Share.astro";
 import TableOfContents from "@/components/interactive/TableOfContents.astro";
 import Filter from "@/components/interactive/Filter.astro";
 import LogoField from "@/components/section/LogoField.astro";
+import LogoMarquee from "@/components/content/LogoMarquee.astro";
+import yCombinator from "@/assets/images/investors/y-combinator.png";
+import base10 from "@/assets/images/investors/base10.png";
+import generalCatalyst from "@/assets/images/investors/general-catalyst.svg";
+import wayfinder from "@/assets/images/investors/wayfinder.png";
 import handshake from "@/assets/icons/handshake.svg";
 import landmark from "@/assets/icons/landmark.svg";
 import partnerKroll from "@/assets/images/partners/kroll.png";
@@ -76,6 +81,13 @@ import daveFrisone from "@/assets/images/about/dave-frisone.jpg";
 import financialAdvisors from "@/assets/images/solutions/financial-advisors.jpg";
 import privateFunds from "@/assets/images/solutions/private-funds.jpg";
 import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
+
+const investorLogos = [
+  { image: yCombinator, name: "Y Combinator" },
+  { image: base10, name: "Base10" },
+  { image: generalCatalyst, name: "General Catalyst" },
+  { image: wayfinder, name: "Wayfinder" },
+];
 ---
 
 <Layout
@@ -1008,7 +1020,7 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
         </SystemBlock>
         <SystemBlock
           heading="Logo list"
-          text="Partner and investor logos, held to one height and muted to one tone."
+          text="A still row of logos, held to one height and muted to one tone. Where logos should move and keep their colors, use the logo marquee below."
         >
           <LogoList label="Example logos">
             <Img src={microsoft} alt="Microsoft" />
@@ -1018,6 +1030,12 @@ import hedgeFunds from "@/assets/images/solutions/hedge-funds.jpg";
             <Img src={morningstar} alt="Morningstar" />
             <Img src={aws} alt="AWS" />
           </LogoList>
+        </SystemBlock>
+        <SystemBlock
+          heading="Logo marquee"
+          text="<code>LogoMarquee</code> runs logos in their own colors on the marquee, each covering the same area so a wide wordmark and a square crest read at the same weight. It keeps the marquee&rsquo;s pause button and its stillness for reduced motion. Used for the investors and customers on About and the trust strip on the homepage."
+        >
+          <LogoMarquee label="Example investors" logos={investorLogos} />
         </SystemBlock>
         <SystemBlock
           heading="Facts"

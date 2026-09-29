@@ -262,6 +262,13 @@ for item in clients:
         continue
     f = item["fields"]
     data = {"name": fix(item["name"])}
+    # The logo when its file is in the repo; the Webflow CDN is out of reach here
+    logo = next((ASSETS / "customers" / f"{item['slug']}{ext}" for ext in (".svg", ".png", ".webp", ".jpg")
+                 if (ASSETS / "customers" / f"{item['slug']}{ext}").exists()), None)
+    if logo:
+        data["logo"] = f"../../assets/images/customers/{logo.name}"
+    if (f.get("company-logo") or {}).get("url"):
+        data["logoUrl"] = f["company-logo"]["url"]
     who = (f.get("testimonial-name") or "").strip()
     if who and f.get("testimonial"):
         data["testimonial"] = {

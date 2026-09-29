@@ -1,5 +1,7 @@
 {
   "name": "FSG",
+  "logo": "../../assets/images/customers/fsg.png",
+  "logoUrl": "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69fe3bac8e95c58c869b8bda_image%20(6).png",
   "testimonial": {
     "quote": "The personal support, the AI capabilities, and then the backing from the compliance expertise makes me a lot more comfortable... knowing that we're doing things the right way.",
     "person": "doug-thalhammer"

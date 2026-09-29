@@ -30,15 +30,18 @@ const people = defineCollection({
 
 const customers = defineCollection({
   loader: glob({ pattern: "*.json", base: "./src/content/customers" }),
-  schema: z.object({
-    name: z.string(),
-    testimonial: z
-      .object({
-        quote: z.string(),
-        person: reference("people"),
-      })
-      .optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      logo: image().optional(),
+      logoUrl: z.url().optional(),
+      testimonial: z
+        .object({
+          quote: z.string(),
+          person: reference("people"),
+        })
+        .optional(),
+    }),
 });
 
 const products = defineCollection({

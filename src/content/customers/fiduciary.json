@@ -1,5 +1,7 @@
 {
   "name": "Fiduciary",
+  "logo": "../../assets/images/customers/fiduciary.webp",
+  "logoUrl": "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69c72033cb8f03f0ef9365ca_fiduciary%20.webp",
   "testimonial": {
     "quote": "Helps us detect risk and automate more of our compliance program than previously possible...easy to use",
     "person": "brook-powers"

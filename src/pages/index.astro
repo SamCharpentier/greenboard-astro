@@ -16,7 +16,6 @@ import Accordion from "@/components/interactive/Accordion.astro";
 import AccordionItem from "@/components/interactive/AccordionItem.astro";
 import Tabs from "@/components/interactive/Tabs.astro";
 import TabLink from "@/components/interactive/TabLink.astro";
-import Marquee from "@/components/interactive/Marquee.astro";
 import Slider from "@/components/interactive/Slider.astro";
 import Form from "@/components/form/Form.astro";
 import Input from "@/components/form/Input.astro";
@@ -25,9 +24,13 @@ import Video from "@/components/media/Video.astro";
 import GoMark from "@/components/media/GoMark.astro";
 import CasePanel from "@/components/content/CasePanel.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
+import LogoMarquee from "@/components/content/LogoMarquee.astro";
+import { trustedLogos } from "@/utils/customers.ts";
 import records from "@/assets/icons/records.svg";
 import shield from "@/assets/icons/shield.svg";
 import lock from "@/assets/icons/lock.svg";
+
+const trusted = await trustedLogos();
 ---
 
 <Layout
@@ -64,24 +67,7 @@ import lock from "@/assets/icons/lock.svg";
       <Stat number="32 367+" label="People served last quarter, and counting" />
     </Grid>
     <hr />
-    <Marquee label="Customers" caption="Trusted by firms like">
-      <span>Betterment</span>
-      <span>Kroll</span>
-      <span>Fiduciary Financial</span>
-      <span>Root Financial</span>
-      <span>JMG Financial Group</span>
-      <span>FSG / ICA</span>
-      <span>S2 Capital</span>
-      <span>Retirable</span>
-      <span>Chicago Partners</span>
-      <span>Harbert Management Corporation</span>
-      <span>Summit Global</span>
-      <span>Compound</span>
-      <span>Accolade Partners</span>
-      <span>Matter Family Office</span>
-      <span>Triad</span>
-      <span>Tobias</span>
-    </Marquee>
+    <LogoMarquee label="Customers" caption="Trusted by firms like" logos={trusted} />
   </Section>
 
   {/* Statement */}

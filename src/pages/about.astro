@@ -12,11 +12,18 @@ import Button from "@/components/Button.astro";
 import Card from "@/components/item/Card.astro";
 import Facts from "@/components/item/Facts.astro";
 import List from "@/components/item/List.astro";
-import LogoList from "@/components/item/LogoList.astro";
 import Quote from "@/components/item/Quote.astro";
 import Icon from "@/components/media/Icon.astro";
 import Img from "@/components/media/Img.astro";
 import CtaDemo from "@/components/content/CtaDemo.astro";
+import LogoMarquee from "@/components/content/LogoMarquee.astro";
+import yCombinator from "@/assets/images/investors/y-combinator.png";
+import base10 from "@/assets/images/investors/base10.png";
+import generalCatalyst from "@/assets/images/investors/general-catalyst.svg";
+import wayfinder from "@/assets/images/investors/wayfinder.png";
+import liquid2 from "@/assets/images/investors/l2-ventures.png";
+import transposePlatform from "@/assets/images/investors/transpose-platform.png";
+import { trustedLogos } from "@/utils/customers.ts";
 import greenboardGo from "@/assets/logo/greenboard-go.svg";
 import message from "@/assets/icons/message.svg";
 import users from "@/assets/icons/users.svg";
@@ -24,13 +31,6 @@ import fileCheck from "@/assets/icons/file-check.svg";
 import shield from "@/assets/icons/shield-plain.svg";
 import search from "@/assets/icons/search.svg";
 import hero from "@/assets/images/about/hero.jpg";
-import microsoft from "@/assets/images/about/logo-microsoft.png";
-import firmscribe from "@/assets/images/about/logo-firmscribe.png";
-import celltrust from "@/assets/images/about/logo-celltrust.png";
-import dots from "@/assets/images/about/logo-dots.png";
-import kroll from "@/assets/images/about/logo-kroll.png";
-import morningstar from "@/assets/images/about/logo-morningstar.png";
-import aws from "@/assets/images/about/logo-aws.png";
 import founders from "@/assets/images/about/founders.jpg";
 import team from "@/assets/images/about/team.jpg";
 import teamOffice from "@/assets/images/about/team-office.jpg";
@@ -39,6 +39,8 @@ import daveFrisone from "@/assets/images/about/dave-frisone.jpg";
 import edSchembor from "@/assets/images/about/ed-schembor.jpg";
 import markMichaelAstarita from "@/assets/images/about/mark-michael-astarita.jpg";
 import mattJacobs from "@/assets/images/about/matt-jacobs.jpg";
+
+const customers = await trustedLogos();
 ---
 
 <Layout
@@ -81,15 +83,17 @@ import mattJacobs from "@/assets/images/about/matt-jacobs.jpg";
   {/* Investors */}
   <Section theme="light" aria-labelledby="investors-title">
     <Heading tag="h2" maxWidth={30} id="investors-title">Backed by top investors</Heading>
-    <LogoList label="Investors">
-      <Img src={microsoft} alt="Microsoft" />
-      <Img src={firmscribe} alt="FirmScribe" />
-      <Img src={celltrust} alt="CellTrust" />
-      <Img src={dots} />
-      <Img src={kroll} alt="Kroll" />
-      <Img src={morningstar} alt="Morningstar" />
-      <Img src={aws} alt="AWS" />
-    </LogoList>
+    <LogoMarquee
+      label="Investors"
+      logos={[
+        { image: yCombinator, name: "Y Combinator" },
+        { image: base10, name: "Base10" },
+        { image: generalCatalyst, name: "General Catalyst" },
+        { image: wayfinder, name: "Wayfinder" },
+        { image: liquid2, name: "Liquid 2 Ventures" },
+        { image: transposePlatform, name: "Transpose Platform" },
+      ]}
+    />
   </Section>
 
   {/* What we do */}
@@ -146,15 +150,7 @@ import mattJacobs from "@/assets/images/about/matt-jacobs.jpg";
         compliance consultants and service providers who support them.
       </Heading>
     </ContentWrapper>
-    <LogoList label="Companies">
-      <Img src={microsoft} alt="Microsoft" />
-      <Img src={firmscribe} alt="FirmScribe" />
-      <Img src={celltrust} alt="CellTrust" />
-      <Img src={dots} />
-      <Img src={kroll} alt="Kroll" />
-      <Img src={morningstar} alt="Morningstar" />
-      <Img src={aws} alt="AWS" />
-    </LogoList>
+    <LogoMarquee label="Customers" logos={customers} />
   </Section>
 
   {/* Customer Advisory Board */}

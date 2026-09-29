@@ -1,0 +1,45 @@
+---
+import type { ComponentProps } from "astro/types";
+import Marquee from "@/components/interactive/Marquee.astro";
+import Img from "@/components/media/Img.astro";
+import { logoHeight } from "@/utils/logo.ts";
+
+type Props = ComponentProps<typeof Marquee> & {
+  /** Logos to run, each with the name it stands for. */
+  logos?: { image: ImageMetadata; name: string }[];
+};
+
+const { render = true, logos = [], label, caption, ...rest } = Astro.props;
+
+/* Every logo covers the same area in its own colors, so a wide wordmark and a
+   square crest read at the same weight; none grows taller than the row. They
+   load with the page: a lazy logo would pop in as it scrolls into view. */
+const LOGO_AREA = 4000;
+const MAX_HEIGHT = 44;
+
+const items = logos.map(({ image, name }) => {
+  const height = Math.min(logoHeight(image, LOGO_AREA), MAX_HEIGHT);
+  return { image, name, height };
+});
+---
+
+<Marquee
+  render={render && items.length > 0}
+  label={label}
+  caption={caption}
+  {...rest}
+>
+  {
+    items.map(({ image, name, height }) => (
+      <Img
+        src={image}
+        alt={name}
+        variant="densities"
+        height={height}
+        transparent
+        loading="eager"
+        style={`--_item-height: ${height / 16}rem`}
+      />
+    ))
+  }
+</Marquee>

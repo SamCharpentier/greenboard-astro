@@ -1,5 +1,7 @@
 {
   "name": "JMG Financial Group",
+  "logo": "../../assets/images/customers/jmg-financial-group.webp",
+  "logoUrl": "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69c6cee1e37b5910765e5254_jmg-financial-group%20(1).webp",
   "testimonial": {
     "quote": "I can't say they like compliance, but I can tell you that advisors love Greenboard",
     "person": "adam-boyer"

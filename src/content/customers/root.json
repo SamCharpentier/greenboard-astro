@@ -1,5 +1,7 @@
 {
   "name": "Root",
+  "logo": "../../assets/images/customers/root.svg",
+  "logoUrl": "https://cdn.prod.website-files.com/67d0a8a9156b7b7bd46ffe28/69c6bbf4fe69ad969b18391a_Group%202147256215.webp",
   "testimonial": {
     "quote": "Whatever we came up with for marketing reviews, it had to move as fast as the content creators moved. Huge thanks to the Greenboard team!",
     "person": "alex-stickelman"
