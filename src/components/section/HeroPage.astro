@@ -57,6 +57,7 @@ const titleId = uid("hero-title");
   theme={theme}
   paddingTop={image ? "navoverlap" : "medium"}
   paddingBottom={paddingBottom}
+  gap="7"
   data-nav-transparent={image ? "" : undefined}
   aria-labelledby={titleId}
   {...rest}
@@ -173,6 +174,11 @@ const titleId = uid("hero-title");
       }
       & > .heading {
         margin-bottom: var(--space-7);
+      }
+      /* With a footer row below, a title closing the column leaves the space
+         to the gap before the rule, rather than adding its own on top */
+      .hero-page_wrap:has(.hero-page_footer) & > .heading:last-child {
+        margin-bottom: 0;
       }
       & > .text + .text {
         margin-top: var(--space-4);
